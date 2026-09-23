@@ -1,6 +1,5 @@
-// Note: we developed this component expecting that headers would have the ability to display different copy and CTAs on small screens, thus requiring this form to include fields for that content. However it seems like current functionality of the GU frontend is to only show the main copy and CTAs, whatever the screen size may be. Code to include and action mobile-specific fields can be found in earlier commits in this PR: https://github.com/guardian/support-admin-console/pull/259
-import { FormControlLabel, Radio, RadioGroup, TextField, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, FormControlLabel, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { HeaderContent, HeaderVariant } from '../../../models/header';
@@ -11,40 +10,39 @@ import { templateValidatorForPlatform } from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
 import HeaderTestVariantCtasEditor from './headerTestVariantCtasEditor';
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    paddingTop: spacing(2),
-    paddingLeft: spacing(4),
-    paddingRight: spacing(10),
+const Container = styled(Box)(({ theme }) => ({
+  width: '100%',
+  paddingTop: theme.spacing(2),
+  paddingLeft: theme.spacing(4),
+  paddingRight: theme.spacing(10),
 
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
+  '& > * + *': {
+    marginTop: theme.spacing(3),
   },
-  hook: {
-    maxWidth: '400px',
+}));
+
+const SectionHeader = styled(Typography)(({ theme }) => ({
+  fontSize: 16,
+  color: theme.palette.grey[900],
+  fontWeight: 500,
+}));
+
+const SectionContainer = styled(Box)(({ theme }) => ({
+  paddingTop: theme.spacing(2),
+  paddingBottom: theme.spacing(2),
+  borderBottom: `1px solid ${theme.palette.grey[500]}`,
+  '& > * + *': {
+    marginTop: theme.spacing(3),
   },
-  sectionHeader: {
-    fontSize: 16,
-    color: palette.grey[900],
-    fontWeight: 500,
-  },
-  sectionContainer: {
-    paddingTop: spacing(2),
-    paddingBottom: spacing(2),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-  contentContainer: {
-    marginLeft: spacing(2),
-  },
-  buttonsContainer: {
-    marginTop: spacing(2),
-    marginLeft: spacing(2),
-  },
+}));
+
+const ContentContainer = styled(Box)(({ theme }) => ({
+  marginLeft: theme.spacing(2),
+}));
+
+const ButtonsContainer = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  marginLeft: theme.spacing(2),
 }));
 
 const HEADING_COPY_RECOMMENDED_LENGTH = 50;
@@ -78,7 +76,6 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
   editMode,
   deviceType,
 }: HeaderTestVariantContentEditorProps) => {
-  const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const templateValidator = templateValidatorForPlatform('DOTCOM');
@@ -128,11 +125,9 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
     <>
       {deviceType !== 'MOBILE' && (
         <>
-          <Typography className={classes.sectionHeader} variant="h4">
-            {`Content${labelSuffix}`}
-          </Typography>
+          <SectionHeader variant="h4">{`Content${labelSuffix}`}</SectionHeader>
 
-          <div className={classes.contentContainer}>
+          <ContentContainer>
             <div>
               <TextField
                 error={errors.heading !== undefined}
@@ -150,9 +145,9 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
                 <VariantCopyLengthWarning charLimit={HEADING_COPY_RECOMMENDED_LENGTH} />
               )}
             </div>
-          </div>
+          </ContentContainer>
 
-          <div className={classes.contentContainer}>
+          <ContentContainer>
             <div>
               <TextField
                 error={errors.subheading !== undefined}
@@ -170,15 +165,13 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
                 <VariantCopyLengthWarning charLimit={SUBHEADING_COPY_RECOMMENDED_LENGTH} />
               )}
             </div>
-          </div>
+          </ContentContainer>
         </>
       )}
 
-      <Typography className={classes.sectionHeader} variant="h4">
-        {`Buttons${labelSuffix}`}
-      </Typography>
+      <SectionHeader variant="h4">{`Buttons${labelSuffix}`}</SectionHeader>
 
-      <div className={classes.buttonsContainer}>
+      <ButtonsContainer>
         <HeaderTestVariantCtasEditor
           primaryCta={content.primaryCta}
           secondaryCta={content.secondaryCta}
@@ -188,7 +181,7 @@ const HeaderTestVariantContentEditor: React.FC<HeaderTestVariantContentEditorPro
           onValidationChange={(isValid) => setValidationStatusForField('cta', isValid)}
           supportSecondaryCta={deviceType !== 'MOBILE'}
         />
-      </div>
+      </ButtonsContainer>
     </>
   );
 };
@@ -207,7 +200,6 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
   onValidationChange,
   onVariantChange,
 }: HeaderTestVariantEditorProps) => {
-  const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
   const content: HeaderContent = variant.content;
@@ -232,8 +224,8 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sectionContainer}>
+    <Container>
+      <SectionContainer>
         <HeaderTestVariantContentEditor
           content={content}
           onChange={(updatedContent: HeaderContent): void =>
@@ -245,7 +237,7 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
           editMode={editMode}
           deviceType={variant.mobileContent === undefined ? 'ALL' : 'NOT_MOBILE'}
         />
-      </div>
+      </SectionContainer>
 
       <RadioGroup
         value={variant.mobileContent !== undefined ? 'enabled' : 'disabled'}
@@ -287,7 +279,7 @@ const HeaderTestVariantEditor: React.FC<HeaderTestVariantEditorProps> = ({
         }}
         isDisabled={!editMode}
       />
-    </div>
+    </Container>
   );
 };
 

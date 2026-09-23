@@ -1,5 +1,5 @@
 import Alert from '@mui/material/Alert';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { EpicVariant } from '../../../models/epic';
 import { mockAmountsCardData, SelectedAmountsVariant } from '../../../utils/models';
@@ -106,15 +106,10 @@ const StorybookNames: Record<EpicModuleName, string> = {
   ContributionsEpic: 'components-marketing-contributionsepic--default',
 };
 
-const useStyles = makeStyles(() => ({
-  container: {
-    width: '620px',
-  },
-  iframe: {
-    width: '620px',
-    height: '800px',
-  },
-}));
+const Iframe = styled('iframe')({
+  width: '620px',
+  height: '800px',
+});
 
 interface EpicVariantPreviewProps {
   variant: EpicVariant;
@@ -129,8 +124,6 @@ const VariantPreview: React.FC<EpicVariantPreviewProps> = ({
   variant,
   moduleName,
 }: EpicVariantPreviewProps) => {
-  const classes = useStyles();
-
   const tickerSettingsWithData = useTickerData(variant.tickerSettings);
   const props = buildProps(variant, tickerSettingsWithData);
 
@@ -143,7 +136,7 @@ const VariantPreview: React.FC<EpicVariantPreviewProps> = ({
         The Live Preview does not support choice cards. Please use the Web Preview to view choice
         cards.
       </Alert>
-      <iframe className={classes.iframe} src={storybookUrl}></iframe>
+      <Iframe src={storybookUrl}></Iframe>
     </div>
   );
 };

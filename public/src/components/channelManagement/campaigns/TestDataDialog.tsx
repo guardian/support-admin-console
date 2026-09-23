@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -7,33 +8,28 @@ import {
   DialogTitle,
   IconButton,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Test } from '../helpers/shared';
 
-const useStyles = makeStyles(() => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
-  },
-  input: {
-    '& input': {
-      textTransform: 'uppercase !important',
-    },
-  },
-  buttonContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  testDataContainer: {
-    fontFamily: 'monospace',
-    fontSize: '12px',
-    whiteSpace: 'pre-wrap',
-  },
-}));
+const DialogHeader = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingRight: '8px',
+});
+
+const ButtonContainer = styled(DialogActions)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+});
+
+const TestDataContainer = styled(DialogContent)({
+  fontFamily: 'monospace',
+  fontSize: '12px',
+  whiteSpace: 'pre-wrap',
+});
 
 const testFields = {
   core: {
@@ -286,8 +282,6 @@ const TestDataDialog: React.FC<TestDataDialogProps> = ({
   test,
   datetimeStamp,
 }: TestDataDialogProps) => {
-  const classes = useStyles();
-
   const parseData = (
     channel: string,
     fields: FieldDefinitions,
@@ -494,22 +488,20 @@ ${parseTestVariantData(channel, data.variants as Array<Record<string, unknown>>)
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
-      <div className={classes.dialogHeader}>
+      <DialogHeader>
         <DialogTitle id="create-campaign-dialog-title">
           Viewing: {test.nickname ?? test.name}
         </DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />
         </IconButton>
-      </div>
-      <DialogActions className={classes.buttonContainer}>
+      </DialogHeader>
+      <ButtonContainer>
         <Button onClick={onCopyToClipboard} color="primary">
           Copy to clipboard
         </Button>
-      </DialogActions>
-      <DialogContent className={classes.testDataContainer} dividers>
-        {parsedTest}
-      </DialogContent>
+      </ButtonContainer>
+      <TestDataContainer dividers>{parsedTest}</TestDataContainer>
     </Dialog>
   );
 };

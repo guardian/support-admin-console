@@ -1,4 +1,4 @@
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { GutterContent, GutterVariant } from '../../../models/gutter';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
@@ -25,15 +25,10 @@ const buildProps = (variant: GutterVariant): GutterProps => ({
   onCtaClick: () => {},
 });
 
-const useStyles = makeStyles(() => ({
-  container: {
-    width: '620px',
-  },
-  iframe: {
-    width: '620px',
-    height: '800px',
-  },
-}));
+const Iframe = styled('iframe')({
+  width: '620px',
+  height: '800px',
+});
 
 interface GutterVariantPreviewProps {
   variant: GutterVariant;
@@ -45,8 +40,6 @@ interface GutterVariantPreviewProps {
 const GutterVariantPreview: React.FC<GutterVariantPreviewProps> = ({
   variant,
 }: GutterVariantPreviewProps) => {
-  const classes = useStyles();
-
   const props = buildProps(variant);
 
   const storyName = 'components-marketing-gutterask--default';
@@ -54,7 +47,7 @@ const GutterVariantPreview: React.FC<GutterVariantPreviewProps> = ({
 
   return (
     <div>
-      <iframe className={classes.iframe} src={storybookUrl}></iframe>
+      <Iframe src={storybookUrl}></Iframe>
     </div>
   );
 };

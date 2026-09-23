@@ -1,12 +1,12 @@
 import { Button, Menu, MenuItem } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-const useStyles = makeStyles(() => ({
-  default: {
-    color: red[500],
-  },
+const StyledButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'isDefault',
+})<{ isDefault: boolean }>(({ isDefault }) => ({
+  ...(isDefault && { color: red[500] }),
 }));
 
 interface AmountsVariantEditorRowAmountPrefs {
@@ -44,21 +44,19 @@ export const AmountsVariantEditorRowAmount: React.FC<AmountsVariantEditorRowAmou
     setAsDefault();
   };
 
-  const classes = useStyles();
-
   return (
     <div>
-      <Button
+      <StyledButton
         aria-controls="simple-menu"
         aria-haspopup="true"
         onClick={handleClick}
         variant="outlined"
         disableElevation
-        className={isDefault ? classes.default : ''}
+        isDefault={isDefault}
         disabled={disabled}
       >
         {amount}
-      </Button>
+      </StyledButton>
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}

@@ -1,11 +1,10 @@
-import { Typography } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 import { OneTimeCheckoutTest, OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
 import { getStage } from '../../../utils/stage';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
 import { RegionTargeting } from '../helpers/shared';
-import { useStyles } from '../helpers/testEditorStyles';
+import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
 import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
@@ -20,8 +19,6 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
   setValidationStatusForField,
   showMParticleMenu,
 }: ValidatedTestEditorProps<OneTimeCheckoutTest>) => {
-  const classes = useStyles();
-
   const onVariantsChange = (
     update: (current: OneTimeCheckoutVariant[]) => OneTimeCheckoutVariant[],
   ): void => {
@@ -144,11 +141,9 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Variants
-        </Typography>
+    <Container>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Variants</SectionHeader>
         <div>
           <VariantsEditor
             variants={test.variants}
@@ -161,11 +156,9 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
             onVariantClone={onVariantClone}
           />
         </div>
-      </div>
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Target audience
-        </Typography>
+      </SectionContainer>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Target audience</SectionHeader>
 
         <TestEditorTargetRegionsSelector
           regionTargeting={test.regionTargeting}
@@ -173,9 +166,9 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
           isDisabled={!userHasTestLocked}
         />
 
-        <Typography variant={'h4'} className={classes.sectionHeader} style={{ marginTop: '20px' }}>
+        <SectionHeader variant={'h4'} style={{ marginTop: '20px' }}>
           mParticle Audience
-        </Typography>
+        </SectionHeader>
 
         <MParticleAudienceEditor
           mParticleAudience={test.mParticleAudience}
@@ -187,8 +180,8 @@ const OneTimeCheckoutTestEditor: React.FC<ValidatedTestEditorProps<OneTimeChecko
             }));
           }}
         />
-      </div>
-    </div>
+      </SectionContainer>
+    </Container>
   );
 };
 

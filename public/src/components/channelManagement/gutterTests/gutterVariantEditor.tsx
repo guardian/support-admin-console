@@ -1,5 +1,5 @@
-import { Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { GutterContent, GutterVariant } from '../../../models/gutter';
@@ -16,52 +16,30 @@ import { getRteCopyLength, RichTextEditor } from '../richTextEditor/richTextEdit
 import { DEFAULT_IMAGE_ALT, DEFAULT_IMAGE_URL } from './utils/defaults';
 import VariantCtasEditor from './variantCtasEditor';
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    paddingTop: spacing(2),
-    paddingLeft: spacing(4),
-    paddingRight: spacing(10),
+const Container = styled('div')(({ theme }) => ({
+  width: '100%',
+  paddingTop: theme.spacing(2),
+  paddingLeft: theme.spacing(4),
+  paddingRight: theme.spacing(10),
 
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-  hook: {
-    maxWidth: '400px',
-  },
-  sectionHeader: {
-    fontSize: 16,
-    color: palette.grey[900],
-    fontWeight: 500,
-  },
-  sectionContainer: {
-    paddingTop: spacing(2),
-    paddingBottom: spacing(2),
-    borderBottom: `1px solid ${palette.grey[500]}`,
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-  contentContainer: {
-    marginLeft: spacing(2),
-  },
-  buttonsContainer: {
-    marginTop: spacing(2),
-  },
-  switchContainer: {
-    display: 'flex',
-    alignItems: 'center',
-
-    '& > * + *': {
-      marginLeft: spacing(1),
-    },
-  },
-  switchLabel: {
-    fontSize: '14px',
-    fontWeight: 500,
+  '& > * + *': {
+    marginTop: theme.spacing(3),
   },
 }));
+const SectionHeader = styled(Typography)(({ theme }) => ({
+  fontSize: 16,
+  color: theme.palette.grey[900],
+  fontWeight: 500,
+}));
+const SectionContainer = styled('div')(({ theme }) => ({
+  paddingTop: theme.spacing(2),
+  paddingBottom: theme.spacing(2),
+  borderBottom: `1px solid ${theme.palette.grey[500]}`,
+  '& > * + *': {
+    marginTop: theme.spacing(3),
+  },
+}));
+const ButtonsContainer = styled('div')(({ theme }) => ({ marginTop: theme.spacing(2) }));
 
 const BODY_COPY_RECOMMENDED_LENGTH = 300;
 const BODY_DEFAULT_HELPER_TEXT = 'Main gutter message paragraph';
@@ -85,8 +63,6 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   onValidationChange,
   editMode,
 }: VariantContentEditorProps) => {
-  const classes = useStyles();
-
   const getBodyCopyLength = () => {
     const bodyCopyRecommendedLength = BODY_COPY_RECOMMENDED_LENGTH;
     return [getRteCopyLength([...variant.bodyCopy]), bodyCopyRecommendedLength];
@@ -216,11 +192,9 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Header Image
-        </Typography>
+    <Container>
+      <SectionContainer>
+        <SectionHeader variant="h4">Header Image</SectionHeader>
 
         <ImageEditorToggle
           image={variant.image}
@@ -232,12 +206,10 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             'The viewbox needs dimensions of 0, 0, 150, 100 and the file format should be SVG. The background colour will be Guardian blue.'
           }
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Body Copy
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant="h4">Body Copy</SectionHeader>
 
         <Controller
           name="bodyCopy"
@@ -276,12 +248,10 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
             );
           }}
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.buttonsContainer}>
-        <Typography className={classes.sectionHeader} variant="h4">
-          Button
-        </Typography>
+      <ButtonsContainer>
+        <SectionHeader variant="h4">Button</SectionHeader>
 
         <VariantCtasEditor
           primaryCta={variant.cta}
@@ -290,8 +260,8 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
           onValidationChange={onCtaValidationChange}
           copyLength={CTA_COPY_MAX_LENGTH}
         />
-      </div>
-    </div>
+      </ButtonsContainer>
+    </Container>
   );
 };
 
@@ -309,7 +279,6 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
   editMode,
   onValidationChange,
 }: GutterVariantEditorProps) => {
-  const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
   const onVariantChangeRef = useRef(onVariantChange);
   const setValidationStatusForFieldRef = useRef(setValidationStatusForField);
@@ -346,8 +315,8 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
   }, []);
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sectionContainer}>
+    <Container>
+      <SectionContainer>
         <VariantContentEditor
           variant={variant.content}
           onVariantChange={onContentChange}
@@ -359,8 +328,8 @@ const GutterVariantEditor: React.FC<GutterVariantEditorProps> = ({
           updatePromoCodes={updatePromoCodes}
           isDisabled={!editMode}
         />
-      </div>
-    </div>
+      </SectionContainer>
+    </Container>
   );
 };
 

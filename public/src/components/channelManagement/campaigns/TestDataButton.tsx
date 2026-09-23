@@ -1,16 +1,14 @@
 import { Button } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
 import { Test } from '../helpers/shared';
 import { formattedTimestamp } from '../helpers/utilities';
 import TestDataDialog from './TestDataDialog';
 
-const useStyles = makeStyles(() => ({
-  button: {
-    backgroundColor: '#fafbff',
-  },
-}));
+const StyledButton = styled(Button)({
+  backgroundColor: '#fafbff',
+});
 
 interface TestDataButtonProps {
   test: Test;
@@ -18,15 +16,14 @@ interface TestDataButtonProps {
 
 const TestDataButton: React.FC<TestDataButtonProps> = ({ test }: TestDataButtonProps) => {
   const [isOpen, open, close] = useOpenable();
-  const classes = useStyles();
 
   const datetimeStamp = formattedTimestamp(Date());
 
   return (
     <>
-      <Button className={classes.button} variant="contained" onClick={open}>
+      <StyledButton variant="contained" onClick={open}>
         View data
-      </Button>
+      </StyledButton>
       <TestDataDialog isOpen={isOpen} close={close} test={test} datetimeStamp={datetimeStamp} />
     </>
   );

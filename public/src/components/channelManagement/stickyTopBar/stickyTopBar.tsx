@@ -4,9 +4,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import HistoryIcon from '@mui/icons-material/History';
 import LockIcon from '@mui/icons-material/Lock';
 import SaveIcon from '@mui/icons-material/Save';
-import { Button, Theme, Typography } from '@mui/material';
-import { grey } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
+import { Button, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { FrontendSettingsType } from '../../../utils/requests';
 import { LockStatus, Status } from '../helpers/shared';
@@ -15,72 +14,65 @@ import { TestArchiveButton } from './testArchiveButton';
 import { TestCopyButton } from './testCopyButton';
 import { TestLockDetails } from './testLockDetails';
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    paddingLeft: spacing(3),
-    paddingRight: spacing(3),
-    paddingTop: spacing(1),
-    backgroundColor: palette.grey[200],
-    borderBottom: `1px solid ${palette.grey[500]}`,
-  },
-  namesContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingBottom: spacing(2),
-  },
-  mainHeader: {
-    fontSize: '32px',
-    fontWeight: 'normal',
-  },
-  secondaryHeaderContainer: {
-    display: 'flex',
-    marginTop: '4px',
-  },
-  secondaryHeader: {
+const Container = styled('header')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  paddingLeft: theme.spacing(3),
+  paddingRight: theme.spacing(3),
+  paddingTop: theme.spacing(1),
+  backgroundColor: theme.palette.grey[200],
+  borderBottom: `1px solid ${theme.palette.grey[500]}`,
+}));
+const NamesContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  paddingBottom: theme.spacing(2),
+}));
+const MainHeader = styled(Typography)({
+  fontSize: '32px',
+  fontWeight: 'normal',
+});
+const SecondaryHeaderContainer = styled('div')({
+  display: 'flex',
+  marginTop: '4px',
+});
+const SecondaryHeader = styled(Typography)(({ theme }) => ({
+  fontSize: '14px',
+  color: theme.palette.grey[700],
+}));
+const ButtonsContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignSelf: 'flex-end',
+  paddingBottom: theme.spacing(1),
+}));
+const SwitchContainer = styled('div')({
+  alignSelf: 'flex-end',
+  display: 'flex',
+});
+const LockContainer = styled('div')(({ theme }) => ({
+  alignSelf: 'flex-end',
+  display: 'flex',
+  gap: theme.spacing(2),
+  marginLeft: theme.spacing(1),
+}));
+const StyledButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.grey[800],
+  '& > p': {
     fontSize: '14px',
-    color: palette.grey[700],
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
+    fontWeight: 500,
   },
-  buttonsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignSelf: 'flex-end',
-    paddingBottom: spacing(1),
-  },
-  switchContainer: {
-    alignSelf: 'flex-end',
-    display: 'flex',
-  },
-  lockContainer: {
-    alignSelf: 'flex-end',
-    display: 'flex',
-    '& > * + *': {
-      marginLeft: spacing(2),
-    },
-    marginLeft: spacing(1),
-  },
-  button: {
-    color: palette.grey[800],
-    '& > p': {
-      fontSize: '14px',
-      textTransform: 'uppercase',
-      letterSpacing: '1px',
-      fontWeight: 500,
-    },
-  },
-  icon: {
-    color: grey[700],
-  },
-  link: {
-    marginLeft: spacing(2),
-    padding: '0 8px',
-    fontSize: '14px',
-    fontWeight: 'normal',
-    color: palette.grey[700],
-    lineHeight: 1.5,
-  },
+}));
+const StyledLinkButton = styled(Button)(({ theme }) => ({
+  marginLeft: theme.spacing(2),
+  padding: '0 8px',
+  fontSize: '14px',
+  fontWeight: 'normal',
+  color: theme.palette.grey[700],
+  lineHeight: 1.5,
 }));
 
 interface StickyTopBarProps {
@@ -129,20 +121,16 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
   settingsType,
   allowEditing,
 }: StickyTopBarProps) => {
-  const classes = useStyles();
   const mainHeader = nickname ?? name;
   const secondaryHeader = nickname ? name : null;
 
   return (
-    <header className={classes.container}>
-      <div className={classes.namesContainer}>
-        <Typography variant="h2" className={classes.mainHeader}>
-          {mainHeader}
-        </Typography>
-        <div className={classes.secondaryHeaderContainer}>
-          <Typography className={classes.secondaryHeader}>{secondaryHeader}</Typography>
-          <Button
-            className={classes.link}
+    <Container>
+      <NamesContainer>
+        <MainHeader variant="h2">{mainHeader}</MainHeader>
+        <SecondaryHeaderContainer>
+          <SecondaryHeader>{secondaryHeader}</SecondaryHeader>
+          <StyledLinkButton
             variant="outlined"
             startIcon={<Link />}
             onClick={() => {
@@ -150,19 +138,19 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
             }}
           >
             Copy link
-          </Button>
-        </div>
-      </div>
+          </StyledLinkButton>
+        </SecondaryHeaderContainer>
+      </NamesContainer>
 
-      <div className={classes.buttonsContainer}>
-        <div className={classes.switchContainer}>
+      <ButtonsContainer>
+        <SwitchContainer>
           <TestLiveSwitch
             isLive={status === 'Live'}
             onChange={(isLive: boolean) => onStatusChange(isLive ? 'Live' : 'Draft')}
             disabled={(userHasTestLocked && lockStatus.locked) || !allowEditing} // cannot change test status while still editing it
           />
-        </div>
-        <div className={classes.lockContainer}>
+        </SwitchContainer>
+        <LockContainer>
           {!userHasTestLocked && !lockStatus.locked && (
             <>
               <TestCopyButton
@@ -174,67 +162,62 @@ const StickyTopBar: React.FC<StickyTopBarProps> = ({
                 onTestCopy={onTestCopy}
                 disabled={userHasTestListLocked || !allowEditing}
               />
-              <Button
-                className={classes.button}
+              <StyledButton
                 variant="outlined"
                 size="medium"
-                startIcon={<EditIcon className={classes.icon} />}
+                startIcon={<EditIcon color="inherit" />}
                 onClick={() => onTestLock(name, false)}
                 disabled={!allowEditing}
               >
                 <Typography>Edit test</Typography>
-              </Button>
+              </StyledButton>
             </>
           )}
           {!userHasTestLocked && lockStatus.locked && (
             <>
               <TestLockDetails email={lockStatus.email} timestamp={lockStatus.timestamp} />
-              <Button
-                className={classes.button}
+              <StyledButton
                 variant="outlined"
                 size="medium"
-                startIcon={<LockIcon className={classes.icon} />}
+                startIcon={<LockIcon color="inherit" />}
                 onClick={() => onTestLock(name, true)}
               >
                 <Typography>Take control</Typography>
-              </Button>
+              </StyledButton>
             </>
           )}
           {userHasTestLocked && (
             <>
               {!isNew && <TestArchiveButton onTestArchive={onTestArchive} />}
-              <Button
-                className={classes.button}
+              <StyledButton
                 variant="outlined"
                 size="medium"
-                startIcon={<CloseIcon className={classes.icon} />}
+                startIcon={<CloseIcon color="inherit" />}
                 onClick={() => onTestUnlock(name)}
               >
                 <Typography>Discard</Typography>
-              </Button>
-              <Button
-                className={classes.button}
+              </StyledButton>
+              <StyledButton
                 variant="outlined"
                 size="medium"
-                startIcon={<SaveIcon className={classes.icon} />}
+                startIcon={<SaveIcon color="inherit" />}
                 onClick={() => onTestSave(name)}
               >
                 <Typography>Save test</Typography>
-              </Button>
+              </StyledButton>
             </>
           )}
-          <Button
-            className={classes.button}
+          <StyledButton
             variant="outlined"
             size="medium"
-            startIcon={<HistoryIcon className={classes.icon} />}
+            startIcon={<HistoryIcon color="inherit" />}
             onClick={() => onTestAudit(name, channel)}
           >
             <Typography>Audit</Typography>
-          </Button>
-        </div>
-      </div>
-    </header>
+          </StyledButton>
+        </LockContainer>
+      </ButtonsContainer>
+    </Container>
   );
 };
 

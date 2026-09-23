@@ -1,33 +1,34 @@
-import { Button, Dialog } from '@mui/material';
+import { Box, Button, Dialog } from '@mui/material';
 import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { makeStyles } from '@mui/styles';
 import React from 'react';
 import useOpenable from '../../../../../../hooks/useOpenable';
 import { Methodology } from '../../../../helpers/shared';
 
-const useStyles = makeStyles(() => ({
-  button: {
-    height: '100%',
-  },
-  dialog: {
-    padding: '10px',
-  },
-  heading: {
-    margin: '6px 12px 0 12px',
-    fontSize: 18,
-    fontWeight: 500,
-  },
-  totalContainer: {
-    fontSize: 15,
-    fontWeight: 500,
-  },
-}));
+const StyledButton = styled(Button)({
+  height: '100%',
+});
+
+const StyledDialog = styled(Dialog)({
+  padding: '10px',
+});
+
+const Heading = styled(Box)({
+  margin: '6px 12px 0 12px',
+  fontSize: 18,
+  fontWeight: 500,
+});
+
+const TotalCell = styled(TableCell)({
+  fontSize: 15,
+  fontWeight: 500,
+});
 
 export interface LTV3Data {
   test_name: string;
@@ -49,7 +50,6 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
   label,
   methodologies,
 }: LTV3DataButtonProps) => {
-  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
   const [dataSet, setDataSet] = React.useState<LTV3Data[][]>([]);
@@ -75,11 +75,11 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
   return (
     <>
       <div>
-        <Button className={classes.button} variant="outlined" onClick={handleClick}>
+        <StyledButton variant="outlined" onClick={handleClick}>
           {label}
-        </Button>
-        <Dialog open={isOpen} onClose={close} maxWidth="lg" className={classes.dialog}>
-          <div className={classes.heading}>
+        </StyledButton>
+        <StyledDialog open={isOpen} onClose={close} maxWidth="lg">
+          <Heading>
             <h3>LTV3 data for the test : {testName}</h3>
             <TableContainer component={Paper}>
               <Table>
@@ -107,24 +107,20 @@ export const LTV3DataButton: React.FC<LTV3DataButtonProps> = ({
                     </TableRow>
                   ))}
                   <TableRow>
-                    <TableCell className={classes.totalContainer}>Total</TableCell>
+                    <TotalCell>Total</TotalCell>
                     {uniqueTestNames.map((testName) => {
                       const totalLTV3 = dataSet
                         .flat()
                         .filter((item) => item.test_name === testName)
                         .reduce((sum, item) => sum + item.ltv3, 0);
-                      return (
-                        <TableCell className={classes.totalContainer} key={testName}>
-                          {totalLTV3.toFixed(2)}
-                        </TableCell>
-                      );
+                      return <TotalCell key={testName}>{totalLTV3.toFixed(2)}</TotalCell>;
                     })}
                   </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
-          </div>
-        </Dialog>
+          </Heading>
+        </StyledDialog>
       </div>
     </>
   );

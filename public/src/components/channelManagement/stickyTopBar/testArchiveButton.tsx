@@ -6,22 +6,19 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Theme,
   Typography,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
-  buttonText: {
-    fontSize: '14px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    color: palette.grey[800],
-  },
+const ButtonText = styled(Typography)(({ theme }) => ({
+  fontSize: '14px',
+  fontWeight: 500,
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
+  color: theme.palette.grey[800],
 }));
 
 interface TestArchiveButtonProps {
@@ -31,7 +28,6 @@ interface TestArchiveButtonProps {
 export const TestArchiveButton: React.FC<TestArchiveButtonProps> = ({
   onTestArchive,
 }: TestArchiveButtonProps) => {
-  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
   return (
@@ -42,7 +38,7 @@ export const TestArchiveButton: React.FC<TestArchiveButtonProps> = ({
         size="medium"
         onClick={open}
       >
-        <Typography className={classes.buttonText}>Archive test</Typography>
+        <ButtonText>Archive test</ButtonText>
       </Button>
       <Dialog
         open={isOpen}

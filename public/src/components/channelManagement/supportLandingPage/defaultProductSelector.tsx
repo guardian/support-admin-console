@@ -5,25 +5,22 @@ import {
   Grid,
   Radio,
   RadioGroup,
-  Theme,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { DefaultProductSelection } from '../../../models/supportLandingPage';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    marginBottom: spacing(3),
-  },
-  sectionTitle: {
-    marginBottom: spacing(2),
-    fontWeight: 600,
-  },
-  formControl: {
-    marginBottom: spacing(2),
-  },
+const Container = styled('div')(({ theme }) => ({
+  marginBottom: theme.spacing(3),
 }));
+const SectionTitle = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  fontWeight: 600,
+}));
+const FormControlWithMargin = styled(FormControl)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+})) as typeof FormControl;
 
 interface DefaultProductSelectorProps {
   defaultProductSelection?: DefaultProductSelection;
@@ -36,8 +33,6 @@ const DefaultProductSelector: React.FC<DefaultProductSelectorProps> = ({
   onDefaultProductSelectionChange,
   editMode,
 }) => {
-  const classes = useStyles();
-
   const handleProductTypeChange = (productType: DefaultProductSelection['productType'] | '') => {
     if (productType === '') {
       handleClearDefault();
@@ -91,14 +86,12 @@ const DefaultProductSelector: React.FC<DefaultProductSelectorProps> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <Typography className={classes.sectionTitle} variant="h6">
-        Default Product Selection
-      </Typography>
+    <Container>
+      <SectionTitle variant="h6">Default Product Selection</SectionTitle>
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <FormControl component="fieldset" className={classes.formControl} disabled={!editMode}>
+          <FormControlWithMargin component="fieldset" disabled={!editMode}>
             <FormLabel component="legend">Default Product</FormLabel>
             <RadioGroup
               value={defaultProductSelection?.productType ?? ''}
@@ -116,12 +109,12 @@ const DefaultProductSelector: React.FC<DefaultProductSelectorProps> = ({
                 label="Digital Plus"
               />
             </RadioGroup>
-          </FormControl>
+          </FormControlWithMargin>
         </Grid>
 
         {defaultProductSelection && (
           <Grid item xs={12} md={6}>
-            <FormControl component="fieldset" className={classes.formControl} disabled={!editMode}>
+            <FormControlWithMargin component="fieldset" disabled={!editMode}>
               <FormLabel component="legend">
                 Default Billing Period for{' '}
                 {getProductDisplayName(defaultProductSelection.productType)}
@@ -138,11 +131,11 @@ const DefaultProductSelector: React.FC<DefaultProductSelectorProps> = ({
                 <FormControlLabel value="Annual" control={<Radio />} label="Annual" />
                 <FormControlLabel value="OneTime" control={<Radio />} label="One-time" />
               </RadioGroup>
-            </FormControl>
+            </FormControlWithMargin>
           </Grid>
         )}
       </Grid>
-    </div>
+    </Container>
   );
 };
 
