@@ -1,7 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import { Button, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import { RegionsAndAll } from '../../utils/models';
 import BatchProcessTestButton from './batchProcessTestButton';
@@ -11,42 +11,40 @@ import TestList from './testList';
 import TestListSidebarFilterSelector from './testListSidebarFilterSelector';
 import TestPriorityLabelList from './testPriorityLabelList';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingLeft: '32px',
-  },
-  header: {
-    marginTop: '5px',
-    fontSize: '14px',
-  },
-  listsContainer: {
-    position: 'relative',
-    display: 'flex',
-    marginTop: '8px',
-  },
-  priorityLabelListContainer: {
-    position: 'absolute',
-    left: '-32px',
-  },
-  buttonsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    marginBottom: '10px',
-  },
-  reorderListButton: {
-    height: '48px',
-    justifyContent: 'start',
-  },
-  buttonText: {
-    fontSize: '12px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-  },
-}));
+const Root = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  paddingLeft: '32px',
+});
+const Header = styled(Typography)({
+  marginTop: '5px',
+  fontSize: '14px',
+});
+const ListsContainer = styled('div')({
+  position: 'relative',
+  display: 'flex',
+  marginTop: '8px',
+});
+const PriorityLabelListContainer = styled('div')({
+  position: 'absolute',
+  left: '-32px',
+});
+const ButtonsContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+  marginBottom: '10px',
+});
+const ReorderListButton = styled(Button)({
+  height: '48px',
+  justifyContent: 'start',
+});
+const ButtonText = styled(Typography)({
+  fontSize: '12px',
+  fontWeight: 500,
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
+});
 
 interface SidebarProps<T extends Test> {
   tests: T[];
@@ -79,7 +77,6 @@ function Sidebar<T extends Test>({
   savingTestList,
   allowEditing,
 }: SidebarProps<T>): React.ReactElement<SidebarProps<T>> {
-  const classes = useStyles();
   const [regionFilter, setRegionFilter] = useState<RegionsAndAll>('ALL');
 
   const filterTests = function (testsToFilter: Test[]): Test[] {
@@ -97,8 +94,8 @@ function Sidebar<T extends Test>({
   };
 
   return (
-    <div className={classes.root}>
-      <div className={classes.buttonsContainer}>
+    <Root>
+      <ButtonsContainer>
         <NewTestButton
           existingNames={tests.map((t) => t.name)}
           existingNicknames={tests.map((t) => t.nickname ?? '')}
@@ -116,51 +113,44 @@ function Sidebar<T extends Test>({
 
         {userHasTestListLocked && (
           <>
-            <Button
+            <ReorderListButton
               variant="outlined"
               size="medium"
               startIcon={<SaveIcon />}
-              className={classes.reorderListButton}
               onClick={savingTestList ? undefined : onTestListOrderSave}
               disabled={savingTestList}
             >
-              <Typography className={classes.buttonText}>
-                {savingTestList ? 'Saving order...' : 'Save order'}
-              </Typography>
-            </Button>
-            <Typography className={classes.header}>EDITING: tests in priority order</Typography>
+              <ButtonText>{savingTestList ? 'Saving order...' : 'Save order'}</ButtonText>
+            </ReorderListButton>
+            <Header>EDITING: tests in priority order</Header>
           </>
         )}
 
         {testListLockStatus.locked && !userHasTestListLocked && (
           <>
-            <Button
+            <ReorderListButton
               variant="outlined"
               size="medium"
               startIcon={<EditIcon />}
-              className={classes.reorderListButton}
               onClick={() => onTestListLock(true)}
               disabled={!allowEditing}
             >
-              <Typography className={classes.buttonText}>Take control</Typography>
-            </Button>
-            <Typography className={classes.header}>
-              {testListLockStatus.email} has the test list locked
-            </Typography>
+              <ButtonText>Take control</ButtonText>
+            </ReorderListButton>
+            <Header>{testListLockStatus.email} has the test list locked</Header>
           </>
         )}
 
         {!testListLockStatus.locked && (
-          <Button
+          <ReorderListButton
             variant="outlined"
             size="medium"
             startIcon={<EditIcon />}
-            className={classes.reorderListButton}
             onClick={() => onTestListLock(false)}
             disabled={!allowEditing}
           >
-            <Typography className={classes.buttonText}>Reorder test list</Typography>
-          </Button>
+            <ButtonText>Reorder test list</ButtonText>
+          </ReorderListButton>
         )}
 
         {!userHasTestListLocked && (
@@ -169,12 +159,12 @@ function Sidebar<T extends Test>({
             handleRegionFilterChange={setRegionFilter}
           />
         )}
-      </div>
+      </ButtonsContainer>
 
-      <div className={classes.listsContainer}>
-        <div className={classes.priorityLabelListContainer}>
+      <ListsContainer>
+        <PriorityLabelListContainer>
           <TestPriorityLabelList numTests={tests.length} />
-        </div>
+        </PriorityLabelListContainer>
         <TestList
           tests={filterTests(tests)}
           isInEditMode={userHasTestListLocked}
@@ -182,8 +172,8 @@ function Sidebar<T extends Test>({
           onTestPriorityChange={onTestPriorityChange}
           onTestSelected={onTestSelected}
         />
-      </div>
-    </div>
+      </ListsContainer>
+    </Root>
   );
 }
 

@@ -1,23 +1,22 @@
 import ArchiveIcon from '@mui/icons-material/Archive';
 import { Button, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../hooks/useOpenable';
 import BatchProcessTestDialog from './batchProcessTestDialog';
 import { Test } from './helpers/shared';
 
-const useStyles = makeStyles(() => ({
-  button: {
-    justifyContent: 'start',
-    height: '48px',
-  },
-  text: {
-    fontSize: '12px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-  },
-}));
+const StyledButton = styled(Button)({
+  justifyContent: 'start',
+  height: '48px',
+});
+
+const Text = styled(Typography)({
+  fontSize: '12px',
+  fontWeight: 500,
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
+});
 
 interface BatchProcessTestButtonProps {
   draftTests: Test[];
@@ -30,19 +29,17 @@ const BatchProcessTestButton: React.FC<BatchProcessTestButtonProps> = ({
   onBatchTestArchive,
   disabled,
 }: BatchProcessTestButtonProps) => {
-  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
   return (
     <>
-      <Button
+      <StyledButton
         variant="outlined"
-        className={classes.button}
         startIcon={<ArchiveIcon />}
         onClick={open}
         disabled={disabled}
       >
-        <Typography className={classes.text}>Batch archive tests</Typography>
-      </Button>
+        <Text>Batch archive tests</Text>
+      </StyledButton>
       <BatchProcessTestDialog
         isOpen={isOpen}
         close={close}

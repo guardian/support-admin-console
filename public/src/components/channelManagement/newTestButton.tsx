@@ -1,22 +1,21 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../hooks/useOpenable';
 import CreateTestDialog from './createTestDialog';
 
-const useStyles = makeStyles(() => ({
-  button: {
-    justifyContent: 'start',
-    height: '48px',
-  },
-  text: {
-    fontSize: '12px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-  },
-}));
+const StyledButton = styled(Button)({
+  justifyContent: 'start',
+  height: '48px',
+});
+
+const Text = styled(Typography)({
+  fontSize: '12px',
+  fontWeight: 500,
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
+});
 
 interface NewTestButtonProps {
   existingNames: string[];
@@ -33,19 +32,12 @@ const NewTestButton: React.FC<NewTestButtonProps> = ({
   createTest,
   disabled,
 }: NewTestButtonProps) => {
-  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
   return (
     <>
-      <Button
-        variant="outlined"
-        className={classes.button}
-        startIcon={<AddIcon />}
-        onClick={open}
-        disabled={disabled}
-      >
-        <Typography className={classes.text}>Create a new test</Typography>
-      </Button>
+      <StyledButton variant="outlined" startIcon={<AddIcon />} onClick={open} disabled={disabled}>
+        <Text>Create a new test</Text>
+      </StyledButton>
       <CreateTestDialog
         isOpen={isOpen}
         close={close}
