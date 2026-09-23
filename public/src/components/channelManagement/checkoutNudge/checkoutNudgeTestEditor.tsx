@@ -11,7 +11,7 @@ import { getStage } from '../../../utils/stage';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
 import { RegionTargeting } from '../helpers/shared';
-import { useStyles } from '../helpers/testEditorStyles';
+import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorTargetRegionsSelector from '../testEditorTargetRegionsSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
@@ -30,8 +30,6 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
   onTestChange,
   setValidationStatusForField,
 }: ValidatedTestEditorProps<CheckoutNudgeTest>) => {
-  const classes = useStyles();
-
   const onVariantsChange = (
     update: (current: CheckoutNudgeVariant[]) => CheckoutNudgeVariant[],
   ): void => {
@@ -169,12 +167,10 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Nudge From Product
-        </Typography>
-        <Typography variant="body2" color="textSecondary" style={{ marginBottom: 16 }}>
+    <Container>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Nudge From Product</SectionHeader>
+        <Typography variant="body2" color="textSecondary">
           Configure which product checkout this nudge appears on
         </Typography>
         <TextField
@@ -220,11 +216,9 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
             </MenuItem>
           ))}
         </TextField>
-      </div>
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Variants
-        </Typography>
+      </SectionContainer>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Variants</SectionHeader>
         <div>
           <VariantsEditor
             variants={test.variants}
@@ -237,31 +231,27 @@ const CheckoutNudgeTestEditor: React.FC<ValidatedTestEditorProps<CheckoutNudgeTe
             onVariantClone={onVariantClone}
           />
         </div>
-      </div>
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Target audience
-        </Typography>
+      </SectionContainer>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Target audience</SectionHeader>
 
         <TestEditorTargetRegionsSelector
           regionTargeting={test.regionTargeting}
           onRegionTargetingUpdate={onTargetingChange}
           isDisabled={!userHasTestLocked}
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Schedule
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Schedule</SectionHeader>
         <ScheduleEditor
           scheduler={test.scheduler}
           disabled={!userHasTestLocked}
           onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
           onValidationChange={(isValid) => setValidationStatusForField('schedule', isValid)}
         />
-      </div>
-    </div>
+      </SectionContainer>
+    </Container>
   );
 };
 

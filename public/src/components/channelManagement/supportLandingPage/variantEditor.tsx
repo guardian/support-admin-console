@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useCallback } from 'react';
 import {
   DefaultProductSelection,
@@ -16,16 +15,14 @@ import DefaultProductSelector from './defaultProductSelector';
 import { ProductsEditor } from './productsEditor';
 import URLGenerator from './urlGenerator';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    paddingTop: spacing(2),
-    paddingLeft: spacing(4),
-    paddingRight: spacing(10),
+const Container = styled('div')(({ theme }) => ({
+  width: '100%',
+  paddingTop: theme.spacing(2),
+  paddingLeft: theme.spacing(4),
+  paddingRight: theme.spacing(10),
 
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
+  '& > * + *': {
+    marginTop: theme.spacing(3),
   },
 }));
 
@@ -47,7 +44,6 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   onVariantChange,
   testName,
 }: VariantEditorProps) => {
-  const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
   // Memoize callbacks to prevent infinite render loops in child components
@@ -90,7 +86,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   );
 
   return (
-    <div className={classes.container}>
+    <Container>
       <div>
         <CopyEditor
           copy={variant.copy}
@@ -125,7 +121,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
       <div>
         <URLGenerator variant={variant} testName={testName} />
       </div>
-    </div>
+    </Container>
   );
 };
 

@@ -1,20 +1,18 @@
 import FileCopyIcon from '@mui/icons-material/FileCopy';
-import { Button, Theme, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
 import CreateTestDialog from '../createTestDialog';
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
-  button: {
-    color: palette.grey[800],
-    '& > p': {
-      fontSize: '14px',
-      fontWeight: 500,
-      textTransform: 'uppercase',
-      letterSpacing: '1px',
-    },
+const CopyButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.grey[800],
+  '& > p': {
+    fontSize: '14px',
+    fontWeight: 500,
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
   },
 }));
 
@@ -42,13 +40,11 @@ export const TestCopyButton: React.FC<TestCopyButtonProps> = ({
   onTestCopy,
   disabled,
 }: TestCopyButtonProps) => {
-  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
   return (
     <>
-      <Button
-        className={classes.button}
+      <CopyButton
         onClick={open}
         variant="outlined"
         startIcon={<FileCopyIcon style={{ color: grey[700] }} />}
@@ -56,7 +52,7 @@ export const TestCopyButton: React.FC<TestCopyButtonProps> = ({
         disabled={disabled}
       >
         <Typography>Copy test</Typography>
-      </Button>
+      </CopyButton>
       <CreateTestDialog
         isOpen={isOpen}
         close={close}

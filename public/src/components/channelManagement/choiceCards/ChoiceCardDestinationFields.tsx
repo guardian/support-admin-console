@@ -1,4 +1,5 @@
 import { FormControl, MenuItem, Select, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
@@ -14,7 +15,6 @@ interface DestinationTestsResponse {
 interface ChoiceCardDestinationFieldsProps {
   index: number;
   isDisabled: boolean;
-  subHeadingClassName: string;
   formMethods: UseFormReturn<ChoiceCardsSettings & { hasOneDefault: boolean }>;
   onDestinationSectionChange: () => void;
 }
@@ -23,6 +23,10 @@ enum Destination {
   LandingPage = 'LandingPage',
   Checkout = 'Checkout',
 }
+
+const SubHeading = styled(Typography)({
+  fontWeight: 700,
+});
 
 const startRequest = (requestRef: React.MutableRefObject<number>): number => {
   requestRef.current += 1;
@@ -40,7 +44,6 @@ const getSettingsTypeForDestination = (destination: Destination) =>
 export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsProps> = ({
   index,
   isDisabled,
-  subHeadingClassName,
   formMethods,
   onDestinationSectionChange,
 }) => {
@@ -162,7 +165,7 @@ export const ChoiceCardDestinationFields: React.FC<ChoiceCardDestinationFieldsPr
       control={control}
       render={({ field }) => (
         <>
-          <Typography className={subHeadingClassName}>Destination</Typography>
+          <SubHeading>Destination</SubHeading>
           <TypedRadioGroup
             selectedValue={(field.value as Destination | undefined) ?? Destination.LandingPage}
             onChange={(destination) => {

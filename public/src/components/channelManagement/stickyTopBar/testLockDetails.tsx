@@ -1,13 +1,11 @@
 import { Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { formattedTimestamp } from '../helpers/utilities';
 
-const useStyles = makeStyles(() => ({
-  lockDetailsText: {
-    alignSelf: 'flex-end',
-  },
-}));
+const LockDetailsText = styled(Typography)({
+  alignSelf: 'flex-end',
+});
 
 const formattedName = (email: string): string => {
   const nameArr: RegExpMatchArray | null = email.match(/^([a-z]*)\.([a-z]*).*@.*/);
@@ -27,11 +25,10 @@ export const TestLockDetails: React.FC<TestLockDetailsProps> = ({
   email,
   timestamp,
 }: TestLockDetailsProps) => {
-  const classes = useStyles();
   if (email && timestamp) {
     const text = `Locked by ${formattedName(email)}, since ${formattedTimestamp(timestamp)}`;
 
-    return <Typography className={classes.lockDetailsText}>{text}</Typography>;
+    return <LockDetailsText>{text}</LockDetailsText>;
   }
   return null;
 };

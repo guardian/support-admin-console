@@ -75,7 +75,7 @@ export const LinkPopover = styled('div')({
   borderRadius: 4,
   boxShadow: '0 2px 8px rgba(0 0 0 / 0.2)',
 });
-export const buttonSx = (theme: Theme) => ({
+export const buttonStyles = (theme: Theme) => ({
   border: '1px solid rgba(0 0 0 / 0.23)',
   borderRadius: 4,
   backgroundColor: 'rgba(255 255 255 / 1)',
@@ -91,7 +91,7 @@ export const buttonSx = (theme: Theme) => ({
   },
 });
 export const Button = styled('button')(({ theme }) => ({
-  ...buttonSx(theme),
+  ...buttonStyles(theme),
 }));
 export const LinkInput = styled('input')({
   minWidth: 180,

@@ -8,10 +8,9 @@ import {
   Button,
   Grid,
   TextField,
-  Theme,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useRef } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { LandingPageProductDescription, Products } from '../../../models/supportLandingPage';
@@ -24,23 +23,24 @@ import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 
 const productKeys: Array<keyof Products> = ['Contribution', 'SupporterPlus', 'DigitalSubscription'];
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  heading: {
-    marginBottom: spacing(1),
-  },
-  accordionDetails: {
-    paddingTop: spacing(2),
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-  benefitsHeading: {
-    fontWeight: 700,
-  },
-  deleteButton: {
-    height: '100%',
-  },
+const Heading = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(1),
 }));
+const AccordionDetailsStyled = styled(AccordionDetails)(({ theme }) => ({
+  paddingTop: theme.spacing(2),
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(3),
+}));
+const BenefitsHeading = styled('div')({
+  fontWeight: 700,
+});
+const DeleteButton = styled(Button)({
+  height: '100%',
+});
+const AddBenefitButton = styled(Button)({
+  alignSelf: 'flex-start',
+});
 
 const buildBenefitsHeading = (product: keyof Products) => {
   if (product === 'DigitalSubscription') {
@@ -84,8 +84,6 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
   onProductChange,
   onValidationChange,
 }: ProductEditorProps) => {
-  const classes = useStyles();
-
   // Validation for this product as a whole
   const {
     control,
@@ -147,7 +145,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="h6">{productKey}</Typography>
       </AccordionSummary>
-      <AccordionDetails className={classes.accordionDetails}>
+      <AccordionDetailsStyled>
         <TextField
           error={!!errors.title}
           helperText={errors.title?.message}
@@ -220,7 +218,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
           fullWidth
         />
 
-        <div className={classes.benefitsHeading}>{buildBenefitsHeading(productKey)}</div>
+        <BenefitsHeading>{buildBenefitsHeading(productKey)}</BenefitsHeading>
 
         {benefits.map((benefit, index) => (
           <Grid container columns={9} spacing={1} key={benefit.id}>
@@ -263,8 +261,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
               />
             </Grid>
             <Grid item xs={1}>
-              <Button
-                className={classes.deleteButton}
+              <DeleteButton
                 onClick={() => {
                   remove(index);
                   onProductChange({
@@ -277,19 +274,19 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({
                 size="medium"
               >
                 <CloseIcon />
-              </Button>
+              </DeleteButton>
             </Grid>
           </Grid>
         ))}
-        <Button
+        <AddBenefitButton
           onClick={() => append({ copy: '' })}
           disabled={!editMode || benefits.length >= 8}
           variant="outlined"
           size="medium"
         >
           <AddIcon />
-        </Button>
-      </AccordionDetails>
+        </AddBenefitButton>
+      </AccordionDetailsStyled>
     </Accordion>
   );
 };
@@ -307,8 +304,6 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
   onValidationChange,
   editMode,
 }) => {
-  const classes = useStyles();
-
   // Validation for all 3 products
   const {
     control,
@@ -347,9 +342,7 @@ export const ProductsEditor: React.FC<ProductsEditorProps> = ({
 
   return (
     <div>
-      <Typography className={classes.heading} variant="h5">
-        Products
-      </Typography>
+      <Heading variant="h5">Products</Heading>
 
       {productKeys.map((productKey) => (
         <Controller

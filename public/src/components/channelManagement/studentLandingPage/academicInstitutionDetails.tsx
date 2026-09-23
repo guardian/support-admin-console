@@ -1,40 +1,26 @@
-import { TextField, Theme } from '@mui/material';
+import { TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { makeStyles } from '@mui/styles';
 import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Institution, StudentLandingPageVariant } from '../../../models/studentLandingPage';
 import { EMPTY_ERROR_HELPER_TEXT, noHtmlValidator } from '../helpers/validation';
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: {
-    width: '98%',
-    paddingTop: 0,
-    paddingLeft: 0,
-    paddingRight: 0,
+const Container = styled('div')(({ theme }) => ({
+  width: '98%',
+  paddingTop: 0,
+  paddingLeft: 0,
+  paddingRight: 0,
 
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
-  },
-  sectionHeader: {
-    fontSize: 16,
-    color: palette.grey[900],
-    fontWeight: 500,
-  },
-  sectionContainer: {
-    paddingTop: spacing(1),
-    paddingBottom: spacing(2),
-
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-  },
-  choiceCardContainer: {
-    display: 'flex',
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
 }));
-
+const SectionHeader = styled(Typography)(({ theme }) => ({
+  fontSize: 16,
+  color: theme.palette.grey[900],
+  fontWeight: 500,
+}));
 interface FormData {
   acronym: string;
   name: string;
@@ -54,8 +40,6 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
   updateInstitutionDetails,
   onValidationChange,
 }) => {
-  const classes = useStyles();
-
   const defaultValues: FormData = {
     acronym: variant.institution.acronym,
     name: variant.institution.name,
@@ -101,11 +85,9 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
     'Image dimensions should be 61px wide by 27px high, with a transparent background and the foreground colour needs to be white';
 
   return (
-    <div className={classes.container}>
-      <Typography variant={'h4'} className={classes.sectionHeader}>
-        Institution Details
-      </Typography>
-      <div className={classes.container}>
+    <Container>
+      <SectionHeader variant={'h4'}>Institution Details</SectionHeader>
+      <Container>
         <TextField
           {...register('name', {
             required: EMPTY_ERROR_HELPER_TEXT,
@@ -165,7 +147,7 @@ export const AcademicInstitutionDetailEditor: React.FC<AcademicInstituteDetailEd
           disabled={!editMode}
           fullWidth
         />
-      </div>
-    </div>
+      </Container>
+    </Container>
   );
 };
