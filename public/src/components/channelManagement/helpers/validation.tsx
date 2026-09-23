@@ -79,7 +79,7 @@ export const templateValidatorForPlatform =
   (platform: TestPlatform) =>
   (text?: string): string | undefined => {
     if (text) {
-      const templates: string[] | null = text.match(/%\S*%/g);
+      const templates: string[] | null = text.match(/%%[^%\s]*%%|%\S*%/g);
 
       if (templates !== null) {
         const invalidTemplate = templates.find(

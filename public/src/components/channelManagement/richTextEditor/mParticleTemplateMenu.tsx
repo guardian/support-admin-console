@@ -4,9 +4,13 @@ import { MPARTICLE_LAST_SINGLE_CONTRIBUTION } from '../helpers/validation';
 
 interface Props {
   insertTemplate: (template: string) => void;
+  buttonClassName?: string;
 }
 
-export const MParticleTemplateMenu: React.FC<Props> = ({ insertTemplate }: Props) => {
+export const MParticleTemplateMenu: React.FC<Props> = ({
+  insertTemplate,
+  buttonClassName = 'remirror-button',
+}: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleButtonClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -25,7 +29,7 @@ export const MParticleTemplateMenu: React.FC<Props> = ({ insertTemplate }: Props
   return (
     <>
       <Button
-        className="remirror-button"
+        className={buttonClassName}
         onClick={handleButtonClick}
         sx={{ textTransform: 'none' }}
       >
