@@ -1,23 +1,19 @@
-import { TextField, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { TextField, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Scheduler } from './helpers/shared';
 import { parseSchedulerUtc } from './helpers/utilities';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(1),
-  },
-  dateRange: {
-    display: 'flex',
-    gap: spacing(2),
-  },
-  field: {
-    flex: '1 0 200px',
-  },
+const Container = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1),
 }));
+const DateRange = styled('div')(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing(2),
+}));
+const Field = styled(TextField)({ flex: '1 0 200px' });
 
 interface ScheduleEditorProps {
   scheduler?: Scheduler;
@@ -32,8 +28,6 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = ({
   onChange,
   onValidationChange,
 }) => {
-  const classes = useStyles();
-
   const startDate = React.useMemo(() => parseSchedulerUtc(scheduler?.start), [scheduler?.start]);
   const endDate = React.useMemo(() => parseSchedulerUtc(scheduler?.end), [scheduler?.end]);
   const hasInvalidRange = Boolean(startDate && endDate && endDate < startDate);
@@ -61,7 +55,7 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <Typography variant="subtitle2">
         Test scheduler{' '}
         <small>
@@ -69,9 +63,8 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = ({
           schedule has no effect on draft tests.)
         </small>
       </Typography>
-      <div className={classes.dateRange}>
-        <TextField
-          className={classes.field}
+      <DateRange>
+        <Field
           label="Start Date (UTC)"
           type="datetime-local"
           value={scheduler?.start ?? ''}
@@ -82,8 +75,7 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = ({
           error={hasInvalidRange}
           InputLabelProps={{ shrink: true }}
         />
-        <TextField
-          className={classes.field}
+        <Field
           label="End Date (UTC)"
           type="datetime-local"
           value={scheduler?.end ?? ''}
@@ -95,8 +87,8 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = ({
           helperText={hasInvalidRange ? 'End date must be after the start date' : ' '}
           InputLabelProps={{ shrink: true }}
         />
-      </div>
-    </div>
+      </DateRange>
+    </Container>
   );
 };
 

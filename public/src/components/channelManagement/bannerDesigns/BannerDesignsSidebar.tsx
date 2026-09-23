@@ -1,27 +1,27 @@
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { BannerDesign } from '../../../models/bannerDesign';
 import BannerDesignsList from './BannerDesignsList';
 import NewBannerDesignButton from './NewBannerDesignButton';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingLeft: '32px',
-  },
-  listsContainer: {
-    position: 'relative',
-    display: 'flex',
-    marginTop: '8px',
-  },
-  buttonsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
-    marginBottom: '10px',
-  },
-}));
+const Root = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  paddingLeft: '32px',
+});
+
+const ListsContainer = styled('div')({
+  position: 'relative',
+  display: 'flex',
+  marginTop: '8px',
+});
+
+const ButtonsContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+  marginBottom: '10px',
+});
 
 interface Props {
   designs: BannerDesign[];
@@ -36,24 +36,22 @@ const BannerDesignsSidebar = ({
   onDesignSelected,
   createDesign,
 }: Props): React.ReactElement => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.root}>
-      <div className={classes.buttonsContainer}>
+    <Root>
+      <ButtonsContainer>
         <NewBannerDesignButton
           existingNames={designs.map((c) => c.name)}
           createDesign={createDesign}
         />
-      </div>
-      <div className={classes.listsContainer}>
+      </ButtonsContainer>
+      <ListsContainer>
         <BannerDesignsList
           designs={designs}
           selectedDesign={selectedDesign}
           onDesignSelected={onDesignSelected}
         />
-      </div>
-    </div>
+      </ListsContainer>
+    </Root>
   );
 };
 
