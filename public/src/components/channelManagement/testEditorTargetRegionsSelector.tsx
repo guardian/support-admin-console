@@ -1,14 +1,10 @@
-import { Checkbox, FormControlLabel, FormGroup, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Region, regionIds, regions } from '../../utils/models';
 import { RegionTargeting, TestPlatform } from './helpers/shared';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  indentedContainer: {
-    marginLeft: spacing(3),
-  },
-}));
+const IndentedContainer = styled(FormGroup)(({ theme }) => ({ marginLeft: theme.spacing(3) }));
 
 interface TestEditorTargetRegionsSelectorProps {
   regionTargeting?: RegionTargeting;
@@ -25,7 +21,6 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
   isDisabled,
   platform,
 }: TestEditorTargetRegionsSelectorProps) => {
-  const classes = useStyles();
   const allRegions = supportedRegions ?? regionIds;
 
   // Guard against undefined regionTargeting during test switching
@@ -80,7 +75,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
         }
         label={'All supported regions'}
       />
-      <FormGroup className={classes.indentedContainer}>
+      <IndentedContainer>
         {allRegions.map((region) => (
           <FormControlLabel
             key={region}
@@ -95,7 +90,7 @@ const TestEditorTargetRegionsSelector: React.FC<TestEditorTargetRegionsSelectorP
             label={checkLabelByChannel(platform, region)}
           />
         ))}
-      </FormGroup>
+      </IndentedContainer>
     </FormGroup>
   );
 };

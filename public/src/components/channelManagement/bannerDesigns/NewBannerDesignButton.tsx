@@ -1,21 +1,20 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
 import CreateBannerDesignDialog from './CreateBannerDesignDialog';
 
-const useStyles = makeStyles(() => ({
-  button: {
-    justifyContent: 'start',
-    height: '48px',
-  },
-  text: {
-    fontSize: '12px',
-    fontWeight: 500,
-    letterSpacing: '1px',
-  },
-}));
+const StyledButton = styled(Button)({
+  justifyContent: 'start',
+  height: '48px',
+});
+
+const Text = styled(Typography)({
+  fontSize: '12px',
+  fontWeight: 500,
+  letterSpacing: '1px',
+});
 
 interface Props {
   existingNames: string[];
@@ -24,13 +23,12 @@ interface Props {
 
 const NewCampaignButton: React.FC<Props> = ({ existingNames, createDesign }: Props) => {
   const [isOpen, open, close] = useOpenable();
-  const classes = useStyles();
 
   return (
     <>
-      <Button className={classes.button} variant="outlined" startIcon={<AddIcon />} onClick={open}>
-        <Typography className={classes.text}>Create a new banner design</Typography>
-      </Button>
+      <StyledButton variant="outlined" startIcon={<AddIcon />} onClick={open}>
+        <Text>Create a new banner design</Text>
+      </StyledButton>
       <CreateBannerDesignDialog
         isOpen={isOpen}
         close={close}

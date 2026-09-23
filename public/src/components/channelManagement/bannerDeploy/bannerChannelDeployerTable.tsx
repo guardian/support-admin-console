@@ -7,29 +7,25 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Theme,
   Toolbar,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import React, { JSX } from 'react';
+import { styled } from '@mui/material/styles';
+import React from 'react';
 import BannerChannelDeployerTableRow from './bannerChannelDeployerTableRow';
 import { BannerDeploys, BannersToRedeploy } from './bannerDeployTypes';
 import { BannerChannel } from './bannerDeployTypes';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  schedule: {
-    paddingLeft: spacing(3),
-  },
+const ScheduleRoot = styled('div')(({ theme }) => ({
+  paddingLeft: theme.spacing(3),
 }));
 
 interface ScheduleProps {
   isChannel1: boolean;
-  classes: Record<string, string>;
 }
 
-const Schedule = ({ isChannel1, classes }: ScheduleProps): JSX.Element => (
-  <div className={classes.schedule}>
+const Schedule = ({ isChannel1 }: ScheduleProps): React.JSX.Element => (
+  <ScheduleRoot>
     This banner is automatically deployed at:
     {isChannel1 ? (
       <ul>
@@ -41,7 +37,7 @@ const Schedule = ({ isChannel1, classes }: ScheduleProps): JSX.Element => (
         <li>9am every Tuesday</li>
       </ul>
     )}
-  </div>
+  </ScheduleRoot>
 );
 
 interface BannerChannelDeployerTableProps {
@@ -59,8 +55,6 @@ const BannerChannelDeployerTable: React.FC<BannerChannelDeployerTableProps> = ({
   onRedeployAllClick,
   onRedeployClick,
 }: BannerChannelDeployerTableProps) => {
-  const classes = useStyles();
-
   const isChannel1 = channel === 'CHANNEL1';
   const shouldRedeployAllBanners = Object.values(bannersToRedeploy).every(
     (shouldRedeploy) => shouldRedeploy,
@@ -73,7 +67,7 @@ const BannerChannelDeployerTable: React.FC<BannerChannelDeployerTableProps> = ({
           {isChannel1 ? 'Banner 1' : 'Banner 2'}
         </Typography>
       </Toolbar>
-      <Schedule isChannel1={isChannel1} classes={classes} />
+      <Schedule isChannel1={isChannel1} />
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>

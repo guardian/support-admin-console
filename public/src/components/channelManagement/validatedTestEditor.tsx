@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useRef } from 'react';
 import { Test } from './helpers/shared';
 import useValidation from './hooks/useValidation';
@@ -7,21 +6,19 @@ import StickyTopBar from './stickyTopBar/stickyTopBar';
 import TestSchedulerStatusBanner from './testSchedulerStatusBanner';
 import { TestEditorProps } from './testsForm';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  testEditorContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%',
-    background: palette.background.paper, // #FFFFFF
-    borderLeft: `1px solid ${palette.grey[500]}`,
-  },
-  scrollableContainer: {
-    overflowY: 'auto',
-    paddingLeft: spacing(3),
-    paddingRight: spacing(1),
-    paddingTop: spacing(2),
-  },
+const TestEditorContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+  width: '100%',
+  background: theme.palette.background.paper, // #FFFFFF
+  borderLeft: `1px solid ${theme.palette.grey[500]}`,
+}));
+const ScrollableContainer = styled('div')(({ theme }) => ({
+  overflowY: 'auto',
+  paddingLeft: theme.spacing(3),
+  paddingRight: theme.spacing(1),
+  paddingTop: theme.spacing(2),
 }));
 
 export interface ValidatedTestEditorProps<T extends Test> {
@@ -57,7 +54,6 @@ export const ValidatedTestEditor = <T extends Test>(
     onStatusChange,
     allowEditing,
   }: TestEditorProps<T>) => {
-    const classes = useStyles();
     /**
      * The useRef is necessary here to avoid bugs where updates can be lost.
      * This can happen when a RichTextEditor field changes a field after another field has changed.
@@ -85,7 +81,7 @@ export const ValidatedTestEditor = <T extends Test>(
     };
 
     return (
-      <div className={classes.testEditorContainer}>
+      <TestEditorContainer>
         <StickyTopBar
           name={test.name}
           nickname={test.nickname}
@@ -110,7 +106,7 @@ export const ValidatedTestEditor = <T extends Test>(
           allowEditing={allowEditing}
         />
 
-        <div className={classes.scrollableContainer}>
+        <ScrollableContainer>
           {test.scheduler && (
             <TestSchedulerStatusBanner scheduler={test.scheduler} status={test.status} />
           )}
@@ -121,8 +117,8 @@ export const ValidatedTestEditor = <T extends Test>(
             onTestChange={(update) => onUpdate(update(test))}
             setValidationStatusForField={setValidationStatusForField}
           />
-        </div>
-      </div>
+        </ScrollableContainer>
+      </TestEditorContainer>
     );
   };
   return Editor;

@@ -8,7 +8,7 @@ import {
   IconButton,
   TextField,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -18,19 +18,18 @@ import {
   VALID_CHARACTERS_REGEX,
 } from '../helpers/validation';
 
-const useStyles = makeStyles(() => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
+const DialogHeader = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingRight: '8px',
+});
+
+const StyledTextField = styled(TextField)({
+  '& input': {
+    textTransform: 'uppercase !important',
   },
-  input: {
-    '& input': {
-      textTransform: 'uppercase !important',
-    },
-  },
-}));
+});
 
 interface CreateBannerDesignDialogProps {
   isOpen: boolean;
@@ -49,8 +48,6 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
   existingNames,
   createDesign,
 }: CreateBannerDesignDialogProps) => {
-  const classes = useStyles();
-
   const defaultValues: FormData = {
     name: '',
   };
@@ -71,15 +68,14 @@ const CreateBannerDesignDialog: React.FC<CreateBannerDesignDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-design-dialog-title">
-      <div className={classes.dialogHeader}>
+      <DialogHeader>
         <DialogTitle id="create-design-dialog-title">Create a new banner design</DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />
         </IconButton>
-      </div>
+      </DialogHeader>
       <DialogContent dividers>
-        <TextField
-          className={classes.input}
+        <StyledTextField
           error={errors.name !== undefined}
           helperText={errors.name ? errors.name.message : ''}
           {...register('name', {

@@ -1,30 +1,23 @@
 import Dialog from '@mui/material/Dialog';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { IChange, Operation } from 'json-diff-ts';
 import * as React from 'react';
 
-const useStyles = makeStyles({
-  dialog: {
-    padding: '10px',
-  },
-  listStyleAdd: {
-    color: 'green',
-    maxWidth: '1000px',
-    overflowX: 'auto',
-    whiteSpace: 'pre-wrap',
-    wordBreak: 'break-all',
-  },
-  listStyleRemove: {
-    color: 'red',
-    maxWidth: '1000px',
-    overflowX: 'auto',
-    whiteSpace: 'pre-wrap',
-    wordBreak: 'break-all',
-  },
+const StyledDialog = styled(Dialog)({
+  padding: '10px',
 });
 
+const listStyleBase = {
+  maxWidth: '1000px',
+  overflowX: 'auto',
+  whiteSpace: 'pre-wrap',
+  wordBreak: 'break-all',
+} as const;
+
+const ListStyleAdd = styled('p')({ ...listStyleBase, color: 'green' });
+const ListStyleRemove = styled('p')({ ...listStyleBase, color: 'red' });
+
 const ListItem = ({ diff }: { diff: IChange }) => {
-  const classes = useStyles();
   if (diff.type === Operation.ADD) {
     if (typeof diff.value === 'string') {
       return (
@@ -35,9 +28,9 @@ const ListItem = ({ diff }: { diff: IChange }) => {
     }
     return (
       <li>
-        <p className={classes.listStyleAdd}> Added :{diff.key}</p>
+        <ListStyleAdd> Added :{diff.key}</ListStyleAdd>
         <pre>
-          <p className={classes.listStyleAdd}> Added : {JSON.stringify(diff.value)}</p>
+          <ListStyleAdd> Added : {JSON.stringify(diff.value)}</ListStyleAdd>
         </pre>
       </li>
     );
@@ -52,9 +45,9 @@ const ListItem = ({ diff }: { diff: IChange }) => {
     }
     return (
       <li>
-        <p className={classes.listStyleRemove}> Removed : {diff.key}</p>
+        <ListStyleRemove> Removed : {diff.key}</ListStyleRemove>
         <pre>
-          <p className={classes.listStyleRemove}> Removed : {JSON.stringify(diff.value)}</p>
+          <ListStyleRemove> Removed : {JSON.stringify(diff.value)}</ListStyleRemove>
         </pre>
       </li>
     );
@@ -101,21 +94,20 @@ export const AuditTestCompareVersionsDialog: React.FC<AuditTestCompareVersionsDi
   setOpen,
   versionToCompare,
 }: AuditTestCompareVersionsDialogProps) => {
-  const classes = useStyles();
   const handleClose = () => {
     setOpen(false);
   };
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg" className={classes.dialog}>
+      <StyledDialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
         <h4>
           Version changes between Version {versionToCompare} and Version {versionToCompare - 1}
         </h4>
         <div>
           <List diffs={jsonDiff} />
         </div>
-      </Dialog>
+      </StyledDialog>
     </>
   );
 };

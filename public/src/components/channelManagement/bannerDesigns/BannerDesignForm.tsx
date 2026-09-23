@@ -1,8 +1,7 @@
 import { InfoOutlined } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import {
   BannerDesign,
@@ -24,46 +23,35 @@ type Props = {
   onChange: (design: BannerDesign) => void;
 };
 
-export const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%',
-    background: palette.background.paper,
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
+const Container = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+  width: '100%',
+  background: theme.palette.background.paper,
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
-  colourSectionContainer: {
-    '& input': {
-      textTransform: 'uppercase',
-    },
-  },
-  ctaEditors: {
-    '& > * + *': {
-      marginTop: spacing(4),
-    },
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  accordion: {
-    border: `1px solid ${palette.grey[700]}`,
-    borderRadius: 4,
-    boxShadow: 'none',
-  },
-  sectionHeader: {
-    fontSize: 18,
-    fontWeight: 500,
-    color: palette.grey[700],
-  },
-  info: {
-    display: 'flex',
-    marginBottom: spacing(1),
-    alignItems: 'center',
-    '& > * + *': {
-      marginLeft: spacing(1),
-    },
+}));
+
+const StyledAccordion = styled(Accordion)(({ theme }) => ({
+  border: `1px solid ${theme.palette.grey[700]}`,
+  borderRadius: 4,
+  boxShadow: 'none',
+}));
+
+const SectionHeader = styled(AccordionSummary)(({ theme }) => ({
+  fontSize: 18,
+  fontWeight: 500,
+  color: theme.palette.grey[700],
+}));
+
+const Info = styled('div')(({ theme }) => ({
+  display: 'flex',
+  marginBottom: theme.spacing(1),
+  alignItems: 'center',
+  '& > * + *': {
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -73,8 +61,6 @@ const BannerDesignForm: React.FC<Props> = ({
   isDisabled,
   onChange,
 }: Props) => {
-  const classes = useStyles();
-
   const onValidationChange = (fieldName: string, isValid: boolean): void => {
     setValidationStatus(fieldName, isValid);
   };
@@ -202,27 +188,23 @@ const BannerDesignForm: React.FC<Props> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.info}>
+    <Container>
+      <Info>
         <InfoOutlined />
         <span>
           Create accessible designs that always meet WCAG Grading of AAA or AA. Check for colour
           contrast at <a href="https://www.whocanuse.com/">whocanuse.com</a>
         </span>
-      </div>
-      <Accordion className={classes.accordion}>
-        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Usage
-        </AccordionSummary>
+      </Info>
+      <StyledAccordion>
+        <SectionHeader expandIcon={<ExpandMoreIcon />}>Usage</SectionHeader>
         <AccordionDetails>
           <BannerDesignUsage designName={design.name} />
         </AccordionDetails>
-      </Accordion>
+      </StyledAccordion>
 
-      <Accordion className={classes.accordion}>
-        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Banner Theme
-        </AccordionSummary>
+      <StyledAccordion>
+        <SectionHeader expandIcon={<ExpandMoreIcon />}>Banner Theme</SectionHeader>
         <AccordionDetails>
           <>
             <BannerVisualEditor
@@ -241,12 +223,10 @@ const BannerDesignForm: React.FC<Props> = ({
             />
           </>
         </AccordionDetails>
-      </Accordion>
+      </StyledAccordion>
 
-      <Accordion className={classes.accordion}>
-        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Header image
-        </AccordionSummary>
+      <StyledAccordion>
+        <SectionHeader expandIcon={<ExpandMoreIcon />}>Header image</SectionHeader>
         <AccordionDetails>
           <HeaderImageEditor
             headerImage={design.headerImage}
@@ -255,12 +235,10 @@ const BannerDesignForm: React.FC<Props> = ({
             onChange={onHeaderImageChange}
           />
         </AccordionDetails>
-      </Accordion>
+      </StyledAccordion>
 
-      <Accordion className={classes.accordion}>
-        <AccordionSummary className={classes.sectionHeader} expandIcon={<ExpandMoreIcon />}>
-          Headline Size
-        </AccordionSummary>
+      <StyledAccordion>
+        <SectionHeader expandIcon={<ExpandMoreIcon />}>Headline Size</SectionHeader>
         <AccordionDetails>
           <HeadlineSizeEditor
             headerSize={design.fonts?.heading?.size}
@@ -268,8 +246,8 @@ const BannerDesignForm: React.FC<Props> = ({
             onChange={onHeadlineSizeChange}
           />
         </AccordionDetails>
-      </Accordion>
-    </div>
+      </StyledAccordion>
+    </Container>
   );
 };
 

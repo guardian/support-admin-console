@@ -1,13 +1,9 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { regionIds, regions, RegionsAndAll } from '../../utils/models';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    marginTop: '8px',
-  },
-}));
+const Container = styled(FormControl)({ marginTop: '8px' });
 
 interface TestListSidebarFilterSelectorProps {
   regionFilter: string;
@@ -18,10 +14,8 @@ const TestListSidebarFilterSelector: React.FC<TestListSidebarFilterSelectorProps
   regionFilter,
   handleRegionFilterChange,
 }: TestListSidebarFilterSelectorProps) => {
-  const classes = useStyles();
-
   return (
-    <FormControl className={classes.container} fullWidth>
+    <Container fullWidth>
       <InputLabel id="filter-region-select-label" htmlFor="filter-region-select">
         Filter by Region
       </InputLabel>
@@ -45,7 +39,7 @@ const TestListSidebarFilterSelector: React.FC<TestListSidebarFilterSelectorProps
           </MenuItem>
         ))}
       </Select>
-    </FormControl>
+    </Container>
   );
 };
 
