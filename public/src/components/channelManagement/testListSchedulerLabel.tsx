@@ -1,25 +1,23 @@
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { Tooltip } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { JSX } from 'react';
 import { Scheduler } from './helpers/shared';
 import { isWithinSchedule } from './helpers/utilities';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    padding: '1px',
-    lineHeight: 0,
-  },
-  iconActive: {
-    color: '#F2453D',
-  },
-  iconInactive: {
-    color: '#9e9e9e',
-  },
-  iconWhite: {
-    color: '#ffffff',
-  },
-}));
+const Container = styled('div')({
+  padding: '1px',
+  lineHeight: 0,
+});
+const IconActive = styled(ScheduleIcon)({
+  color: '#F2453D',
+});
+const IconInactive = styled(ScheduleIcon)({
+  color: '#9e9e9e',
+});
+const IconWhite = styled(ScheduleIcon)({
+  color: '#ffffff',
+});
 
 interface TestListSchedulerLabelProps {
   scheduler: Scheduler;
@@ -32,14 +30,8 @@ const TestListSchedulerLabel: React.FC<TestListSchedulerLabelProps> = ({
   isLive,
   shouldInvertColor,
 }: TestListSchedulerLabelProps): JSX.Element => {
-  const classes = useStyles();
-
   const isActive = isLive && isWithinSchedule(scheduler);
-  const iconClass = shouldInvertColor
-    ? classes.iconWhite
-    : isActive
-      ? classes.iconActive
-      : classes.iconInactive;
+  const Icon = shouldInvertColor ? IconWhite : isActive ? IconActive : IconInactive;
 
   const lines: string[] = [];
   if (scheduler.start) {
@@ -60,9 +52,9 @@ const TestListSchedulerLabel: React.FC<TestListSchedulerLabelProps> = ({
       }
       arrow
     >
-      <div className={classes.container}>
-        <ScheduleIcon className={iconClass} sx={{ fontSize: 16 }} />
-      </div>
+      <Container>
+        <Icon sx={{ fontSize: 16 }} />
+      </Container>
     </Tooltip>
   );
 };

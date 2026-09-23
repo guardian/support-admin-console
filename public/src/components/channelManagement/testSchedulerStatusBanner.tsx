@@ -1,69 +1,50 @@
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import { Theme, Typography, useTheme } from '@mui/material';
-import { alpha } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { Typography, useTheme } from '@mui/material';
+import { alpha, styled } from '@mui/material/styles';
 import React from 'react';
 import { Scheduler, Status } from './helpers/shared';
 import { isWithinSchedule, parseSchedulerUtc } from './helpers/utilities';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  containerLive: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: spacing(1),
-    padding: spacing(1.5),
-    borderRadius: '4px',
-    border: `1px solid ${palette.primary.main}`,
-    backgroundColor: alpha(palette.primary.main, 0.1),
-    marginBottom: spacing(2),
-  },
-  containerOffline: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: spacing(1),
-    padding: spacing(1.5),
-    borderRadius: '4px',
-    border: `1px solid ${palette.grey[700]}`,
-    backgroundColor: palette.grey[200],
-    marginBottom: spacing(2),
-  },
-  iconRow: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    flexShrink: 0,
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(0.5),
-  },
-  titleTextLive: {
-    fontSize: '16px',
-    color: palette.grey[700],
-  },
-  titleTextOffline: {
-    fontSize: '16px',
-    color: palette.grey[700],
-  },
-  statusLive: {
-    fontWeight: 600,
-    fontSize: '16px',
-    color: palette.grey[700],
-  },
-  statusOffline: {
-    fontWeight: 600,
-    fontSize: '16px',
-    color: palette.grey[700],
-  },
-  scheduleTimeText: {
-    fontSize: '16px',
-    color: palette.grey[600],
-  },
-  reasonText: {
-    fontSize: '16px',
-    color: palette.grey[600],
-  },
+const Container = styled('div', {
+  shouldForwardProp: (prop) => prop !== 'liveOnSite',
+})<{ liveOnSite: boolean }>(({ theme, liveOnSite }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+  padding: theme.spacing(1.5),
+  borderRadius: '4px',
+  border: `1px solid ${liveOnSite ? theme.palette.primary.main : theme.palette.grey[700]}`,
+  backgroundColor: liveOnSite ? alpha(theme.palette.primary.main, 0.1) : theme.palette.grey[200],
+  marginBottom: theme.spacing(2),
 }));
+const IconRow = styled('div')({
+  display: 'flex',
+  alignItems: 'flex-start',
+  flexShrink: 0,
+});
+const Details = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(0.5),
+}));
+const TitleText = styled(Typography)({
+  fontSize: '16px',
+  color: '#616161',
+});
+const Status = styled(Typography)({
+  fontWeight: 600,
+  fontSize: '16px',
+  color: '#616161',
+});
+const ScheduleTimeText = styled('span')({
+  fontSize: '16px',
+  color: '#757575',
+});
+const ReasonText = styled('span')({
+  fontSize: '16px',
+  color: '#757575',
+  fontWeight: 'normal',
+});
 
 const formatUtc = (value: string): string => `${value} UTC`;
 
@@ -76,16 +57,11 @@ const TestSchedulerStatusBanner: React.FC<TestSchedulerStatusBannerProps> = ({
   scheduler,
   status,
 }) => {
-  const classes = useStyles();
-
   const theme = useTheme();
   const isLive = status === 'Live';
   const withinSchedule = isWithinSchedule(scheduler);
   const liveOnSite = isLive && withinSchedule;
 
-  const containerClass = liveOnSite ? classes.containerLive : classes.containerOffline;
-  const statusClass = liveOnSite ? classes.statusLive : classes.statusOffline;
-  const titleClass = liveOnSite ? classes.titleTextLive : classes.titleTextOffline;
   const iconColor = liveOnSite ? theme.palette.primary.main : '#616161';
 
   const statusLabel = liveOnSite
@@ -107,36 +83,27 @@ const TestSchedulerStatusBanner: React.FC<TestSchedulerStatusBannerProps> = ({
   }
 
   return (
-    <div className={containerClass}>
-      <div className={classes.iconRow}>
+    <Container liveOnSite={liveOnSite}>
+      <IconRow>
         <ScheduleIcon sx={{ fontSize: 40, color: iconColor }} />
-      </div>
-      <div className={classes.details}>
-        <Typography className={titleClass}>
+      </IconRow>
+      <Details>
+        <TitleText>
           Scheduler configured.{' '}
           {scheduler.start && (
-            <Typography component="span" className={classes.scheduleTimeText}>
-              Start time: {formatUtc(scheduler.start)}
-            </Typography>
+            <ScheduleTimeText>Start time: {formatUtc(scheduler.start)}</ScheduleTimeText>
           )}
           {scheduler.start && scheduler.end && <Typography component="span"> </Typography>}
           {scheduler.end && (
-            <Typography component="span" className={classes.scheduleTimeText}>
-              End time: {formatUtc(scheduler.end)}
-            </Typography>
+            <ScheduleTimeText>End time: {formatUtc(scheduler.end)}</ScheduleTimeText>
           )}
-        </Typography>
-        <Typography className={statusClass}>
+        </TitleText>
+        <Status>
           {statusLabel}
-          {reason && (
-            <Typography component="span" className={classes.reasonText}>
-              {' '}
-              {reason}
-            </Typography>
-          )}
-        </Typography>
-      </div>
-    </div>
+          {reason && <ReasonText> {reason}</ReasonText>}
+        </Status>
+      </Details>
+    </Container>
   );
 };
 // Rerender banner only when test is saved

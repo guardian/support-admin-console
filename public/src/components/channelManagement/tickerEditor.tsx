@@ -1,29 +1,19 @@
-import {
-  Checkbox,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-  Theme,
-} from '@mui/material';
+import { Checkbox, FormControl, FormLabel, Radio, RadioGroup, TextField } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { TickerName, TickerSettings } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT } from './helpers/validation';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
+const Container = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
-  fieldsContainer: {
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
+}));
+const FieldsContainer = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(3),
   },
 }));
 
@@ -55,8 +45,6 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
   updateTickerSettings,
   onValidationChange,
 }: TickerEditorProps) => {
-  const classes = useStyles();
-
   const defaultValues = useMemo<FormData>(
     () => ({
       countLabel: tickerSettings?.copy.countLabel ?? '',
@@ -130,7 +118,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <FormControlLabel
         control={
           <Checkbox
@@ -144,7 +132,7 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
       />
 
       {!!tickerSettings && (
-        <div className={classes.fieldsContainer}>
+        <FieldsContainer>
           <div>
             <FormControl component="fieldset">
               <FormLabel component="legend">Ticker campaign name</FormLabel>
@@ -213,9 +201,9 @@ const TickerEditor: React.FC<TickerEditorProps> = ({
               fullWidth
             />
           )}
-        </div>
+        </FieldsContainer>
       )}
-    </div>
+    </Container>
   );
 };
 

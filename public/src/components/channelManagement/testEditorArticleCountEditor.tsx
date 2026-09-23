@@ -1,23 +1,21 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { ArticlesViewedSettings } from './helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT, notNumberValidator } from './helpers/validation';
 import MultiselectAutocomplete from './MutliSelectTagEditor';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
+const Container = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(2),
   },
-  formContainer: {
-    maxWidth: '250px',
+}));
+const FormContainer = styled('div')(({ theme }) => ({
+  maxWidth: '250px',
 
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
 }));
 
@@ -48,8 +46,6 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   onValidationChange,
   isDisabled,
 }: TestEditorArticleCountEditorProps) => {
-  const classes = useStyles();
-
   const defaultValues: FormData = useMemo(
     () => ({
       minViews: articlesViewedSettings?.minViews.toString() ?? '',
@@ -113,7 +109,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <FormControl>
         <RadioGroup
           value={articlesViewedSettings ? 'enabled' : 'disabled'}
@@ -138,7 +134,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
 
       {articlesViewedSettings && (
         <div>
-          <div className={classes.formContainer}>
+          <FormContainer>
             <div>
               <TextField
                 error={errors.minViews !== undefined}
@@ -184,7 +180,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
                 disabled={isDisabled}
               />
             </div>
-          </div>
+          </FormContainer>
           <div>
             <MultiselectAutocomplete
               disabled={isDisabled}
@@ -196,7 +192,7 @@ const TestEditorArticleCountEditor: React.FC<TestEditorArticleCountEditorProps> 
           </div>
         </div>
       )}
-    </div>
+    </Container>
   );
 };
 

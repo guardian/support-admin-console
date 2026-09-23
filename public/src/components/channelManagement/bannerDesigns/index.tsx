@@ -1,5 +1,5 @@
-import { Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { BannerDesign } from '../../../models/bannerDesign';
@@ -20,45 +20,41 @@ import BannerDesignEditor from './BannerDesignEditor';
 import BannerDesignsSidebar from './BannerDesignsSidebar';
 import { createDefaultBannerDesign } from './utils/defaults';
 
-const useStyles = makeStyles(({ spacing, typography }: Theme) => ({
-  viewTextContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '-50px',
-  },
-  viewText: {
-    fontSize: typography.pxToRem(16),
-  },
-  body: {
-    display: 'flex',
-    overflow: 'hidden',
-    flexGrow: 1,
-    width: '100%',
-    height: '100%',
-  },
-  leftCol: {
-    height: '100%',
-    flexShrink: 0,
-    overflowY: 'auto',
-    background: 'white',
-    paddingTop: spacing(6),
-    paddingLeft: spacing(6),
-    paddingRight: spacing(6),
-  },
-  rightCol: {
-    flexGrow: 1,
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  scrollableContainer: {
-    overflowY: 'auto',
-    paddingLeft: spacing(3),
-    paddingRight: spacing(1),
-    paddingTop: spacing(2),
-  },
+const ViewTextContainer = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: '-50px',
+});
+
+const ViewText = styled(Typography)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(16),
 }));
+
+const Body = styled(Box)({
+  display: 'flex',
+  overflow: 'hidden',
+  flexGrow: 1,
+  width: '100%',
+  height: '100%',
+});
+
+const LeftCol = styled(Box)(({ theme }) => ({
+  height: '100%',
+  flexShrink: 0,
+  overflowY: 'auto',
+  background: 'white',
+  paddingTop: theme.spacing(6),
+  paddingLeft: theme.spacing(6),
+  paddingRight: theme.spacing(6),
+}));
+
+const RightCol = styled(Box)({
+  flexGrow: 1,
+  display: 'flex',
+  justifyContent: 'center',
+});
 
 const BannerDesigns: React.FC = () => {
   const [bannerDesigns, setBannerDesigns] = useState<BannerDesign[]>([]);
@@ -67,8 +63,6 @@ const BannerDesigns: React.FC = () => {
     bannerDesignName,
   );
   const [userEmail, setUserEmail] = useState<string>('');
-
-  const classes = useStyles();
 
   const refreshDesigns = () => {
     void fetchFrontendSettings(FrontendSettingsType.BannerDesigns).then(
@@ -176,16 +170,16 @@ const BannerDesigns: React.FC = () => {
   const selectedBannerDesign = bannerDesigns.find((b) => b.name === selectedBannerDesignName);
 
   return (
-    <div className={classes.body}>
-      <div className={classes.leftCol}>
+    <Body>
+      <LeftCol>
         <BannerDesignsSidebar
           designs={bannerDesigns}
           selectedDesign={selectedBannerDesign}
           onDesignSelected={(name) => setSelectedBannerDesignName(name)}
           createDesign={createDesign}
         />
-      </div>
-      <div className={classes.rightCol}>
+      </LeftCol>
+      <RightCol>
         {selectedBannerDesign ? (
           <BannerDesignEditor
             name={selectedBannerDesign.name}
@@ -200,15 +194,13 @@ const BannerDesigns: React.FC = () => {
             onStatusChange={(status) => onStatusChange(selectedBannerDesignName, status)}
           />
         ) : (
-          <div className={classes.viewTextContainer}>
-            <Typography className={classes.viewText}>
-              Select an existing banner design from the menu,
-            </Typography>
-            <Typography className={classes.viewText}>or create a new one</Typography>
-          </div>
+          <ViewTextContainer>
+            <ViewText>Select an existing banner design from the menu,</ViewText>
+            <ViewText>or create a new one</ViewText>
+          </ViewTextContainer>
         )}
-      </div>
-    </div>
+      </RightCol>
+    </Body>
   );
 };
 
