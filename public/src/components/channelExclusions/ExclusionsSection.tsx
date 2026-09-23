@@ -1,31 +1,33 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, Divider, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Button, Divider, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { ExclusionRule as ExclusionRuleType, ExclusionSettings } from '../../models/exclusions';
 import ExclusionRule from './ExclusionRule';
 import { ChannelKey } from './util';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  sectionHeader: {
-    marginBottom: spacing(2),
-    textTransform: 'capitalize',
-  },
-  addRuleButton: {
-    marginBottom: spacing(2),
-  },
-  addRuleButtonBottom: {
-    marginTop: spacing(2),
-  },
-  bottomDivider: {
-    marginTop: 'auto',
-  },
+const Container = styled('div')({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+const SectionHeader = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  textTransform: 'capitalize',
 }));
+
+const AddRuleButton = styled(Button)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+}));
+
+const AddRuleButtonBottom = styled(Button)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+}));
+
+const BottomDivider = styled(Divider)({
+  marginTop: 'auto',
+});
 
 interface ExclusionsSectionProps {
   channel: ChannelKey;
@@ -48,7 +50,6 @@ const ExclusionsSection: React.FC<ExclusionsSectionProps> = ({
   onUpdateSettings,
   onPersistSettings,
 }) => {
-  const classes = useStyles();
   const rules = data[channel]?.rules ?? [];
 
   const handleAddRule = () => {
@@ -62,13 +63,10 @@ const ExclusionsSection: React.FC<ExclusionsSectionProps> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <Typography variant="h6" className={classes.sectionHeader}>
-        {label}
-      </Typography>
+    <Container>
+      <SectionHeader variant="h6">{label}</SectionHeader>
 
-      <Button
-        className={classes.addRuleButton}
+      <AddRuleButton
         variant="outlined"
         size="small"
         startIcon={<AddIcon />}
@@ -76,7 +74,7 @@ const ExclusionsSection: React.FC<ExclusionsSectionProps> = ({
         disabled={!canEdit}
       >
         Add {channel} rule
-      </Button>
+      </AddRuleButton>
 
       {rules.length === 0 && (
         <Typography variant="body2" color="textSecondary">
@@ -100,8 +98,7 @@ const ExclusionsSection: React.FC<ExclusionsSectionProps> = ({
       ))}
 
       {rules.length > 8 && (
-        <Button
-          className={classes.addRuleButtonBottom}
+        <AddRuleButtonBottom
           variant="outlined"
           size="small"
           startIcon={<AddIcon />}
@@ -109,11 +106,11 @@ const ExclusionsSection: React.FC<ExclusionsSectionProps> = ({
           disabled={!canEdit}
         >
           Add {channel} rule
-        </Button>
+        </AddRuleButtonBottom>
       )}
 
-      <Divider className={classes.bottomDivider} sx={{ mt: 3 }} />
-    </div>
+      <BottomDivider />
+    </Container>
   );
 };
 

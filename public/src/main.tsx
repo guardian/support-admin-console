@@ -2,10 +2,10 @@ import { StyledEngineProvider } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Theme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { makeStyles, ThemeProvider as StylesThemeProvider } from '@mui/styles';
 import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
@@ -101,12 +101,6 @@ const PromoTool = lazy(() => import('./components/promoTool/promoTool'));
 const Switchboard = lazy(() => import('./components/switchboard'));
 const QrCodePage = lazy(() => import('./components/utilities/QrCodePage'));
 
-declare module '@mui/styles' {
-  // https://mui.com/material-ui/migration/v5-style-changes/#%E2%9C%85-add-module-augmentation-for-defaulttheme-typescript
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- MUI module augmentation
-  interface DefaultTheme extends Theme {}
-}
-
 interface PagePermission {
   name: string;
   permission: 'Read' | 'Write';
@@ -123,87 +117,77 @@ declare global {
   }
 }
 
-const useStyles = makeStyles(({ palette, mixins, typography, transitions }: Theme) => ({
-  root: {
-    display: 'flex',
-  },
-  appContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100vw',
-    height: '100vh',
-  },
-  appBar: {
-    transition: transitions.create(['margin', 'width'], {
-      easing: transitions.easing.sharp,
-      duration: transitions.duration.leavingScreen,
-    }),
-  },
-  appContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    overflowX: 'hidden',
-    overflowY: 'auto',
-    flexGrow: 1,
-    backgroundColor: palette.grey[100],
-  },
-  toolbar: mixins.toolbar,
-  heading: {
-    fontSize: typography.pxToRem(24),
-    fontWeight: typography.fontWeightMedium,
-  },
-  toolbarContent: {
-    width: '100%',
-    justifyContent: 'space-between',
-  },
-  link: {
-    fontSize: typography.pxToRem(12),
-    fontWeight: typography.fontWeightMedium,
-    textDecoration: 'none',
-  },
-  guideButton: {
-    borderColor: palette.grey[100],
-    color: palette.grey[100],
-  },
+const Root = styled('div')({
+  display: 'flex',
+});
+const AppContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100vw',
+  height: '100vh',
+});
+const AppBarStyled = styled(AppBar)(({ theme }) => ({
+  transition: theme.transitions.create(['margin', 'width'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+}));
+const AppContent = styled('main')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  overflowX: 'hidden',
+  overflowY: 'auto',
+  flexGrow: 1,
+  backgroundColor: theme.palette.grey[100],
+}));
+const Heading = styled(Typography)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(24),
+  fontWeight: theme.typography.fontWeightMedium,
+}));
+const ToolbarContent = styled(Toolbar)({
+  width: '100%',
+  justifyContent: 'space-between',
+});
+const GuideLink = styled('a')(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(12),
+  fontWeight: theme.typography.fontWeightMedium,
+  textDecoration: 'none',
+}));
+const GuideButton = styled(Button)(({ theme }) => ({
+  borderColor: theme.palette.grey[100],
+  color: theme.palette.grey[100],
 }));
 
 export { HELP_GUIDE_URL };
 
 const AppRouter = () => {
-  const classes = useStyles();
-
   const createComponent = (
     component: React.JSX.Element,
     displayName: string,
   ): React.ReactElement => (
-    <div className={classes.appContainer}>
-      <AppBar position="relative" className={classes.appBar}>
-        <Toolbar className={classes.toolbarContent}>
+    <AppContainer>
+      <AppBarStyled position="relative">
+        <ToolbarContent>
           <NavDrawer />
-          <Typography className={classes.heading} variant="h1" color="inherit" noWrap>
+          <Heading variant="h1" color="inherit" noWrap>
             {displayName}
-          </Typography>
-          <a
-            href={HELP_GUIDE_URL}
-            className={classes.link}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button className={classes.guideButton} variant="outlined" disableElevation>
+          </Heading>
+          <GuideLink href={HELP_GUIDE_URL} target="_blank" rel="noopener noreferrer">
+            <GuideButton variant="outlined" disableElevation>
               User Guide
-            </Button>
-          </a>
-        </Toolbar>
-      </AppBar>
-      <main className={classes.appContent}>
+            </GuideButton>
+          </GuideLink>
+        </ToolbarContent>
+      </AppBarStyled>
+      <AppContent>
         <Suspense fallback={<div>Loading…</div>}>{component}</Suspense>
-      </main>
-    </div>
+      </AppContent>
+    </AppContainer>
   );
 
   return (
     <Router>
-      <div className={classes.root}>
+      <Root>
         <CssBaseline />
         <Routes>
           <Route path="/" element={createComponent(<IndexPage />, 'Home Page')} />
@@ -315,7 +299,7 @@ const AppRouter = () => {
           />
           <Route path="/exclusions" element={createComponent(<ExclusionsBoard />, 'Exclusions')} />
         </Routes>
-      </div>
+      </Root>
     </Router>
   );
 };
@@ -326,9 +310,7 @@ if (container) {
   root.render(
     <ThemeProvider theme={getTheme()}>
       <StyledEngineProvider injectFirst>
-        <StylesThemeProvider theme={getTheme()}>
-          <AppRouter />
-        </StylesThemeProvider>
+        <AppRouter />
       </StyledEngineProvider>
     </ThemeProvider>,
   );

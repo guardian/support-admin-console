@@ -14,9 +14,8 @@ import {
   Typography,
 } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
-import { Theme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import SwitchUI from '@mui/material/Switch';
-import { makeStyles } from '@mui/styles';
 import cloneDeep from 'lodash/cloneDeep';
 import { JSX } from 'react';
 import React, { useState } from 'react';
@@ -49,64 +48,47 @@ interface SwitchGroup {
 
 type SupportFrontendSwitches = Record<string, SwitchGroup>;
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  formControl: {
-    marginRight: spacing(4),
-    marginBottom: spacing(4),
-    paddingTop: spacing(1),
-    paddingBottom: spacing(1),
-    paddingLeft: spacing(2),
-    paddingRight: spacing(2),
-    border: `1px solid ${palette.grey['300']}`,
-    width: '45%',
-  },
-  button: {
-    marginRight: spacing(2),
-  },
-  addButton: {
-    padding: '0.2em',
-    margin: '0.1em 0.2em',
-  },
-  buttons: {
-    marginTop: spacing(2),
-    marginBottom: spacing(2),
-  },
-  form: {
-    marginTop: spacing(4),
-    marginLeft: spacing(4),
-    marginRight: spacing(4),
-    marginBottom: spacing(4),
-    overflowY: 'auto',
-  },
-  divider: {
-    marginTop: spacing(4),
-    marginBottom: spacing(4),
-  },
-  existingSwitchesHeader: {
-    marginBottom: spacing(2),
-  },
-  newSwitchesHeader: {
-    marginBottom: spacing(2),
-  },
-  textParagraph: {
-    marginBottom: spacing(2),
-  },
-  input: {
-    width: '33%',
-  },
-  inputGroup: {
-    marginTop: spacing(2),
-    display: 'flex',
-    justifyContent: 'space-evenly',
-  },
-  switchLayout: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    '&:nth-child(even)': {
-      backgroundColor: '#e7e7e7',
-    },
-  },
+const FormControlStyled = styled(FormControl)(({ theme }) => ({
+  marginRight: theme.spacing(4),
+  marginBottom: theme.spacing(4),
+  paddingTop: theme.spacing(1),
+  paddingBottom: theme.spacing(1),
+  paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(2),
+  border: `1px solid ${theme.palette.grey['300']}`,
+  width: '45%',
 }));
+const ButtonStyled = styled(Button)(({ theme }) => ({ marginRight: theme.spacing(2) }));
+const AddButton = styled(Button)({
+  padding: '0.2em',
+  margin: '0.1em 0.2em',
+});
+const Buttons = styled('div')(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  marginBottom: theme.spacing(2),
+}));
+const Form = styled('form')(({ theme }) => ({
+  marginTop: theme.spacing(4),
+  marginLeft: theme.spacing(4),
+  marginRight: theme.spacing(4),
+  marginBottom: theme.spacing(4),
+  overflowY: 'auto',
+}));
+const ExistingSwitchesHeader = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+}));
+const InputGroup = styled('div')(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  display: 'flex',
+  justifyContent: 'space-evenly',
+}));
+const SwitchLayout = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  '&:nth-child(even)': {
+    backgroundColor: '#e7e7e7',
+  },
+});
 
 function sortByDescription<T extends Switch | SwitchGroup>(a: [string, T], b: [string, T]): number {
   return a[1].description > b[1].description ? 1 : -1;
@@ -118,14 +100,13 @@ interface SaveButtonProps {
 }
 
 const SaveButton: React.FC<SaveButtonProps> = ({ saving, onSave }) => {
-  const classes = useStyles();
   return (
-    <div className={classes.buttons}>
-      <Button variant="contained" onClick={onSave} className={classes.button} disabled={saving}>
+    <Buttons>
+      <ButtonStyled variant="contained" onClick={onSave} disabled={saving}>
         <SaveIcon />
         Save
-      </Button>
-    </div>
+      </ButtonStyled>
+    </Buttons>
   );
 };
 
@@ -135,8 +116,6 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   sendToS3,
   saving,
 }: InnerProps<SupportFrontendSwitches>) => {
-  const classes = useStyles();
-
   const [pendingChanges, setPendingChanges] = useState<string[]>([]);
 
   const displayNeedToSaveDataWarning = (): JSX.Element | false => {
@@ -189,7 +168,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     const isChecked = switchData.state === SwitchState.On;
 
     return (
-      <div className={classes.switchLayout} key={switchId}>
+      <SwitchLayout key={switchId}>
         <FormControlLabel
           label={switchData.description}
           checked={switchData.state === SwitchState.On}
@@ -204,7 +183,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
         >
           <DeleteIcon />
         </IconButton>
-      </div>
+      </SwitchLayout>
     );
   };
 
@@ -232,7 +211,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
     };
 
     return (
-      <FormControl className={classes.formControl} key={groupId}>
+      <FormControlStyled key={groupId}>
         <FormLabel>
           <strong>{groupData.description} </strong>
         </FormLabel>
@@ -242,9 +221,9 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
           .map(([switchId, switchData]) =>
             createSwitchesFromGroupData(switchId, switchData, group),
           )}
-        <div className={classes.inputGroup}>
+        <InputGroup>
           <TextField
-            className={classes.input}
+            sx={{ width: '33%' }}
             id={groupId + '-add-switch-switch-name'}
             error={errors.switchId !== undefined}
             helperText={errors.switchId ? errors.switchId.message : ''}
@@ -262,7 +241,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
           />
           <span />
           <TextField
-            className={classes.input}
+            sx={{ width: '33%' }}
             id={groupId + '-add-switch-switch-description'}
             error={errors.description !== undefined}
             helperText={errors.description ? errors.description.message : ''}
@@ -281,22 +260,21 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
             fullWidth
           />
           <span />
-          <div className={classes.buttons}>
-            <Button
+          <Buttons>
+            <AddButton
               aria-label="Add switch"
               variant="contained"
               onClick={(e) => {
                 e.preventDefault();
                 void handleSubmit(onSubmit)(e);
               }}
-              className={classes.addButton}
               disabled={saving}
             >
               <AddIcon />
-            </Button>
-          </div>
-        </div>
-      </FormControl>
+            </AddButton>
+          </Buttons>
+        </InputGroup>
+      </FormControlStyled>
     );
   };
 
@@ -341,10 +319,8 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
   };
 
   return (
-    <form className={classes.form}>
-      <Typography className={classes.existingSwitchesHeader} variant="h6">
-        Manage existing switches
-      </Typography>
+    <Form>
+      <ExistingSwitchesHeader variant="h6">Manage existing switches</ExistingSwitchesHeader>
 
       {displayNeedToSaveDataWarning()}
       <SaveButton saving={saving} onSave={actionSaveData} />
@@ -353,7 +329,7 @@ const Switchboard: React.FC<InnerProps<SupportFrontendSwitches>> = ({
 
       {displayNeedToSaveDataWarning()}
       <SaveButton saving={saving} onSave={actionSaveData} />
-    </form>
+    </Form>
   );
 };
 
