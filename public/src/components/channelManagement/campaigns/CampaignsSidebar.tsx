@@ -47,6 +47,10 @@ function CampaignsSidebar({
     setCampaignSearch(e.target.value.toUpperCase());
   };
 
+  const searchInputNative = (e: React.InputEvent<HTMLDivElement>) => {
+    setCampaignSearch((e.target as HTMLInputElement).value.toUpperCase());
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.buttonsContainer}>
@@ -60,7 +64,7 @@ function CampaignsSidebar({
           label="Filter campaigns"
           type="search"
           variant="outlined"
-          onInput={searchInput}
+          onInput={searchInputNative}
           onChange={searchInput}
         />
       </div>
