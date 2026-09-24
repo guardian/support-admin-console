@@ -58,7 +58,8 @@ export const MenuContainer = styled('div')(({ theme }) => ({
 export const DropdownMenu = styled('div')({ display: 'inline' });
 export const DropdownMenuToggle = styled('button')({});
 export const DropdownMenuContent = styled('menu')({
-  display: 'inline',
+  margin: '0.5em 0 0',
+  padding: '0',
 });
 export const DropdownMenuContentHidden = styled('menu')({
   margin: '0',

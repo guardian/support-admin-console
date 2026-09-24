@@ -6,7 +6,10 @@ import { PromoProduct, promoProductNames } from './utils/promoModels';
 const StyledSelect = styled(Select)({
   marginBottom: '8px',
   width: '100%',
-}) as unknown as typeof Select;
+});
+
+const isPromoProduct = (value: unknown): value is PromoProduct =>
+  typeof value === 'string' && Object.prototype.hasOwnProperty.call(promoProductNames, value);
 
 export interface ProductSelectorProps {
   selectedValue: string;
@@ -26,9 +29,11 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
       <StyledSelect
         id="product-selector-label"
         value={selectedValue}
-        onChange={(event: SelectChangeEvent): void =>
-          handleProductSelectorChange(event.target.value as PromoProduct)
-        }
+        onChange={(event: SelectChangeEvent<unknown>): void => {
+          if (isPromoProduct(event.target.value)) {
+            handleProductSelectorChange(event.target.value);
+          }
+        }}
         aria-label="Select a Product"
       >
         {Object.entries(promoProductNames).map(([product, label], index) => (
