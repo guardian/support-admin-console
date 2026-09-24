@@ -1,4 +1,4 @@
-import { Alert, Typography } from '@mui/material';
+import { Alert } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   BannerContent,
@@ -26,7 +26,7 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
-import { useStyles } from '../helpers/testEditorStyles';
+import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
 import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorArticleCountEditor, {
@@ -61,8 +61,6 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   onTestChange,
   setValidationStatusForField,
 }: ValidatedTestEditorProps<BannerTest>) => {
-  const classes = useStyles();
-
   const [designs, setDesigns] = useState<BannerDesign[]>([]);
 
   const fetchBannerDesigns = (): void => {
@@ -296,11 +294,9 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Variants
-        </Typography>
+    <Container>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Variants</SectionHeader>
         <div>
           <VariantsEditor
             variants={test.variants}
@@ -313,12 +309,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             onVariantClone={onVariantClone}
           />
         </div>
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Experiment Methodology
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Experiment Methodology</SectionHeader>
         <TestMethodologyEditor
           methodologies={test.methodologies}
           testName={test.name}
@@ -326,13 +320,11 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           isDisabled={!userHasTestLocked || test.status === 'Live'}
           onChange={onMethodologyChange}
         />
-      </div>
+      </SectionContainer>
 
       {test.variants.length > 1 && (
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Variants split (applies to AB tests only)
-          </Typography>
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>Variants split (applies to AB tests only)</SectionHeader>
           <div>
             <TestVariantsSplitEditor
               variants={test.variants}
@@ -342,13 +334,11 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
               isDisabled={!userHasTestLocked}
             />
           </div>
-        </div>
+        </SectionContainer>
       )}
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Campaign
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Campaign</SectionHeader>
         <div>
           <CampaignSelector
             test={test}
@@ -356,12 +346,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             disabled={!userHasTestLocked}
           />
         </div>
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Target context
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Target context</SectionHeader>
 
         <TestEditorContextTargeting
           contextTargeting={test.contextTargeting}
@@ -370,12 +358,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             updateTest((current) => ({ ...current, contextTargeting }))
           }
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Target audience
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Target audience</SectionHeader>
 
         <TestEditorTargetAudienceSelector
           regionTargeting={test.regionTargeting}
@@ -402,12 +388,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
             (test.articlesViewedSettings !== undefined && test.articlesViewedSettings.minViews >= 5)
           }
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Article count
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Article count</SectionHeader>
 
         {test.mParticleAudience !== undefined && test.signedInStatus !== 'SignedIn' && (
           <Alert severity="info" style={{ marginBottom: '16px' }}>
@@ -421,12 +405,10 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           onValidationChange={onArticlesViewedSettingsValidationChanged}
           isDisabled={!userHasTestLocked}
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Deploy schedule override
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Deploy schedule override</SectionHeader>
 
         <DeployScheduleEditor
           deploySchedule={test.deploySchedule}
@@ -434,32 +416,28 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
           onValidationChange={(isValid) => setValidationStatusForField('deploySchedule', isValid)}
           isDisabled={!userHasTestLocked}
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Fronts only
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Fronts only</SectionHeader>
 
         <FrontsOnlyEditor
           frontsOnly={test.frontsOnly}
           onFrontsOnlyChange={onFrontsOnlyChange}
           isDisabled={!userHasTestLocked}
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Schedule
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Schedule</SectionHeader>
         <ScheduleEditor
           scheduler={test.scheduler}
           disabled={!userHasTestLocked}
           onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
           onValidationChange={(isValid) => setValidationStatusForField('schedule', isValid)}
         />
-      </div>
-    </div>
+      </SectionContainer>
+    </Container>
   );
 };
 

@@ -10,12 +10,11 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Theme,
   Tooltip,
   Typography,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
 import { BannerDesign, Status } from '../../../models/bannerDesign';
@@ -24,57 +23,61 @@ import { LockStatus } from '../helpers/shared';
 import { BannerDesignPreview } from './BannerDesignPreview';
 import { LockDetails } from './LockDetails';
 
-const useStyles = makeStyles(({ palette, spacing }: Theme) => ({
-  container: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    paddingLeft: spacing(3),
-    paddingRight: spacing(3),
-    paddingBottom: spacing(2),
-    paddingTop: spacing(1),
-    backgroundColor: palette.grey[200],
-    borderBottom: `1px solid ${palette.grey[500]}`,
-  },
-  namesContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'spaced',
-    height: '100%',
-  },
-  mainHeader: {
-    fontSize: '32px',
-    fontWeight: 'normal',
-  },
-  buttonsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignSelf: 'flex-end',
-    paddingBottom: spacing(1),
-  },
-  switchContainer: {
-    alignSelf: 'flex-end',
-    display: 'flex',
-  },
-  lockContainer: {
-    alignSelf: 'flex-end',
-    display: 'flex',
-    '& > * + *': {
-      marginLeft: spacing(2),
-    },
-    marginLeft: spacing(1),
-  },
-  buttonText: {
-    fontSize: '14px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    color: palette.grey[800],
-  },
-  icon: {
-    color: grey[700],
-  },
+const Container = styled('header')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  paddingLeft: theme.spacing(3),
+  paddingRight: theme.spacing(3),
+  paddingBottom: theme.spacing(2),
+  paddingTop: theme.spacing(1),
+  backgroundColor: theme.palette.grey[200],
+  borderBottom: `1px solid ${theme.palette.grey[500]}`,
 }));
+
+const NamesContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'spaced',
+  height: '100%',
+});
+
+const MainHeader = styled(Typography)({
+  fontSize: '32px',
+  fontWeight: 'normal',
+});
+
+const ButtonsContainer = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignSelf: 'flex-end',
+  paddingBottom: theme.spacing(1),
+}));
+
+const SwitchContainer = styled('div')({
+  alignSelf: 'flex-end',
+  display: 'flex',
+});
+
+const LockContainer = styled('div')(({ theme }) => ({
+  alignSelf: 'flex-end',
+  display: 'flex',
+  gap: theme.spacing(2),
+  marginLeft: theme.spacing(1),
+}));
+
+const ButtonText = styled(Typography)(({ theme }) => ({
+  fontSize: '14px',
+  fontWeight: 500,
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
+  color: theme.palette.grey[800],
+}));
+
+const StyledEditIcon = styled(EditIcon)({ color: grey[700] });
+const StyledLockIcon = styled(LockIcon)({ color: grey[700] });
+const StyledCloseIcon = styled(CloseIcon)({ color: grey[700] });
+const StyledSaveIcon = styled(SaveIcon)({ color: grey[700] });
 
 interface Props {
   name: string;
@@ -96,7 +99,6 @@ interface ArchiveButtonProps {
 
 const ArchiveButton: React.FC<ArchiveButtonProps> = ({ design, name, onArchive }) => {
   const [isOpen, open, close] = useOpenable();
-  const classes = useStyles();
 
   return (
     <Tooltip
@@ -110,7 +112,7 @@ const ArchiveButton: React.FC<ArchiveButtonProps> = ({ design, name, onArchive }
           onClick={open}
           disabled={design.status !== 'Draft'}
         >
-          <Typography className={classes.buttonText}>Archive banner design</Typography>
+          <ButtonText>Archive banner design</ButtonText>
         </Button>
         <Dialog
           open={isOpen}
@@ -150,34 +152,30 @@ const StickyTopBar: React.FC<Props> = ({
   lockStatus,
   onStatusChange,
 }: Props) => {
-  const classes = useStyles();
-
   return (
-    <header className={classes.container}>
-      <div className={classes.namesContainer}>
-        <Typography variant="h2" className={classes.mainHeader}>
-          {name}
-        </Typography>
-      </div>
-      <div className={classes.buttonsContainer}>
-        <div className={classes.switchContainer}>
+    <Container>
+      <NamesContainer>
+        <MainHeader variant="h2">{name}</MainHeader>
+      </NamesContainer>
+      <ButtonsContainer>
+        <SwitchContainer>
           <LiveSwitch
             label="Status"
             isLive={design.status === 'Live'}
             onChange={(isLive: boolean) => onStatusChange(isLive ? 'Live' : 'Draft')}
             isDisabled={userHasLock && lockStatus.locked}
           />
-        </div>
-        <div className={classes.lockContainer}>
+        </SwitchContainer>
+        <LockContainer>
           {!userHasLock && !lockStatus.locked && (
             <>
               <Button
                 variant="outlined"
                 size="medium"
-                startIcon={<EditIcon className={classes.icon} />}
+                startIcon={<StyledEditIcon />}
                 onClick={() => onLock(name, false)}
               >
-                <Typography className={classes.buttonText}>Edit design</Typography>
+                <ButtonText>Edit design</ButtonText>
               </Button>
             </>
           )}
@@ -187,10 +185,10 @@ const StickyTopBar: React.FC<Props> = ({
               <Button
                 variant="outlined"
                 size="medium"
-                startIcon={<LockIcon className={classes.icon} />}
+                startIcon={<StyledLockIcon />}
                 onClick={() => onLock(name, true)}
               >
-                <Typography className={classes.buttonText}>Take control</Typography>
+                <ButtonText>Take control</ButtonText>
               </Button>
             </>
           )}
@@ -200,25 +198,25 @@ const StickyTopBar: React.FC<Props> = ({
               <Button
                 variant="outlined"
                 size="medium"
-                startIcon={<CloseIcon className={classes.icon} />}
+                startIcon={<StyledCloseIcon />}
                 onClick={() => onUnlock(name)}
               >
-                <Typography className={classes.buttonText}>Discard</Typography>
+                <ButtonText>Discard</ButtonText>
               </Button>
               <Button
                 variant="outlined"
                 size="medium"
-                startIcon={<SaveIcon className={classes.icon} />}
+                startIcon={<StyledSaveIcon />}
                 onClick={() => onSave(name)}
               >
-                <Typography className={classes.buttonText}>Save</Typography>
+                <ButtonText>Save</ButtonText>
               </Button>
             </>
           )}
           <BannerDesignPreview design={design} />
-        </div>
-      </div>
-    </header>
+        </LockContainer>
+      </ButtonsContainer>
+    </Container>
   );
 };
 

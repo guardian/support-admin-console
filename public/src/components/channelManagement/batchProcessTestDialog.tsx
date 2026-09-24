@@ -13,19 +13,17 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import useOpenable from '../../hooks/useOpenable';
 import { Test } from './helpers/shared';
 
-const useStyles = makeStyles(() => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
-  },
-}));
+const DialogHeader = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingRight: '8px',
+});
 
 interface BatchProcessTestDialogProps {
   isOpen: boolean;
@@ -40,8 +38,6 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
   draftTests,
   onBatchTestArchive,
 }: BatchProcessTestDialogProps) => {
-  const classes = useStyles();
-
   const [selectedTests, setSelectedTests] = useState<string[]>([]);
   const [isConfirmOpen, confirmOpen, confirmClose] = useOpenable();
 
@@ -90,12 +86,12 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
       maxWidth="sm"
       aria-labelledby="batch-process-dialog-title"
     >
-      <div className={classes.dialogHeader}>
+      <DialogHeader>
         <DialogTitle id="batch-process-dialog-title">Batch archive tests</DialogTitle>
         <IconButton onClick={onCancel} aria-label="close">
           <CloseIcon />
         </IconButton>
-      </div>
+      </DialogHeader>
       <DialogContent dividers>
         <List>
           {draftTests.map((t, index) => {
@@ -124,12 +120,12 @@ const BatchProcessTestDialog: React.FC<BatchProcessTestDialogProps> = ({
         maxWidth="sm"
         aria-labelledby="batch-process-dialog-confirm-title"
       >
-        <div className={classes.dialogHeader}>
+        <DialogHeader>
           <DialogTitle id="batch-process-dialog-title">Batch archive tests</DialogTitle>
           <IconButton onClick={confirmClose} aria-label="close">
             <CloseIcon />
           </IconButton>
-        </div>
+        </DialogHeader>
         <DialogContent dividers>
           <Typography>
             Please confirm. The following tests will be <strong>archived</strong>:

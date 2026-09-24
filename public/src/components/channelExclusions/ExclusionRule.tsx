@@ -8,10 +8,9 @@ import {
   FormControlLabel,
   FormGroup,
   TextField,
-  Theme,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { ExclusionRule as ExclusionRuleType, ExclusionSettings } from '../../models/exclusions';
 import { SectionsEditor } from '../channelManagement/epicTests/sectionsEditor';
@@ -21,6 +20,27 @@ import RuleHeader from './RuleHeader';
 import { useExclusionRuleHandlers } from './useExclusionRuleHandlers';
 import { ChannelKey } from './util';
 
+const FullRowField = styled('div')({ flex: '1 1 100%' });
+const FullRowAlert = styled(Alert)({ flex: '1 1 100%' });
+const Field = styled(TextField)({ flex: '1 0 200px' });
+
+const StyledAccordion = styled(Accordion)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  backgroundColor: 'transparent',
+}));
+
+const RuleFields = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: theme.spacing(2),
+}));
+
+const DateRange = styled('div')(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing(2),
+  flex: '1 1 100%',
+}));
+
 const NETWORK_FRONTS = [
   { id: 'uk', name: 'UK' },
   { id: 'us', name: 'US' },
@@ -28,29 +48,6 @@ const NETWORK_FRONTS = [
   { id: 'europe', name: 'Europe' },
   { id: 'international', name: 'International' },
 ];
-
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  accordion: {
-    marginBottom: spacing(2),
-    backgroundColor: 'transparent',
-  },
-  ruleFields: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: spacing(2),
-  },
-  field: {
-    flex: '1 0 200px',
-  },
-  fullRowField: {
-    flex: '1 1 100%',
-  },
-  dateRange: {
-    display: 'flex',
-    gap: spacing(2),
-    flex: '1 1 100%',
-  },
-}));
 
 interface ExclusionRuleProps {
   channel: ChannelKey;
@@ -75,7 +72,6 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
   onUpdateSettings,
   onPersistSettings,
 }) => {
-  const classes = useStyles();
   const {
     formRule,
     isExpanded,
@@ -102,9 +98,8 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
 
   return (
     <form>
-      <Accordion
+      <StyledAccordion
         key={index}
-        className={classes.accordion}
         disableGutters
         expanded={isExpanded}
         onChange={(_, expanded) => setIsExpanded(expanded)}
@@ -131,7 +126,7 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
           />
         </AccordionSummary>
         <AccordionDetails>
-          <div className={classes.ruleFields}>
+          <RuleFields>
             <ContentTypesSelector
               rule={formRule}
               index={index}
@@ -139,11 +134,11 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
               editMode={isRuleInEditMode}
               onUpdateRule={handleUpdateRuleWithIndex}
             />
-            <Alert severity="info" className={classes.fullRowField}>
+            <FullRowAlert severity="info">
               Pages for this exclusion are determined by Section IDs <strong>OR</strong> Tag IDs
               <strong> OR</strong> Front IDs. If any list matches, the rule exclusion will apply.
-            </Alert>
-            <div className={classes.fullRowField}>
+            </FullRowAlert>
+            <FullRowField>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 Section IDs
               </Typography>
@@ -159,8 +154,8 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
                   disabled={!isRuleInEditMode}
                 />
               )}
-            </div>
-            <div className={classes.fullRowField}>
+            </FullRowField>
+            <FullRowField>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 Tag IDs
               </Typography>
@@ -176,8 +171,8 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
                   disabled={!isRuleInEditMode}
                 />
               )}
-            </div>
-            <div className={classes.fullRowField}>
+            </FullRowField>
+            <FullRowField>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 Network Fronts
               </Typography>
@@ -212,8 +207,8 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
                   ))}
                 </FormGroup>
               )}
-            </div>
-          </div>
+            </FullRowField>
+          </RuleFields>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
             Date Range{' '}
             <small>
@@ -221,9 +216,8 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
               inclusive.)
             </small>
           </Typography>
-          <div className={classes.dateRange}>
-            <TextField
-              className={classes.field}
+          <DateRange>
+            <Field
               label="Start Date"
               type="date"
               value={formRule.dateRange?.start ?? ''}
@@ -242,8 +236,7 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
                 shrink: true,
               }}
             />
-            <TextField
-              className={classes.field}
+            <Field
               label="End Date"
               type="date"
               value={formRule.dateRange?.end ?? ''}
@@ -262,9 +255,9 @@ const ExclusionRule: React.FC<ExclusionRuleProps> = ({
                 shrink: true,
               }}
             />
-          </div>
+          </DateRange>
         </AccordionDetails>
-      </Accordion>
+      </StyledAccordion>
     </form>
   );
 };

@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { withPreviewStyles } from '../previewContainer';
 
@@ -32,189 +31,214 @@ export interface PreviewColours {
   };
 }
 
-const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    width: '100%',
-    maxWidth: 320,
-    [breakpoints.up('md')]: {
-      flexDirection: 'row',
-      maxWidth: 'unset',
-    },
-  },
-  card: {
-    borderRadius: 12,
-    padding: spacing(2),
-    width: '100%',
-  },
-  contentRow: {
-    display: 'flex',
-    gap: spacing(2),
-    alignItems: 'flex-start',
-    flexDirection: 'column',
-    width: '100%',
-    maxWidth: 320,
-    [breakpoints.up('md')]: {
-      flexDirection: 'row',
-      maxWidth: 'max-content',
-    },
-  },
-  leftCol: {
-    maxWidth: 364,
-    width: '100%',
-    [breakpoints.up('md')]: {
-      minWidth: 364,
-    },
-  },
-  rightCol: {
-    flex: 1,
-    minWidth: 286,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(1.5),
-  },
-  heading: {
-    fontFamily: 'GH Guardian Headline',
-    fontSize: 42,
-    fontWeight: 500,
-    lineHeight: 1.15,
-    marginBottom: spacing('4px'),
-  },
-  tickerContainer: {
-    margin: `${spacing(1)} 0`,
-  },
-  tickerBar: {
-    height: 12,
-    width: '100%',
-    background: '#EEE',
-    borderRadius: 6,
-    overflow: 'hidden',
-  },
-  tickerFill: {
-    height: '100%',
-    width: '50%',
-    borderRadius: 6,
-  },
-  tickerText: {
-    fontFamily: 'GuardianTextSans',
-    fontSize: 15,
-    fontWeight: 400,
-    lineHeight: 1.3,
-    marginTop: spacing(0.5),
-  },
-  body: {
-    fontFamily: 'GuardianTextSans',
-    fontSize: 15,
-    fontWeight: 400,
-    lineHeight: 1.3,
-  },
-  highlight: {
-    fontFamily: 'GuardianTextSans',
-    fontSize: 15,
-    fontWeight: 700,
-    lineHeight: 1.3,
-    display: 'inline-block',
-    marginBottom: spacing(2),
-  },
-  buttons: {
-    display: 'flex',
-    gap: spacing(1.5),
-    flexDirection: 'column',
-
-    [breakpoints.up('md')]: {
-      flexDirection: 'row',
-    },
-  },
-  button: {
-    borderRadius: 1000,
-    cursor: 'default',
-    fontFamily: 'GuardianTextSans',
-    fontSize: 17,
-    fontWeight: 700,
-    padding: '6px 18px',
-    textAlign: 'center',
-    width: '100%',
-    [breakpoints.up('md')]: {
-      width: '50%',
-    },
-  },
-  choiceCard: {
-    borderRadius: 12,
-    padding: spacing(1.25),
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(1),
-    position: 'relative',
-  },
-  choiceHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: spacing(1),
-    fontFamily: 'GuardianTextSans',
-    fontSize: 17,
-    fontWeight: 700,
-  },
-  choiceOption: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: spacing(1),
-    fontFamily: 'GuardianTextSans',
-    fontSize: 17,
-    fontWeight: 400,
-  },
-  radio: {
-    width: 18,
-    height: 18,
-    borderRadius: '50%',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: '0 0 18px',
-  },
-  radioDot: {
-    width: 8,
-    height: 8,
-    borderRadius: '50%',
-  },
-  radioRing: {
-    width: 15,
-    height: 15,
-    borderRadius: '50%',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  recommendedBadge: {
-    position: 'absolute',
-    top: -12,
-    right: 8,
-    borderRadius: 4,
-    padding: '2px 6px',
-    fontFamily: 'GuardianTextSans',
-    fontSize: 12,
-    fontWeight: 700,
-    lineHeight: 1.2,
-  },
-  choiceList: {
-    margin: 0,
-    padding: 0,
-    fontFamily: 'GuardianTextSans',
-    fontSize: 14,
-    fontWeight: 400,
-    lineHeight: 1.4,
-    listStyle: 'none',
-  },
-  choiceItem: { display: 'flex', alignItems: 'center', gap: spacing(0.5) },
-  imagePreviewContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    flexGrow: 1,
-    justifyContent: 'center',
-    minHeight: 208,
-    backgroundColor: 'rgba(241,248,252,0.2)',
+const Container = styled('div')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  width: '100%',
+  maxWidth: 320,
+  [theme.breakpoints.up('md')]: {
+    flexDirection: 'row',
+    maxWidth: 'unset',
   },
 }));
+
+const Card = styled('div')(({ theme }) => ({
+  borderRadius: 12,
+  padding: theme.spacing(2),
+  width: '100%',
+}));
+
+const ContentRow = styled('div')(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing(2),
+  alignItems: 'flex-start',
+  flexDirection: 'column',
+  width: '100%',
+  maxWidth: 320,
+  [theme.breakpoints.up('md')]: {
+    flexDirection: 'row',
+    maxWidth: 'max-content',
+  },
+}));
+
+const LeftCol = styled('div')(({ theme }) => ({
+  maxWidth: 364,
+  width: '100%',
+  [theme.breakpoints.up('md')]: {
+    minWidth: 364,
+  },
+}));
+
+const RightCol = styled('div')(({ theme }) => ({
+  flex: 1,
+  minWidth: 286,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1.5),
+}));
+
+const Heading = styled('div')({
+  fontFamily: 'GH Guardian Headline',
+  fontSize: 42,
+  fontWeight: 500,
+  lineHeight: 1.15,
+  marginBottom: '4px',
+});
+
+const TickerContainer = styled('div')(({ theme }) => ({
+  margin: `${theme.spacing(1)} 0`,
+}));
+
+const TickerBar = styled('div')({
+  height: 12,
+  width: '100%',
+  background: '#EEE',
+  borderRadius: 6,
+  overflow: 'hidden',
+});
+
+const TickerFill = styled('div')({
+  height: '100%',
+  width: '50%',
+  borderRadius: 6,
+});
+
+const TickerText = styled('div')(({ theme }) => ({
+  fontFamily: 'GuardianTextSans',
+  fontSize: 15,
+  fontWeight: 400,
+  lineHeight: 1.3,
+  marginTop: theme.spacing(0.5),
+}));
+
+const Body = styled('div')({
+  fontFamily: 'GuardianTextSans',
+  fontSize: 15,
+  fontWeight: 400,
+  lineHeight: 1.3,
+});
+
+const Highlight = styled('div')(({ theme }) => ({
+  fontFamily: 'GuardianTextSans',
+  fontSize: 15,
+  fontWeight: 700,
+  lineHeight: 1.3,
+  display: 'inline-block',
+  marginBottom: theme.spacing(2),
+}));
+
+const Buttons = styled('div')(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing(1.5),
+  flexDirection: 'column',
+
+  [theme.breakpoints.up('md')]: {
+    flexDirection: 'row',
+  },
+}));
+
+const StyledButton = styled('div')(({ theme }) => ({
+  borderRadius: 1000,
+  cursor: 'default',
+  fontFamily: 'GuardianTextSans',
+  fontSize: 17,
+  fontWeight: 700,
+  padding: '6px 18px',
+  textAlign: 'center' as const,
+  width: '100%',
+  [theme.breakpoints.up('md')]: {
+    width: '50%',
+  },
+}));
+
+const ChoiceCard = styled('div')(({ theme }) => ({
+  borderRadius: 12,
+  padding: theme.spacing(1.25),
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1),
+  position: 'relative',
+}));
+
+const ChoiceHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+  fontFamily: 'GuardianTextSans',
+  fontSize: 17,
+  fontWeight: 700,
+}));
+
+const ChoiceOption = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+  fontFamily: 'GuardianTextSans',
+  fontSize: 17,
+  fontWeight: 400,
+}));
+
+const Radio = styled('span')({
+  width: 18,
+  height: 18,
+  borderRadius: '50%',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flex: '0 0 18px',
+});
+
+const RadioDot = styled('span')({
+  width: 8,
+  height: 8,
+  borderRadius: '50%',
+});
+
+const RadioRing = styled('span')({
+  width: 15,
+  height: 15,
+  borderRadius: '50%',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
+const RecommendedBadge = styled('div')({
+  position: 'absolute',
+  top: -12,
+  right: 8,
+  borderRadius: 4,
+  padding: '2px 6px',
+  fontFamily: 'GuardianTextSans',
+  fontSize: 12,
+  fontWeight: 700,
+  lineHeight: 1.2,
+});
+
+const ChoiceList = styled('ul')({
+  margin: 0,
+  padding: 0,
+  fontFamily: 'GuardianTextSans',
+  fontSize: 14,
+  fontWeight: 400,
+  lineHeight: 1.4,
+  listStyle: 'none',
+});
+
+const ChoiceItem = styled('li')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(0.5),
+}));
+
+const ImagePreviewContainer = styled('div')({
+  alignItems: 'center',
+  display: 'flex',
+  flexGrow: 1,
+  justifyContent: 'center',
+  minHeight: 208,
+  backgroundColor: 'rgba(241,248,252,0.2)',
+});
 
 type Props = {
   colours: PreviewColours;
@@ -222,51 +246,33 @@ type Props = {
 };
 
 const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.container}>
-      <div
-        className={classes.card}
-        style={{ background: colours.background }}
-        aria-label="Banner preview"
-      >
-        <div className={classes.contentRow}>
-          <div className={classes.leftCol}>
-            <div className={classes.heading} style={{ color: colours.heading }}>
-              Heading
-            </div>
+    <Container>
+      <Card style={{ background: colours.background }} aria-label="Banner preview">
+        <ContentRow>
+          <LeftCol>
+            <Heading style={{ color: colours.heading }}>Heading</Heading>
             {visualKind === 'ChoiceCards' && colours.ticker && (
-              <div className={classes.tickerContainer}>
-                <div
-                  className={classes.tickerBar}
-                  style={{ background: colours.ticker.progressBarBackground }}
-                >
-                  <div
-                    className={classes.tickerFill}
-                    style={{ background: colours.ticker.filledProgress }}
-                  />
-                </div>
-                <div className={classes.tickerText}>
+              <TickerContainer>
+                <TickerBar style={{ background: colours.ticker.progressBarBackground }}>
+                  <TickerFill style={{ background: colours.ticker.filledProgress }} />
+                </TickerBar>
+                <TickerText>
                   <span style={{ color: colours.ticker.totalColour, fontWeight: 700 }}>
                     $500,000
                   </span>{' '}
                   <span style={{ color: colours.ticker.goalColour }}>of $1,500,000 goal</span>
-                </div>
-              </div>
+                </TickerText>
+              </TickerContainer>
             )}
-            <div className={classes.body} style={{ color: colours.bodyText }}>
-              Body Text.
-            </div>
-            <div
-              className={classes.highlight}
+            <Body style={{ color: colours.bodyText }}>Body Text.</Body>
+            <Highlight
               style={{ color: colours.highlightText, background: colours.highlightBackground }}
             >
               Highlighted text.
-            </div>
-            <div className={classes.buttons}>
-              <div
-                className={classes.button}
+            </Highlight>
+            <Buttons>
+              <StyledButton
                 style={{
                   color: colours.primaryCta.text,
                   background: colours.primaryCta.background,
@@ -276,9 +282,8 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
                 }}
               >
                 Primary action
-              </div>
-              <div
-                className={classes.button}
+              </StyledButton>
+              <StyledButton
                 style={{
                   color: colours.secondaryCta.text,
                   background: colours.secondaryCta.background,
@@ -288,52 +293,44 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
                 }}
               >
                 Secondary action
-              </div>
-            </div>
-          </div>
+              </StyledButton>
+            </Buttons>
+          </LeftCol>
           {visualKind === 'ChoiceCards' && colours.choiceCards && (
-            <div className={classes.rightCol}>
-              <div
-                className={classes.choiceCard}
+            <RightCol>
+              <ChoiceCard
                 style={{
                   background: colours.choiceCards.buttonSelectColour,
                   border: `2px solid ${colours.choiceCards.buttonSelectBorderColour}`,
                   color: colours.choiceCards.buttonSelectTextColour,
                 }}
               >
-                <div
-                  className={classes.recommendedBadge}
+                <RecommendedBadge
                   style={{
                     background: colours.choiceCards.pillBackgroundColour,
                     color: colours.choiceCards.pillTextColour,
                   }}
                 >
                   Recommended
-                </div>
-                <div className={classes.choiceHeader}>
-                  <span
-                    className={classes.radio}
+                </RecommendedBadge>
+                <ChoiceHeader>
+                  <Radio
                     style={{ border: `2px solid ${colours.choiceCards.buttonSelectBorderColour}` }}
                   >
-                    <span
-                      className={classes.radioRing}
+                    <RadioRing
                       style={{
                         border: `1px solid ${colours.choiceCards.buttonSelectBorderColour}`,
                       }}
                     >
-                      <span
-                        className={classes.radioDot}
+                      <RadioDot
                         style={{ background: colours.choiceCards.buttonSelectBorderColour }}
                       />
-                    </span>
-                  </span>
+                    </RadioRing>
+                  </Radio>
                   Support £XX/month
-                </div>
-                <ul
-                  className={classes.choiceList}
-                  style={{ color: colours.choiceCards.buttonSelectTextColour }}
-                >
-                  <li className={classes.choiceItem}>
+                </ChoiceHeader>
+                <ChoiceList style={{ color: colours.choiceCards.buttonSelectTextColour }}>
+                  <ChoiceItem>
                     <svg
                       width="14"
                       height="14"
@@ -347,8 +344,8 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
                       />
                     </svg>
                     Item 1
-                  </li>
-                  <li className={classes.choiceItem}>
+                  </ChoiceItem>
+                  <ChoiceItem>
                     <svg
                       width="14"
                       height="14"
@@ -362,30 +359,28 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
                       />
                     </svg>
                     Item 2
-                  </li>
-                </ul>
-              </div>
-              <div
-                className={classes.choiceCard}
+                  </ChoiceItem>
+                </ChoiceList>
+              </ChoiceCard>
+              <ChoiceCard
                 style={{
                   background: colours.choiceCards.buttonColour,
                   border: `1px solid ${colours.choiceCards.buttonBorderColour}`,
                   color: colours.choiceCards.buttonTextColour,
                 }}
               >
-                <div className={classes.choiceOption}>
-                  <span
-                    className={classes.radio}
+                <ChoiceOption>
+                  <Radio
                     style={{ border: `1px solid ${colours.choiceCards.buttonBorderColour}` }}
                   />
                   Support with £X/month
-                </div>
-              </div>
-            </div>
+                </ChoiceOption>
+              </ChoiceCard>
+            </RightCol>
           )}
           {visualKind === 'Image' && (
-            <div className={classes.rightCol}>
-              <div className={classes.imagePreviewContainer}>
+            <RightCol>
+              <ImagePreviewContainer>
                 <svg
                   version="1.1"
                   xmlns="http://www.w3.org/2000/svg"
@@ -422,8 +417,8 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
                   <path d="" fill="#000000" transform="translate(0,0)" />
                   <path d="" fill="#000000" transform="translate(0,0)" />
                 </svg>
-              </div>
-            </div>
+              </ImagePreviewContainer>
+            </RightCol>
           )}
           {/** Close button hidden, use for troubleshooting only */}
           {/* <div>
@@ -449,9 +444,9 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
               </svg>
             </button>
           </div> */}
-        </div>
-      </div>
-    </div>
+        </ContentRow>
+      </Card>
+    </Container>
   );
 };
 

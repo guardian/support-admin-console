@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -11,36 +12,32 @@ import {
   Switch,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import { FrontendSettingsType, updateStatuses } from '../../../utils/requests';
 import { Status, Test } from '../helpers/shared';
 import { testChannelData, testChannelOrder } from './CampaignsTypes';
 
-const useStyles = makeStyles(() => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
-  },
-  input: {
-    '& input': {
-      textTransform: 'uppercase !important',
-    },
-  },
-  onOffLabel: {
-    fontSize: '13px',
-  },
-  channelLabel: {
-    fontSize: '14px',
-    marginLeft: '16px',
-  },
-  testLabel: {
-    fontSize: '14px',
-    marginLeft: '10px',
-  },
-}));
+const DialogHeader = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingRight: '8px',
+});
+
+const OnOffLabel = styled(Typography)({
+  fontSize: '13px',
+});
+
+const ChannelLabel = styled(Typography)({
+  fontSize: '14px',
+  marginLeft: '16px',
+});
+
+const TestLabel = styled(Typography)({
+  fontSize: '14px',
+  marginLeft: '10px',
+});
 
 interface StatusUpdateDialogProps {
   isOpen: boolean;
@@ -59,8 +56,6 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
   tests,
   updatePage,
 }: StatusUpdateDialogProps) => {
-  const classes = useStyles();
-
   const getStatusKey = (test: Test) => {
     return `${test.channel}|${test.name}`;
   };
@@ -126,12 +121,12 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
-      <div className={classes.dialogHeader}>
+      <DialogHeader>
         <DialogTitle id="create-campaign-dialog-title">Update Test status values</DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />
         </IconButton>
-      </div>
+      </DialogHeader>
       {tests.length > 0 ? (
         <>
           <DialogContent dividers>
@@ -143,11 +138,11 @@ const StatusUpdateDialog: React.FC<StatusUpdateDialogProps> = ({
 
                 return (
                   <ListItem key={labelId}>
-                    <Typography className={classes.onOffLabel}>Draft</Typography>
+                    <OnOffLabel>Draft</OnOffLabel>
                     <Switch id={key} checked={testData[key] === 'Live'} onChange={updateSwitch} />
-                    <Typography className={classes.onOffLabel}>Live</Typography>
-                    <Typography className={classes.channelLabel}>[{channelLabel}]</Typography>
-                    <Typography className={classes.testLabel}>{testLabel}</Typography>
+                    <OnOffLabel>Live</OnOffLabel>
+                    <ChannelLabel>[{channelLabel}]</ChannelLabel>
+                    <TestLabel>{testLabel}</TestLabel>
                   </ListItem>
                 );
               })}

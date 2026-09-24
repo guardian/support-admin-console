@@ -1,22 +1,19 @@
 import Autocomplete from '@mui/material/Autocomplete';
 import { grey } from '@mui/material/colors';
-import { Theme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import { makeStyles } from '@mui/styles';
-import React, { JSX } from 'react';
+import React from 'react';
 import { countries } from '../../utils/models';
 import { RegionTargeting } from './helpers/shared';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: spacing(3),
-    },
-    borderColor: `2px solid ${grey[700]}`,
-    borderRadius: '2px',
-    padding: spacing(2),
+const Container = styled('div')(({ theme }) => ({
+  width: '100%',
+  '& > * + *': {
+    marginTop: theme.spacing(3),
   },
+  borderColor: `2px solid ${grey[700]}`,
+  borderRadius: '2px',
+  padding: theme.spacing(2),
 }));
 
 interface Option {
@@ -50,8 +47,6 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
   regionTargeting,
   onRegionTargetingUpdate,
 }: MultiselectAutocompleteProps) => {
-  const classes = useStyles();
-
   const [inputValue, setInputValue] = React.useState<string>('');
 
   // Guard against undefined regionTargeting during test switching
@@ -61,7 +56,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <span style={{ fontSize: '1rem', fontWeight: 'normal' }}>
         Additionally if you want to target by countries select from the list
       </span>
@@ -100,7 +95,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
             placeholder="Select multiple options "
           />
         )}
-        renderOption={(props, option): JSX.Element => {
+        renderOption={(props, option): React.JSX.Element => {
           return <li {...props}>{option.label ? option.label : option.value}</li>;
         }}
         onChange={(event, values: Option[], reason): void => {
@@ -113,7 +108,7 @@ const MultiselectAutocomplete: React.FC<MultiselectAutocompleteProps> = ({
           }
         }}
       />
-    </div>
+    </Container>
   );
 };
 

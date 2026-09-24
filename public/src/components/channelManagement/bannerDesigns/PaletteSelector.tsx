@@ -6,34 +6,32 @@ import {
   Select,
   SelectChangeEvent,
 } from '@mui/material';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useCallback, useMemo, useState } from 'react';
 import { HELP_GUIDE_URL } from '../../../constants';
 import PalettePreview from './PalettePreview';
 import { colourThemes, ThemeColours, ThemeDefinition, ThemeStyle } from './utils/colourThemes';
 
-const useStyles = makeStyles(({ breakpoints, spacing }: Theme) => ({
-  container: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: spacing(3),
-    width: '100%',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    marginTop: spacing(2),
+const Container = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  gap: theme.spacing(3),
+  width: '100%',
+  flexDirection: 'column',
+  flexWrap: 'wrap',
+  marginTop: theme.spacing(2),
 
-    [breakpoints.up('md')]: {
-      flexDirection: 'row',
-    },
+  [theme.breakpoints.up('md')]: {
+    flexDirection: 'row',
   },
-  selectors: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: spacing(2),
-    minWidth: 320,
-  },
+}));
+
+const Selectors = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(2),
+  minWidth: 320,
 }));
 
 export interface SelectedPalette {
@@ -57,7 +55,6 @@ const PaletteSelector: React.FC<Props> = ({
   visualKind,
   isDisabled,
 }) => {
-  const classes = useStyles();
   const { styles } = colourThemes;
 
   const getStyle = useCallback(
@@ -128,8 +125,8 @@ const PaletteSelector: React.FC<Props> = ({
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.selectors}>
+    <Container>
+      <Selectors>
         <FormControl required fullWidth error={!style}>
           <InputLabel id="style-label" htmlFor="style-select">
             Style
@@ -174,7 +171,7 @@ const PaletteSelector: React.FC<Props> = ({
           </Select>
           {!theme && <FormHelperText>Select a colour theme</FormHelperText>}
         </FormControl>
-      </div>
+      </Selectors>
       {selectedColours && (
         <>
           <PalettePreview colours={selectedColours} visualKind={visualKind} />
@@ -190,7 +187,7 @@ const PaletteSelector: React.FC<Props> = ({
           </div>
         </>
       )}
-    </div>
+    </Container>
   );
 };
 
