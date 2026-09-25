@@ -1,4 +1,4 @@
-import { BannerTest, BannerVariant } from '../../../../models/banner';
+import { BannerStepMode, BannerTest, BannerVariant } from '../../../../models/banner';
 import { getStage } from '../../../../utils/stage';
 import { Cta, RegionTargeting, UserCohort } from '../../helpers/shared';
 
@@ -15,6 +15,8 @@ export const DEFAULT_SECONDARY_CTA: Cta = {
 const CODE_DEFAULT_VARIANT: BannerVariant = {
   name: 'CONTROL',
   template: { designName: 'TEST_NOT_SELECTED' },
+  bannerStepMode: BannerStepMode.OneStep,
+  isCollapsible: false,
   bannerContent: {
     heading: 'We chose a different approach. Will you support it?',
     paragraphs: [
@@ -28,6 +30,8 @@ const CODE_DEFAULT_VARIANT: BannerVariant = {
 const PROD_DEFAULT_VARIANT: BannerVariant = {
   name: 'CONTROL',
   template: { designName: 'TEST_NOT_SELECTED' },
+  bannerStepMode: BannerStepMode.OneStep,
+  isCollapsible: false,
   bannerContent: {
     paragraphs: [],
     highlightedText: 'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1. Thank you.',

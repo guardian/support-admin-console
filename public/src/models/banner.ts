@@ -20,6 +20,14 @@ export interface BannerUi {
   designName: string;
 }
 
+export const BannerStepMode = {
+  OneStep: 'OneStep',
+  TwoStep: 'TwoStep',
+  TwoStepIfAllowed: 'TwoStepIfAllowed',
+} as const;
+
+export type BannerStepMode = (typeof BannerStepMode)[keyof typeof BannerStepMode];
+
 export interface BannerContent {
   heading?: string;
   messageText?: string;
@@ -38,6 +46,7 @@ export interface BannerVariant extends Variant {
   choiceCardsSettings?: ChoiceCardsSettings;
   promoCodes?: string[];
   isCollapsible?: boolean;
+  bannerStepMode?: BannerStepMode;
 }
 
 export interface BannerTestDeploySchedule {
