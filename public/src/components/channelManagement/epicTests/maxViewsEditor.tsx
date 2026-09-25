@@ -1,23 +1,22 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup, TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { MaxEpicViews } from '../../../models/epic';
 import { EMPTY_ERROR_HELPER_TEXT, notNumberValidator } from '../helpers/validation';
 import { DEFAULT_MAX_EPIC_VIEWS } from './utils/defaults';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
+const Container = styled(Box)(({ theme }) => ({
+  '& > * + *': {
+    marginTop: theme.spacing(2),
   },
-  formContainer: {
-    maxWidth: '250px',
+}));
 
-    '& > * + *': {
-      marginTop: spacing(1),
-    },
+const FormContainer = styled(Box)(({ theme }) => ({
+  maxWidth: '250px',
+
+  '& > * + *': {
+    marginTop: theme.spacing(1),
   },
 }));
 
@@ -40,8 +39,6 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
   onValidationChange,
   isDisabled,
 }: TestEditorArticleCountEditorProps) => {
-  const classes = useStyles();
-
   const defaultValues: FormData = useMemo(
     () => ({
       maxViewsCount: maxEpicViews?.maxViewsCount.toString() ?? '',
@@ -98,7 +95,7 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <FormControl>
         <RadioGroup value={maxEpicViews ? 'enabled' : 'disabled'} onChange={onRadioGroupChange}>
           <FormControlLabel
@@ -119,7 +116,7 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
       </FormControl>
 
       {maxEpicViews && (
-        <div className={classes.formContainer}>
+        <FormContainer>
           <div>
             <TextField
               error={errors.maxViewsCount !== undefined}
@@ -177,9 +174,9 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
               disabled={isDisabled}
             />
           </div>
-        </div>
+        </FormContainer>
       )}
-    </div>
+    </Container>
   );
 };
 

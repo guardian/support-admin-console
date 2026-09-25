@@ -1,5 +1,5 @@
-import { Button, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import {
   fetchFrontendSettings,
@@ -10,13 +10,14 @@ import BannerChannelDeployerTable from './bannerChannelDeployerTable';
 import { BannerDeploys, BannersToRedeploy, DataFromServer } from './bannerDeployTypes';
 import type { BannerChannel } from './bannerDeployTypes';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    '& > * + *': {
-      marginTop: spacing(2),
-    },
-  },
+const Container = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(2),
 }));
+const RedeployButton = styled(Button)({
+  alignSelf: 'flex-start',
+});
 
 interface BannerChannelDeployerProps {
   channel: BannerChannel;
@@ -25,8 +26,6 @@ interface BannerChannelDeployerProps {
 const BannerChannelDeployer: React.FC<BannerChannelDeployerProps> = ({
   channel,
 }: BannerChannelDeployerProps) => {
-  const classes = useStyles();
-
   const isChannel1 = channel === 'CHANNEL1';
   const settingsType = isChannel1
     ? FrontendSettingsType.BannerDeploy
@@ -105,7 +104,7 @@ const BannerChannelDeployer: React.FC<BannerChannelDeployerProps> = ({
   useEffect(fetchDataFromServer, [settingsType]);
 
   return (
-    <div className={classes.container}>
+    <Container>
       <BannerChannelDeployerTable
         channel={channel}
         bannerDeploys={dataFromServer?.value}
@@ -114,10 +113,10 @@ const BannerChannelDeployer: React.FC<BannerChannelDeployerProps> = ({
         onRedeployClick={onRedeployClick}
       />
 
-      <Button onClick={redeploy} color="primary" variant="contained" size="large">
+      <RedeployButton onClick={redeploy} color="primary" variant="contained" size="large">
         Redeploy channel {isChannel1 ? ' 1 ' : ' 2 '} in selected regions
-      </Button>
-    </div>
+      </RedeployButton>
+    </Container>
   );
 };
 

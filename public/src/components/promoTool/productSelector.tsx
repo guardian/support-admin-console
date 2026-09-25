@@ -1,14 +1,15 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { PromoProduct, promoProductNames } from './utils/promoModels';
 
-const useStyles = makeStyles(() => ({
-  select: {
-    marginBottom: '8px',
-    width: '100%',
-  },
-}));
+const StyledSelect = styled(Select)({
+  marginBottom: '8px',
+  width: '100%',
+});
+
+const isPromoProduct = (value: unknown): value is PromoProduct =>
+  typeof value === 'string' && Object.prototype.hasOwnProperty.call(promoProductNames, value);
 
 export interface ProductSelectorProps {
   selectedValue: string;
@@ -19,21 +20,20 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
   selectedValue,
   handleSelectedValue,
 }: ProductSelectorProps) => {
-  const classes = useStyles();
-
   const handleProductSelectorChange = (selectedValue: PromoProduct) => {
     handleSelectedValue(selectedValue);
   };
   return (
     <FormControl fullWidth>
       <InputLabel id="product-selector-label">Select a Product</InputLabel>
-      <Select
+      <StyledSelect
         id="product-selector-label"
-        className={classes.select}
         value={selectedValue}
-        onChange={(event: SelectChangeEvent): void =>
-          handleProductSelectorChange(event.target.value as PromoProduct)
-        }
+        onChange={(event: SelectChangeEvent<unknown>): void => {
+          if (isPromoProduct(event.target.value)) {
+            handleProductSelectorChange(event.target.value);
+          }
+        }}
         aria-label="Select a Product"
       >
         {Object.entries(promoProductNames).map(([product, label], index) => (
@@ -41,7 +41,7 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({
             {label}
           </MenuItem>
         ))}
-      </Select>
+      </StyledSelect>
     </FormControl>
   );
 };

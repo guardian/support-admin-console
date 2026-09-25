@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useState } from 'react';
 import { BannerDesign, Status } from '../../../models/bannerDesign';
 import { LockStatus } from '../helpers/shared';
@@ -7,21 +6,20 @@ import useValidation from '../hooks/useValidation';
 import BannerDesignForm from './BannerDesignForm';
 import StickyTopBar from './StickyTopBar';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%',
-    background: palette.background.paper,
-    borderLeft: `1px solid ${palette.grey[500]}`,
-  },
-  scrollableContainer: {
-    overflowY: 'auto',
-    paddingLeft: spacing(3),
-    paddingRight: spacing(1),
-    paddingTop: spacing(2),
-  },
+const Container = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+  width: '100%',
+  background: theme.palette.background.paper,
+  borderLeft: `1px solid ${theme.palette.grey[500]}`,
+}));
+
+const ScrollableContainer = styled('div')(({ theme }) => ({
+  overflowY: 'auto',
+  paddingLeft: theme.spacing(3),
+  paddingRight: theme.spacing(1),
+  paddingTop: theme.spacing(2),
 }));
 
 type Props = {
@@ -49,8 +47,6 @@ const BannerDesignEditor: React.FC<Props> = ({
   onChange,
   onStatusChange,
 }: Props) => {
-  const classes = useStyles();
-
   const [isValid, setIsValid] = useState<boolean>(true);
 
   const setValidationStatus = useValidation(setIsValid);
@@ -64,7 +60,7 @@ const BannerDesignEditor: React.FC<Props> = ({
   };
 
   return (
-    <div className={classes.container}>
+    <Container>
       <StickyTopBar
         name={name}
         onLock={onLock}
@@ -76,15 +72,15 @@ const BannerDesignEditor: React.FC<Props> = ({
         design={design}
         onStatusChange={onStatusChange}
       />
-      <div className={classes.scrollableContainer}>
+      <ScrollableContainer>
         <BannerDesignForm
           design={design}
           setValidationStatus={setValidationStatus}
           isDisabled={!userHasLock}
           onChange={onChange}
         />
-      </div>
-    </div>
+      </ScrollableContainer>
+    </Container>
   );
 };
 

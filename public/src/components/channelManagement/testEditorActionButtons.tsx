@@ -1,3 +1,4 @@
+// This component is not used anywhere in the current codebase. Should it be deleted?
 import ArchiveIcon from '@mui/icons-material/Archive';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
@@ -8,33 +9,30 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Theme,
   Typography,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../hooks/useOpenable';
 import CreateTestDialog from './createTestDialog';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+const Container = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+});
+const CopyAndArchiveContainer = styled('div')(({ theme }) => ({
+  '& > * + *': {
+    marginLeft: theme.spacing(2),
   },
-  copyAndArchiveContainer: {
-    '& > * + *': {
-      marginLeft: spacing(2),
-    },
-  },
-  buttonText: {
-    fontSize: '14px',
-    fontWeight: 500,
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    color: palette.grey[800],
-  },
+}));
+const ButtonText = styled(Typography)(({ theme }) => ({
+  fontSize: '14px',
+  fontWeight: 500,
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
+  color: theme.palette.grey[800],
 }));
 
 interface TestEditorActionButtonsProps {
@@ -56,8 +54,6 @@ interface DeleteButtonProps {
 
 const DeleteButton: React.FC<DeleteButtonProps> = ({ isDisabled, onDelete }) => {
   const [isOpen, open, close] = useOpenable();
-  const classes = useStyles();
-
   return (
     <>
       <Button
@@ -67,7 +63,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({ isDisabled, onDelete }) => 
         onClick={open}
         disabled={isDisabled}
       >
-        <Typography className={classes.buttonText}>Delete test</Typography>
+        <ButtonText>Delete test</ButtonText>
       </Button>
       <Dialog
         open={isOpen}
@@ -101,8 +97,6 @@ interface ArchiveButtonProps {
 
 const ArchiveButton: React.FC<ArchiveButtonProps> = ({ isDisabled, onArchive }) => {
   const [isOpen, open, close] = useOpenable();
-  const classes = useStyles();
-
   return (
     <>
       <Button
@@ -112,7 +106,7 @@ const ArchiveButton: React.FC<ArchiveButtonProps> = ({ isDisabled, onArchive }) 
         onClick={open}
         disabled={isDisabled}
       >
-        <Typography className={classes.buttonText}>Archive test</Typography>
+        <ButtonText>Archive test</ButtonText>
       </Button>
       <Dialog
         open={isOpen}
@@ -160,8 +154,6 @@ const CopyButton: React.FC<CopyButtonProps> = ({
   onCopy,
 }) => {
   const [isOpen, open, close] = useOpenable();
-  const classes = useStyles();
-
   return (
     <>
       <Button
@@ -171,7 +163,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({
         size="medium"
         disabled={isDisabled}
       >
-        <Typography className={classes.buttonText}>Copy test</Typography>
+        <ButtonText>Copy test</ButtonText>
       </Button>
       <CreateTestDialog
         isOpen={isOpen}
@@ -199,11 +191,9 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
   isDisabled,
   onCopy,
 }: TestEditorActionButtonsProps) => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.container}>
-      <div className={classes.copyAndArchiveContainer}>
+    <Container>
+      <CopyAndArchiveContainer>
         <CopyButton
           isDisabled={isDisabled}
           existingNames={existingNames}
@@ -214,9 +204,9 @@ const TestEditorActionButtons: React.FC<TestEditorActionButtonsProps> = ({
           onCopy={onCopy}
         />
         <ArchiveButton isDisabled={isDisabled} onArchive={onArchive} />
-      </div>
+      </CopyAndArchiveContainer>
       <DeleteButton isDisabled={isDisabled} onDelete={onDelete} />
-    </div>
+    </Container>
   );
 };
 

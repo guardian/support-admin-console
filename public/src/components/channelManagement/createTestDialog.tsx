@@ -16,7 +16,7 @@ import {
   TextField,
 } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../utils/requests';
@@ -28,28 +28,29 @@ import {
   VALID_CHARACTERS_REGEX,
 } from './helpers/validation';
 
-const useStyles = makeStyles(() => ({
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
+const DialogHeader = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingRight: '8px',
+});
+
+const StyledTextField = styled(TextField)({
+  '& input': {
+    textTransform: 'uppercase !important',
   },
-  input: {
-    '& input': {
-      textTransform: 'uppercase !important',
-    },
-  },
-  campaignSelector: {
-    marginBottom: '20px',
-    marginRight: '12px',
-    minWidth: '200px',
-  },
-  campaignSelectorContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-}));
+});
+
+const CampaignSelectorField = styled(FormControl)({
+  marginBottom: '20px',
+  marginRight: '12px',
+  minWidth: '200px',
+});
+
+const CampaignSelectorContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+});
 
 type FormData = {
   name: string;
@@ -83,8 +84,6 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
   testNamePrefix,
   createTest,
 }: CreateTestDialogProps) => {
-  const classes = useStyles();
-
   const defaultValues = {
     name: sourceName ?? '',
     nickname: sourceNickname ?? '',
@@ -135,18 +134,18 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onClose={close} aria-labelledby="create-test-dialog-title">
-      <div className={classes.dialogHeader}>
+      <DialogHeader>
         <DialogTitle id="create-test-dialog-title">
           {mode === 'NEW' ? 'Create a new test' : 'Name your new test'}
         </DialogTitle>
         <IconButton onClick={close} aria-label="close">
           <CloseIcon />
         </IconButton>
-      </div>
+      </DialogHeader>
       <DialogContent dividers>
         {testNamePrefix === undefined && (
-          <div className={classes.campaignSelectorContainer}>
-            <FormControl className={classes.campaignSelector}>
+          <CampaignSelectorContainer>
+            <CampaignSelectorField>
               <InputLabel id="campaign-selector" htmlFor="campaign-select">
                 Campaign
               </InputLabel>
@@ -175,7 +174,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            </CampaignSelectorField>
             <FormControlLabel
               control={
                 <Checkbox
@@ -187,10 +186,9 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
               }
               label="Prefix test name"
             />
-          </div>
+          </CampaignSelectorContainer>
         )}
-        <TextField
-          className={classes.input}
+        <StyledTextField
           error={errors.name !== undefined}
           helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
           {...register('name', {
@@ -217,8 +215,7 @@ const CreateTestDialog: React.FC<CreateTestDialogProps> = ({
           fullWidth
           autoComplete={'off'}
         />
-        <TextField
-          className={classes.input}
+        <StyledTextField
           error={errors.nickname !== undefined}
           helperText={errors.nickname ? errors.nickname.message : NICKNAME_DEFAULT_HELPER_TEXT}
           {...register('nickname', {

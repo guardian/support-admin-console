@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import { Alert, Button, Card, CardContent, Typography } from '@mui/material';
+import { Alert, Typography } from '@mui/material';
 import React from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { ChoiceCardsSettings } from '../../models/choiceCards';
@@ -10,7 +10,14 @@ import {
   sanitizeChoiceCardsSettings,
 } from '../../utils/defaultChoiceCards';
 import { ChoiceCardEditor } from '../channelManagement/choiceCards/ChoiceCardEditor';
-import { useStyles } from './styles';
+import {
+  AddButton,
+  ChoiceCardRow,
+  DeleteButton,
+  HelperText,
+  RegionCard,
+  RegionContent,
+} from './styles';
 
 interface CardsPerRegionEditorProps {
   label: string;
@@ -29,7 +36,6 @@ export const CardsPerRegionEditor: React.FC<CardsPerRegionEditorProps> = ({
   onChange,
   onValidationChange,
 }) => {
-  const classes = useStyles();
   const formMethods = useForm<FormData>({
     defaultValues: {
       choiceCards: settings.choiceCards,
@@ -81,21 +87,21 @@ export const CardsPerRegionEditor: React.FC<CardsPerRegionEditorProps> = ({
   };
 
   return (
-    <Card className={classes.regionCard} variant="outlined">
-      <CardContent className={classes.regionContent}>
+    <RegionCard variant="outlined">
+      <RegionContent>
         <div>
           <Typography variant="h6">{label}</Typography>
           {label !== 'Default fallback' && (
-            <Typography variant="body2" className={classes.helperText}>
+            <HelperText variant="body2">
               Leave this region empty to continue using fallback settings.
-            </Typography>
+            </HelperText>
           )}
         </div>
         {formMethods.formState.errors.hasOneDefault && (
           <Alert severity="error">{formMethods.formState.errors.hasOneDefault.message}</Alert>
         )}
         {fields.map((choiceCard, idx) => (
-          <div className={classes.choiceCardRow} key={choiceCard.id}>
+          <ChoiceCardRow key={choiceCard.id}>
             <ChoiceCardEditor
               choiceCard={choiceCard}
               onChange={(updatedCard) => {
@@ -108,8 +114,7 @@ export const CardsPerRegionEditor: React.FC<CardsPerRegionEditorProps> = ({
               hideDestination={true}
               idPrefix={`${idPrefix}-`}
             />
-            <Button
-              className={classes.deleteButton}
+            <DeleteButton
               onClick={() => {
                 remove(idx);
                 handleFieldChange();
@@ -120,11 +125,10 @@ export const CardsPerRegionEditor: React.FC<CardsPerRegionEditorProps> = ({
               startIcon={<CloseIcon />}
             >
               Delete
-            </Button>
-          </div>
+            </DeleteButton>
+          </ChoiceCardRow>
         ))}
-        <Button
-          className={classes.addButton}
+        <AddButton
           onClick={() => {
             append({
               product: { supportTier: 'Contribution', ratePlan: 'Monthly' },
@@ -140,8 +144,8 @@ export const CardsPerRegionEditor: React.FC<CardsPerRegionEditorProps> = ({
           startIcon={<AddIcon />}
         >
           Add choice card
-        </Button>
-      </CardContent>
-    </Card>
+        </AddButton>
+      </RegionContent>
+    </RegionCard>
   );
 };

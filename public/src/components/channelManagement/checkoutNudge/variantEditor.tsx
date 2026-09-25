@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel, MenuItem, TextField, Typography } from '@mui/material';
+import { Checkbox, FormControlLabel, MenuItem, TextField } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 import {
   CheckoutNudgeVariant,
@@ -8,7 +8,7 @@ import {
   RatePlan,
 } from '../../../models/checkoutNudge';
 import PromoCodesEditor from '../../shared/PromoCodesEditor';
-import { useStyles } from '../helpers/testEditorStyles';
+import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 import { getAvailableRatePlans, ONE_TIME_PLANS, PRODUCTS, RECURRING_PLANS } from './utils/defaults';
 
@@ -33,8 +33,6 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   editMode,
   onValidationChange,
 }) => {
-  const classes = useStyles();
-
   const hasNudge = !!variant.nudge;
 
   // Use refs to stabilize callback dependencies and prevent infinite render loops
@@ -117,7 +115,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
   }, [hasNudge, variant.nudge]);
 
   return (
-    <div className={classes.container}>
+    <Container>
       <FormControlLabel
         control={
           <Checkbox
@@ -132,10 +130,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
 
       {hasNudge && variant.nudge && (
         <>
-          <div className={classes.sectionContainer}>
-            <Typography variant="h4" className={classes.sectionHeader}>
-              Nudge to Product
-            </Typography>
+          <SectionContainer>
+            <SectionHeader variant="h4">Nudge to Product</SectionHeader>
             <TextField
               select
               label="Product"
@@ -179,12 +175,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
                 </MenuItem>
               ))}
             </TextField>
-          </div>
+          </SectionContainer>
 
-          <div className={classes.sectionContainer}>
-            <Typography variant="h4" className={classes.sectionHeader}>
-              Nudge Copy
-            </Typography>
+          <SectionContainer>
+            <SectionHeader variant="h4">Nudge Copy</SectionHeader>
             <RichTextEditorSingleLine
               label="Heading"
               copyData={variant.nudge.nudgeCopy.heading}
@@ -205,12 +199,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               error={false}
               rteMenuConstraints={richTextEditorConfig}
             />
-          </div>
+          </SectionContainer>
 
-          <div className={classes.sectionContainer}>
-            <Typography variant="h4" className={classes.sectionHeader}>
-              Thank You Copy
-            </Typography>
+          <SectionContainer>
+            <SectionHeader variant="h4">Thank You Copy</SectionHeader>
             <RichTextEditorSingleLine
               label="Heading"
               copyData={variant.nudge.thankyouCopy.heading}
@@ -231,12 +223,10 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               error={false}
               rteMenuConstraints={richTextEditorConfig}
             />
-          </div>
+          </SectionContainer>
 
-          <div className={classes.sectionContainer}>
-            <Typography variant="h4" className={classes.sectionHeader}>
-              Benefits (Optional)
-            </Typography>
+          <SectionContainer>
+            <SectionHeader variant="h4">Benefits (Optional)</SectionHeader>
             <TextField
               label="Benefits Label"
               value={variant.nudge.benefits?.label ?? ''}
@@ -246,14 +236,12 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
               margin="normal"
               helperText="e.g., 'Your all-access benefits:'"
             />
-          </div>
+          </SectionContainer>
         </>
       )}
 
-      <div className={classes.sectionContainer}>
-        <Typography variant="h4" className={classes.sectionHeader}>
-          Promo Codes
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant="h4">Promo Codes</SectionHeader>
         <PromoCodesEditor
           promoCodes={variant.promoCodes ?? []}
           updatePromoCodes={(promoCodes: string[]): void => {
@@ -261,8 +249,8 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           }}
           isDisabled={!editMode}
         />
-      </div>
-    </div>
+      </SectionContainer>
+    </Container>
   );
 };
 

@@ -1,22 +1,20 @@
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { format } from 'date-fns';
 import React, { useEffect, useState } from 'react';
 
-const useStyles = makeStyles(() => ({
-  webTitle: {
-    fontSize: 18,
-    fontStyle: 'italic',
-  },
-  timestampContainer: {
-    fontSize: 13,
-    fontWeight: 'normal',
-  },
-  timestampLabel: {
-    fontWeight: 500,
-    width: '120px',
-    display: 'inline-block',
-  },
-}));
+const WebTitle = styled('div')({
+  fontSize: 18,
+  fontStyle: 'italic',
+});
+const TimestampContainer = styled('div')({
+  fontSize: 13,
+  fontWeight: 'normal',
+});
+const TimestampLabel = styled('span')({
+  fontWeight: 500,
+  width: '120px',
+  display: 'inline-block',
+});
 
 const formatDate = (date: Date): string => format(date, 'HH:mm:ss MM/dd/yyyy');
 
@@ -40,7 +38,6 @@ export const ArticleDetails: React.FC<ArticleDetailsProps> = ({
   startTimestamp,
   region,
 }: ArticleDetailsProps) => {
-  const classes = useStyles();
   const [content, setContent] = useState<Content | null>(null);
 
   useEffect(() => {
@@ -53,15 +50,14 @@ export const ArticleDetails: React.FC<ArticleDetailsProps> = ({
     const { webTitle, webPublicationDate } = content.response.content;
     return (
       <div>
-        <div className={classes.webTitle}>{webTitle}</div>
-        <div className={classes.timestampContainer}>
-          <span className={classes.timestampLabel}>Published:</span>{' '}
-          {formatDate(new Date(webPublicationDate))}
-        </div>
-        <div className={classes.timestampContainer}>
-          <span className={classes.timestampLabel}>Went super in {region}:</span>{' '}
+        <WebTitle>{webTitle}</WebTitle>
+        <TimestampContainer>
+          <TimestampLabel>Published:</TimestampLabel> {formatDate(new Date(webPublicationDate))}
+        </TimestampContainer>
+        <TimestampContainer>
+          <TimestampLabel>Went super in {region}:</TimestampLabel>{' '}
           {formatDate(new Date(startTimestamp))}
-        </div>
+        </TimestampContainer>
       </div>
     );
   }

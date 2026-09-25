@@ -1,17 +1,15 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import VariantCtaEditor from '../../tests/variants/variantCtaEditor';
 import { Cta } from '../helpers/shared';
 import useValidation from '../hooks/useValidation';
 import { DEFAULT_PRIMARY_CTA, DEFAULT_SECONDARY_CTA } from './utils/defaults';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gridGap: spacing(2),
-  },
+const Container = styled(Box)(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gridGap: theme.spacing(2),
 }));
 
 interface HeaderTestVariantCtasEditorProps {
@@ -33,11 +31,10 @@ const HeaderTestVariantCtasEditor: React.FC<HeaderTestVariantCtasEditorProps> = 
   isDisabled,
   supportSecondaryCta,
 }: HeaderTestVariantCtasEditorProps) => {
-  const classes = useStyles();
   const setValidationStatusForField = useValidation(onValidationChange);
 
   return (
-    <div className={classes.container}>
+    <Container>
       <VariantCtaEditor
         label="Primary button"
         isDisabled={isDisabled}
@@ -57,7 +54,7 @@ const HeaderTestVariantCtasEditor: React.FC<HeaderTestVariantCtasEditorProps> = 
           onValidationChange={(isValid) => setValidationStatusForField('secondaryCta', isValid)}
         />
       )}
-    </div>
+    </Container>
   );
 };
 

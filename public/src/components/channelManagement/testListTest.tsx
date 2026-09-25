@@ -1,7 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { ListItem, Theme } from '@mui/material';
+import { ListItemButton } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useHover from '../../hooks/useHover';
 import { Test } from './helpers/shared';
@@ -11,63 +11,38 @@ import TestListTestArticleCountLabel from './testListTestArticleCountLabel';
 import TestListTestLiveLabel from './testListTestLiveLabel';
 import TestListTestName from './testListTestName';
 
-const useStyles = makeStyles(({ palette }: Theme) => ({
-  test: {
-    position: 'relative',
-    height: '50px',
-    width: '290px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    background: 'white',
-    borderRadius: '4px',
-    padding: '0 12px',
-  },
-  icons: {
-    display: 'flex',
-    '& > * + *': {
-      marginLeft: '2px',
-    },
-  },
-  live: {
-    border: `1px solid ${red[500]}`,
-
-    '&:hover': {
-      background: `${red[500]}`,
-    },
-  },
-  liveInverted: {
-    background: `${red[500]}`,
-  },
-
-  draft: {
-    border: `1px solid ${palette.grey[700]}`,
-
-    '&:hover': {
-      background: `${palette.grey[700]}`,
-    },
-  },
-  draftInverted: {
-    background: `${palette.grey[700]}`,
-  },
-  priorityLabelContainer: {
-    position: 'absolute',
-    top: '0',
-    bottom: '0',
-    left: '-36px',
-  },
-  labelAndNameContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    '& > * + *': {
-      marginLeft: '4px',
-    },
-    overflow: 'hidden',
-  },
-  whitePencil: {
-    color: 'white',
+const StyledListItemButton = styled(ListItemButton, {
+  shouldForwardProp: (prop) => prop !== 'live' && prop !== 'inverted',
+})<{ live: boolean; inverted: boolean }>(({ theme, live, inverted }) => ({
+  position: 'relative',
+  height: '50px',
+  width: '290px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  background: inverted ? (live ? red[500] : theme.palette.grey[700]) : 'white',
+  borderRadius: '4px',
+  padding: '0 12px',
+  border: `1px solid ${live ? red[500] : theme.palette.grey[700]}`,
+  '&:hover': {
+    background: live ? red[500] : theme.palette.grey[700],
   },
 }));
+const Icons = styled('div')({
+  display: 'flex',
+  '& > * + *': {
+    marginLeft: '2px',
+  },
+});
+const LabelAndNameContainer = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+  overflow: 'hidden',
+});
+const WhitePencil = styled(EditIcon)({
+  color: 'white',
+});
 
 interface TestListTestProps {
   test: Test;
@@ -82,8 +57,6 @@ const TestListTest: React.FC<TestListTestProps> = ({
   isEdited,
   onClick,
 }: TestListTestProps) => {
-  const classes = useStyles();
-
   const hasArticleCount = test.articlesViewedSettings !== undefined;
   const isBanditTest = test.methodologies.find(
     (method) => method.name === 'EpsilonGreedyBandit' || method.name === 'Roulette',
@@ -93,16 +66,15 @@ const TestListTest: React.FC<TestListTestProps> = ({
 
   const shouldInvertColor = isHovered || isSelected;
 
-  const containerClasses = [classes.test];
-  containerClasses.push(test.status === 'Live' ? classes.live : classes.draft);
-  if (shouldInvertColor) {
-    containerClasses.push(test.status === 'Live' ? classes.liveInverted : classes.draftInverted);
-  }
-
   return (
-    <ListItem className={containerClasses.join(' ')} button={true} onClick={onClick} ref={ref}>
-      <div className={classes.labelAndNameContainer}>
-        {isEdited && (isSelected ? <EditIcon className={classes.whitePencil} /> : <EditIcon />)}
+    <StyledListItemButton
+      live={test.status === 'Live'}
+      inverted={shouldInvertColor}
+      onClick={onClick}
+      ref={ref}
+    >
+      <LabelAndNameContainer>
+        {isEdited && (isSelected ? <WhitePencil /> : <EditIcon />)}
         <TestListTestLiveLabel
           isLive={test.status === 'Live'}
           shouldInvertColor={shouldInvertColor}
@@ -119,13 +91,13 @@ const TestListTest: React.FC<TestListTestProps> = ({
           nickname={test.nickname}
           shouldInverColor={shouldInvertColor}
         />
-      </div>
+      </LabelAndNameContainer>
 
-      <div className={classes.icons}>
+      <Icons>
         {hasArticleCount && <TestListTestArticleCountLabel />}
         {isBanditTest && <TestListBanditIcon />}
-      </div>
-    </ListItem>
+      </Icons>
+    </StyledListItemButton>
   );
 };
 

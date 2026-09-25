@@ -28,7 +28,6 @@
     "@dnd-kit/utilities": "3.2.2",
     "@mui/icons-material": "5.18.0",
     "@mui/material": "5.18.0",
-    "@mui/styles": "6.4.8",
     "@prosekit/pm": "0.1.19",
     "@mui/x-data-grid": "8.29.3",
     "@types/lodash": "4.17.25",

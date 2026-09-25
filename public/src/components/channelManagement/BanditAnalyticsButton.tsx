@@ -1,25 +1,26 @@
 import { Button, Dialog, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React, { useEffect } from 'react';
 import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 import useOpenable from '../../hooks/useOpenable';
 import { buildChartData } from './helpers/utilities';
 
-const useStyles = makeStyles({
-  dialog: {
-    padding: '10px',
-  },
-  analyticsButton: {
-    height: '100%',
-  },
-  heading: {
-    margin: '6px 12px 0 12px',
-    fontSize: 18,
-    fontWeight: 500,
-  },
-  chartContainer: {
-    margin: '12px',
-  },
+const StyledDialog = styled(Dialog)({
+  padding: '10px',
+});
+
+const AnalyticsButton = styled(Button)({
+  height: '100%',
+});
+
+const Heading = styled('div')({
+  margin: '6px 12px 0 12px',
+  fontSize: 18,
+  fontWeight: 500,
+});
+
+const ChartContainer = styled('div')({
+  margin: '12px',
 });
 
 interface VariantSummary {
@@ -83,7 +84,6 @@ export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
   channel,
   sampleCount,
 }: BanditAnalyticsButton) => {
-  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
   const [data, setData] = React.useState<BanditData>();
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -102,16 +102,16 @@ export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
 
   return (
     <>
-      <Button className={classes.analyticsButton} variant="outlined" onClick={open}>
+      <AnalyticsButton variant="outlined" onClick={open}>
         Analytics
-      </Button>
+      </AnalyticsButton>
 
-      <Dialog open={isOpen} onClose={close} fullWidth maxWidth="lg" className={classes.dialog}>
-        <div className={classes.heading}>
+      <StyledDialog open={isOpen} onClose={close} fullWidth maxWidth="lg">
+        <Heading>
           <h3>Bandit data for: {testName}</h3>
-        </div>
+        </Heading>
 
-        <div className={classes.chartContainer}>
+        <ChartContainer>
           {loading && <Typography>Loading...</Typography>}
           {data && (
             <div>
@@ -133,8 +133,8 @@ export const BanditAnalyticsButton: React.FC<BanditAnalyticsButton> = ({
                 ))}
             </div>
           )}
-        </div>
-      </Dialog>
+        </ChartContainer>
+      </StyledDialog>
     </>
   );
 };

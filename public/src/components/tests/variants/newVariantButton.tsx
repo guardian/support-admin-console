@@ -1,33 +1,29 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Button, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import useOpenable from '../../../hooks/useOpenable';
 import CreateVariantDialog from '../../channelManagement/createVariantDialog';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  button: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'start',
-    border: `1px dashed ${palette.grey[700]}`,
-    borderRadius: '4px',
-    padding: '12px 16px',
-  },
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    '& > * + *': {
-      marginLeft: spacing(1),
-    },
-  },
-  text: {
-    fontSize: 14,
-    fontWeight: 500,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
+const StyledButton = styled(Button)(({ theme }) => ({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'start',
+  border: `1px dashed ${theme.palette.grey[700]}`,
+  borderRadius: '4px',
+  padding: '12px 16px',
 }));
+const Container = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+}));
+const Text = styled(Typography)({
+  fontSize: 14,
+  fontWeight: 500,
+  letterSpacing: 1,
+  textTransform: 'uppercase',
+});
 
 interface NewVariantButtonProps {
   existingNames: string[];
@@ -40,17 +36,16 @@ const NewVariantButton: React.FC<NewVariantButtonProps> = ({
   createVariant,
   isDisabled,
 }: NewVariantButtonProps) => {
-  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
   return (
     <>
-      <Button className={classes.button} onClick={open} disabled={isDisabled}>
-        <div className={classes.container}>
+      <StyledButton onClick={open} disabled={isDisabled}>
+        <Container>
           <AddIcon />
-          <Typography className={classes.text}>New variant</Typography>
-        </div>
-      </Button>
+          <Text>New variant</Text>
+        </Container>
+      </StyledButton>
       <CreateVariantDialog
         isOpen={isOpen}
         close={close}

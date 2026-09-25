@@ -1,5 +1,5 @@
-import { FormHelperText, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { FormHelperText, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useRef } from 'react';
 import {
   StudentLandingPageTest,
@@ -11,52 +11,33 @@ import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { StudentLandingPageLinkBuilder } from './studentLandingPageLinkBuilder';
 import { VariantEditor } from './variantEditor';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%',
-    background: palette.background.paper, // #FFFFFF
-  },
-  sectionContainer: {
-    paddingTop: spacing(1),
-    paddingBottom: spacing(6),
-    borderBottom: `1px solid ${palette.grey[500]}`,
+const Section = styled('div')(({ theme }) => ({
+  paddingTop: theme.spacing(1),
+  paddingBottom: theme.spacing(6),
+  borderBottom: `1px solid ${theme.palette.grey[500]}`,
 
-    '& > * + *': {
-      marginTop: spacing(4),
-    },
-  },
-  sectionHeader: {
-    fontSize: 18,
-    fontWeight: 500,
-    color: palette.grey[700],
-  },
-  variantsHeaderContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-  },
-  buttonsContainer: {
-    paddingTop: spacing(4),
-    paddingBottom: spacing(12),
-  },
-  variantsHeaderButtonsContainer: {
-    display: 'flex',
-    '& > * + *': {
-      marginLeft: spacing(2),
-    },
-  },
-  errorText: {
-    color: 'rgba(0 0 0 / 1)',
-    backgroundColor: 'rgba(255 255 0 / 1)',
-    margin: '0.5em 0 0 1.5em',
-  },
-  resetMargin: {
-    marginTop: 0,
+  '& > * + *': {
+    marginTop: theme.spacing(4),
   },
 }));
+const SectionHeader = styled(Typography)(({ theme }) => ({
+  fontSize: 18,
+  fontWeight: 500,
+  color: theme.palette.grey[700],
+}));
+const ErrorText = styled('p')({
+  color: 'rgba(0 0 0 / 1)',
+  backgroundColor: 'rgba(255 255 0 / 1)',
+  margin: '0.5em 0 0 1.5em',
+});
+const FormErrorText = styled(FormHelperText)({
+  color: 'rgba(0 0 0 / 1)',
+  backgroundColor: 'rgba(255 255 0 / 1)',
+  margin: '0.5em 0 0 1.5em',
+});
+const ResetMargin = styled('div')({
+  marginTop: 0,
+});
 
 const isFieldSet = (field: string) => {
   if (!field) {
@@ -68,8 +49,6 @@ const isFieldSet = (field: string) => {
 export const StudentLandingPageTestEditor: React.FC<
   ValidatedTestEditorProps<StudentLandingPageTest>
 > = ({ test, userHasTestLocked, onTestChange, setValidationStatusForField }) => {
-  const classes = useStyles();
-
   const helperText = '';
 
   // Use ref to stabilize the callback and prevent infinite render loops
@@ -125,14 +104,10 @@ export const StudentLandingPageTestEditor: React.FC<
 
   return (
     <>
-      <div className={classes.sectionContainer} key={test.name}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Offer
-        </Typography>
-        <div className={classes.sectionContainer} key={test.name}>
-          <Typography variant={'h4'} className={classes.sectionHeader}>
-            Preview link for Promotional Materials
-          </Typography>
+      <Section key={test.name}>
+        <SectionHeader variant={'h3'}>Offer</SectionHeader>
+        <Section key={test.name}>
+          <SectionHeader variant={'h4'}>Preview link for Promotional Materials</SectionHeader>
           {!userHasTestLocked && (
             <>
               <StudentLandingPageLinkBuilder test={test} />
@@ -143,11 +118,11 @@ export const StudentLandingPageTestEditor: React.FC<
             </>
           )}
           {userHasTestLocked && (
-            <p className={classes.errorText}>
+            <ErrorText>
               Please update the fields below and save so that the preview link can be generated.
-            </p>
+            </ErrorText>
           )}
-        </div>
+        </Section>
 
         <div>
           <VariantEditor
@@ -160,12 +135,12 @@ export const StudentLandingPageTestEditor: React.FC<
             }
           />
         </div>
-      </div>
+      </Section>
       {/* If you need to update the countries in the labels argument, note that you will also need to adjust the route in support-frontend too */}
-      <div className={classes.sectionContainer}>
-        <Typography className={classes.sectionHeader}>Country</Typography>
-        <FormHelperText className={classes.errorText}>{helperText}</FormHelperText>
-        <div className={classes.resetMargin}>
+      <Section>
+        <SectionHeader>Country</SectionHeader>
+        <FormErrorText>{helperText}</FormErrorText>
+        <ResetMargin>
           <TypedRadioGroup
             selectedValue={test.countryGroupId}
             onChange={updateCountryGroupId}
@@ -180,8 +155,8 @@ export const StudentLandingPageTestEditor: React.FC<
               International: 'International',
             }}
           />
-        </div>
-      </div>
+        </ResetMargin>
+      </Section>
     </>
   );
 };

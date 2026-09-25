@@ -2,21 +2,18 @@ import { closestCenter, DndContext, DragEndEvent, useDroppable } from '@dnd-kit/
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { List } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Test } from './helpers/shared';
 import TestListTest from './testListTest';
 
-const useStyles = makeStyles(() => ({
-  container: {},
-  list: {
-    marginTop: 0,
-    padding: 0,
-    '& > * + *': {
-      marginTop: '8px',
-    },
-  },
-}));
+const StyledList = styled(List)({
+  marginTop: 0,
+  padding: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+});
 
 interface TestListItemProps<T extends Test> {
   test: T;
@@ -75,7 +72,6 @@ const TestList = <T extends Test>({
   onTestPriorityChange,
   onTestSelected,
 }: TestListProps<T>): React.ReactElement => {
-  const classes = useStyles();
   const { setNodeRef: setDroppableNodeRef } = useDroppable({
     id: 'droppable',
   });
@@ -91,11 +87,11 @@ const TestList = <T extends Test>({
   };
 
   return (
-    <div className={classes.container}>
+    <div>
       <DndContext onDragEnd={onDragEnd} collisionDetection={closestCenter}>
         <SortableContext items={tests.map((test) => test.name)}>
           <div ref={setDroppableNodeRef}>
-            <List className={classes.list}>
+            <StyledList>
               {tests.map((test) => {
                 return (
                   <TestListItem
@@ -107,7 +103,7 @@ const TestList = <T extends Test>({
                   />
                 );
               })}
-            </List>
+            </StyledList>
           </div>
         </SortableContext>
       </DndContext>

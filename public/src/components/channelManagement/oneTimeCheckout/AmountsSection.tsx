@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import React from 'react';
 import { OneTimeCheckoutVariant } from '../../../models/oneTimeCheckout';
 import {
@@ -6,7 +5,7 @@ import {
   contributionTypes,
   MParticleAmountAttribute,
 } from '../../../utils/models';
-import { useStyles } from '../helpers/testEditorStyles';
+import { SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
 import { AmountsVariantEditorRow } from './AmountsVariantEditorRow';
 
 interface AmountsSectionProps {
@@ -22,8 +21,6 @@ export const AmountsSection: React.FC<AmountsSectionProps> = ({
   editMode,
   showMParticleMenu,
 }) => {
-  const classes = useStyles();
-
   const updateAmounts = (label: ContributionType, val: number[]): void => {
     onVariantChange((current) => ({
       ...current,
@@ -68,10 +65,8 @@ export const AmountsSection: React.FC<AmountsSectionProps> = ({
   };
 
   return (
-    <div className={classes.sectionContainer}>
-      <Typography variant="h4" className={classes.sectionHeader}>
-        Amounts
-      </Typography>
+    <SectionContainer>
+      <SectionHeader variant="h4">Amounts</SectionHeader>
       <AmountsVariantEditorRow
         label={contributionTypes.OneOff}
         amounts={variant.amounts.amounts}
@@ -85,6 +80,6 @@ export const AmountsSection: React.FC<AmountsSectionProps> = ({
         updateMParticleAmountAttribute={updateMParticleAmountAttribute}
         disabled={!editMode}
       />
-    </div>
+    </SectionContainer>
   );
 };

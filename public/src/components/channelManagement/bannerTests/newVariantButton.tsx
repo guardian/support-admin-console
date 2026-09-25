@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -8,10 +9,9 @@ import {
   DialogTitle,
   IconButton,
   TextField,
-  Theme,
   Typography,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import useOpenable from '../../../hooks/useOpenable';
@@ -22,40 +22,42 @@ import {
   VALID_CHARACTERS_REGEX,
 } from '../helpers/validation';
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  button: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'start',
-    border: `1px dashed ${palette.grey[700]}`,
-    borderRadius: '4px',
-    padding: '12px 16px',
-  },
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    '& > * + *': {
-      marginLeft: spacing(1),
-    },
-  },
-  text: {
-    fontSize: 14,
-    fontWeight: 500,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
-  dialogHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingRight: '8px',
-  },
-  input: {
-    '& input': {
-      textTransform: 'uppercase !important',
-    },
+const StyledButton = styled(Button)(({ theme }) => ({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'start',
+  border: `1px dashed ${theme.palette.grey[700]}`,
+  borderRadius: '4px',
+  padding: '12px 16px',
+}));
+
+const Container = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  '& > * + *': {
+    marginLeft: theme.spacing(1),
   },
 }));
+
+const Text = styled(Typography)({
+  fontSize: 14,
+  fontWeight: 500,
+  letterSpacing: 1,
+  textTransform: 'uppercase',
+});
+
+const DialogHeader = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingRight: '8px',
+});
+
+const StyledTextField = styled(TextField)({
+  '& input': {
+    textTransform: 'uppercase !important',
+  },
+});
 
 const NAME_DEFAULT_HELPER_TEXT = "Format: 'control' or 'v1_name'";
 
@@ -74,7 +76,6 @@ const NewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
   createVariant,
   isDisabled,
 }: BannerTestNewVariantButtonProps) => {
-  const classes = useStyles();
   const [isOpen, open, close] = useOpenable();
 
   const {
@@ -91,12 +92,12 @@ const NewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
 
   return (
     <>
-      <Button className={classes.button} onClick={open} disabled={isDisabled}>
-        <div className={classes.container}>
+      <StyledButton onClick={open} disabled={isDisabled}>
+        <Container>
           <AddIcon />
-          <Typography className={classes.text}>New variant</Typography>
-        </div>
-      </Button>
+          <Text>New variant</Text>
+        </Container>
+      </StyledButton>
       <Dialog
         open={isOpen}
         onClose={close}
@@ -104,15 +105,14 @@ const NewVariantButton: React.FC<BannerTestNewVariantButtonProps> = ({
         aria-describedby="new-variant-dialog-description"
         fullWidth
       >
-        <div className={classes.dialogHeader}>
+        <DialogHeader>
           <DialogTitle id="new-variant-dialog-title">Create a new variant</DialogTitle>
           <IconButton onClick={close} aria-label="close">
             <CloseIcon />
           </IconButton>
-        </div>
+        </DialogHeader>
         <DialogContent dividers>
-          <TextField
-            className={classes.input}
+          <StyledTextField
             error={errors.name !== undefined}
             helperText={errors.name ? errors.name.message : NAME_DEFAULT_HELPER_TEXT}
             {...register('name', {

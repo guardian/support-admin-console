@@ -1,18 +1,16 @@
 import { Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 
-const useStyles = makeStyles(() => ({
-  text: {
-    maxWidth: '190px',
-    fontSize: '12px',
-    fontWeight: 500,
-    lineHeight: '24px',
-    textTransform: 'uppercase',
-  },
-  textInverted: {
-    color: '#FFFFFF',
-  },
+const Text = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== 'shouldInvertColor',
+})<{ shouldInvertColor: boolean }>(({ shouldInvertColor }) => ({
+  maxWidth: '190px',
+  fontSize: '12px',
+  fontWeight: 500,
+  lineHeight: '24px',
+  textTransform: 'uppercase',
+  color: shouldInvertColor ? '#FFFFFF' : undefined,
 }));
 
 interface TestListTestNameProps {
@@ -28,17 +26,10 @@ const TestListTestName: React.FC<TestListTestNameProps> = ({
   nickname,
   shouldInverColor,
 }: TestListTestNameProps) => {
-  const classes = useStyles();
-
-  const textClasses = [classes.text];
-  if (shouldInverColor) {
-    textClasses.push(classes.textInverted);
-  }
-
   return (
-    <Typography className={textClasses.join(' ')} noWrap={true}>
+    <Text shouldInvertColor={shouldInverColor} noWrap={true}>
       {nickname ?? name.replace(TEST_NAME_CHARACTERS_TO_STRIP_REGEX, '')}
-    </Typography>
+    </Text>
   );
 };
 

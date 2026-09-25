@@ -5,6 +5,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Button,
   Checkbox,
   FormControl,
@@ -13,11 +14,10 @@ import {
   RadioGroup,
   Select,
   TextField,
-  Theme,
   Typography,
 } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Controller, useFieldArray, UseFormReturn } from 'react-hook-form';
 import { ChoiceCard, ChoiceCardsSettings, Product } from '../../../models/choiceCards';
@@ -25,31 +25,34 @@ import { EMPTY_ERROR_HELPER_TEXT } from '../helpers/validation';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 import { ChoiceCardDestinationFields } from './ChoiceCardDestinationFields';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  container: {
-    width: '100%',
+const StyledAccordion = styled(Accordion)({
+  width: '100%',
+});
+
+const ProductContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(2),
+}));
+
+const SubHeading = styled(Typography)({
+  fontWeight: 700,
+});
+
+const BenefitContainer = styled(Box)({
+  display: 'flex',
+  alignItems: 'center',
+  '& > :first-child': {
+    flex: 1,
   },
-  productContainer: {
-    '& > * + *': {
-      marginLeft: spacing(2),
-    },
-  },
-  subHeading: {
-    fontWeight: 700,
-  },
-  benefitContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    '& > :first-child': {
-      flex: 1,
-    },
-  },
-  deleteButton: {
-    margin: `${spacing(2)} 0 ${spacing(1)} ${spacing(1)}`,
-  },
-  addButton: {
-    marginBottom: spacing(2),
-  },
+});
+
+const DeleteButton = styled(Button)(({ theme }) => ({
+  margin: `${theme.spacing(2)} 0 ${theme.spacing(1)} ${theme.spacing(1)}`,
+}));
+
+const AddButton = styled(Button)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
 }));
 
 const richTextEditorConfig: RteMenuConstraints = {
@@ -91,7 +94,6 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   hideDestination = false,
   idPrefix = '',
 }) => {
-  const classes = useStyles();
   const { control, getValues } = formMethods;
 
   const {
@@ -109,7 +111,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
   };
 
   return (
-    <Accordion key={`${choiceCard.product.supportTier}-${index}`} className={classes.container}>
+    <StyledAccordion key={`${choiceCard.product.supportTier}-${index}`}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant="h6">
           {productDisplayName(getValues(`choiceCards.${index}.product`))}{' '}
@@ -117,7 +119,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <div className={classes.productContainer}>
+        <ProductContainer>
           <FormControl disabled={isDisabled} margin="normal">
             <Controller
               name={`choiceCards.${index}.product.supportTier`}
@@ -180,7 +182,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
               />
             </FormControl>
           )}
-        </div>
+        </ProductContainer>
 
         <FormControlLabel
           control={
@@ -269,9 +271,9 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
         />
 
         <div>
-          <Typography className={classes.subHeading}>Benefits</Typography>
+          <SubHeading>Benefits</SubHeading>
           {benefits.map((benefit, benefitIndex) => (
-            <div className={classes.benefitContainer} key={benefit.id}>
+            <BenefitContainer key={benefit.id}>
               <Controller
                 name={`choiceCards.${index}.benefits.${benefitIndex}.copy`}
                 control={control}
@@ -290,8 +292,7 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                   />
                 )}
               />
-              <Button
-                className={classes.deleteButton}
+              <DeleteButton
                 onClick={() => {
                   remove(benefitIndex);
                   handleCardChange();
@@ -301,10 +302,10 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
                 size="medium"
               >
                 <CloseIcon />
-              </Button>
-            </div>
+              </DeleteButton>
+            </BenefitContainer>
           ))}
-          <Button
+          <AddButton
             onClick={() => {
               append({ copy: '' });
               handleCardChange();
@@ -312,22 +313,20 @@ export const ChoiceCardEditor: React.FC<ChoiceCardEditorProps> = ({
             disabled={isDisabled || benefits.length >= 8}
             variant="outlined"
             size="medium"
-            className={classes.addButton}
           >
             <AddIcon />
-          </Button>
+          </AddButton>
         </div>
 
         {!hideDestination && (
           <ChoiceCardDestinationFields
             index={index}
             isDisabled={isDisabled}
-            subHeadingClassName={classes.subHeading}
             formMethods={formMethods}
             onDestinationSectionChange={handleCardChange}
           />
         )}
       </AccordionDetails>
-    </Accordion>
+    </StyledAccordion>
   );
 };

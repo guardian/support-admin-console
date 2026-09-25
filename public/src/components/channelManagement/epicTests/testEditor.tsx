@@ -1,4 +1,4 @@
-import { FormControlLabel, Switch, Typography } from '@mui/material';
+import { FormControlLabel, Switch } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 import { EpicTest, EpicVariant, MaxEpicViews } from '../../../models/epic';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
@@ -21,7 +21,13 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
-import { useStyles } from '../helpers/testEditorStyles';
+import {
+  Container,
+  SectionContainer,
+  SectionHeader,
+  VariantsHeaderButtonsContainer,
+  VariantsHeaderContainer,
+} from '../helpers/testEditorStyles';
 import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorArticleCountEditor, {
@@ -56,7 +62,6 @@ export const getEpicTestEditor = (
     onTestChange,
     setValidationStatusForField,
   }: ValidatedTestEditorProps<EpicTest>) => {
-    const classes = useStyles();
     const [userExplicitlyDisabledArticleCount, setUserExplicitlyDisabledArticleCount] =
       React.useState(test.articlesViewedSettings === undefined);
 
@@ -298,19 +303,17 @@ export const getEpicTestEditor = (
     );
 
     return (
-      <div className={classes.container}>
+      <Container>
         {epicEditorConfig.allowMultipleVariants && (
-          <div className={classes.sectionContainer}>
-            <div className={classes.variantsHeaderContainer}>
-              <Typography variant={'h3'} className={classes.sectionHeader}>
-                Variants
-              </Typography>
-              <div className={classes.variantsHeaderButtonsContainer}>
+          <SectionContainer>
+            <VariantsHeaderContainer>
+              <SectionHeader variant={'h3'}>Variants</SectionHeader>
+              <VariantsHeaderButtonsContainer>
                 {epicEditorConfig.allowVariantPreview && (
                   <EpicTestPreviewButton test={test} moduleName={epicEditorConfig.moduleName} />
                 )}
-              </div>
-            </div>
+              </VariantsHeaderButtonsContainer>
+            </VariantsHeaderContainer>
             <div>
               <VariantsEditor<EpicVariant>
                 variants={test.variants}
@@ -323,13 +326,11 @@ export const getEpicTestEditor = (
                 onVariantClone={onVariantClone}
               />
             </div>
-          </div>
+          </SectionContainer>
         )}
         {epicEditorConfig.allowMethodologyEditor && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Experiment Methodology
-            </Typography>
+          <SectionContainer>
+            <SectionHeader variant={'h3'}>Experiment Methodology</SectionHeader>
             <TestMethodologyEditor
               methodologies={test.methodologies}
               testName={test.name}
@@ -337,14 +338,12 @@ export const getEpicTestEditor = (
               isDisabled={!userHasTestLocked || test.status === 'Live'}
               onChange={onMethodologyChange}
             />
-          </div>
+          </SectionContainer>
         )}
 
         {epicEditorConfig.allowCustomVariantSplit && canHaveCustomVariantSplit(test.variants) && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Variants split (applies to AB tests only)
-            </Typography>
+          <SectionContainer>
+            <SectionHeader variant={'h3'}>Variants split (applies to AB tests only)</SectionHeader>
             <div>
               <TestVariantsSplitEditor
                 variants={test.variants}
@@ -354,14 +353,12 @@ export const getEpicTestEditor = (
                 isDisabled={!userHasTestLocked}
               />
             </div>
-          </div>
+          </SectionContainer>
         )}
 
         {!epicEditorConfig.allowMultipleVariants && (
-          <div className={classes.sectionContainer} key={test.name}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Copy
-            </Typography>
+          <SectionContainer key={test.name}>
+            <SectionHeader variant={'h3'}>Copy</SectionHeader>
 
             <div>
               <VariantEditor
@@ -375,13 +372,11 @@ export const getEpicTestEditor = (
                 onValidationChange={getValidationCallback(test.variants[0].name)}
               />
             </div>
-          </div>
+          </SectionContainer>
         )}
 
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Campaign
-          </Typography>
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>Campaign</SectionHeader>
           <div>
             <CampaignSelector
               test={test}
@@ -389,13 +384,11 @@ export const getEpicTestEditor = (
               disabled={!userHasTestLocked}
             />
           </div>
-        </div>
+        </SectionContainer>
 
         {epicEditorConfig.allowContentTargeting && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Target content
-            </Typography>
+          <SectionContainer>
+            <SectionHeader variant={'h3'}>Target content</SectionHeader>
 
             <TestEditorContextTargeting
               contextTargeting={{
@@ -407,14 +400,12 @@ export const getEpicTestEditor = (
               editMode={userHasTestLocked}
               updateContextTargeting={updateContextTargeting}
             />
-          </div>
+          </SectionContainer>
         )}
 
         {epicEditorConfig.allowLocationTargeting && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Target audience
-            </Typography>
+          <SectionContainer>
+            <SectionHeader variant={'h3'}>Target audience</SectionHeader>
 
             <TestEditorTargetAudienceSelector
               regionTargeting={test.regionTargeting}
@@ -443,14 +434,12 @@ export const getEpicTestEditor = (
                   : undefined
               }
             />
-          </div>
+          </SectionContainer>
         )}
 
         {epicEditorConfig.allowViewFrequencySettings && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              View frequency settings
-            </Typography>
+          <SectionContainer>
+            <SectionHeader variant={'h3'}>View frequency settings</SectionHeader>
 
             <FormControlLabel
               control={
@@ -469,14 +458,12 @@ export const getEpicTestEditor = (
               onMaxViewsChanged={onMaxViewsChange}
               onValidationChange={onMaxViewsValidationChange}
             />
-          </div>
+          </SectionContainer>
         )}
 
         {epicEditorConfig.allowArticleCount && (
-          <div className={classes.sectionContainer}>
-            <Typography variant={'h3'} className={classes.sectionHeader}>
-              Article count
-            </Typography>
+          <SectionContainer>
+            <SectionHeader variant={'h3'}>Article count</SectionHeader>
 
             <TestEditorArticleCountEditor
               articlesViewedSettings={test.articlesViewedSettings}
@@ -484,21 +471,19 @@ export const getEpicTestEditor = (
               onValidationChange={onArticlesViewedSettingsValidationChanged}
               isDisabled={!userHasTestLocked}
             />
-          </div>
+          </SectionContainer>
         )}
 
-        <div className={classes.sectionContainer}>
-          <Typography variant={'h3'} className={classes.sectionHeader}>
-            Schedule
-          </Typography>
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>Schedule</SectionHeader>
           <ScheduleEditor
             scheduler={test.scheduler}
             disabled={!userHasTestLocked}
             onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
             onValidationChange={(isValid) => setValidationStatusForField('schedule', isValid)}
           />
-        </div>
-      </div>
+        </SectionContainer>
+      </Container>
     );
   };
   return ValidatedTestEditor(EpicTestEditor, epicEditorConfig.testNamePrefix);

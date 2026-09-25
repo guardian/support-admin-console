@@ -1,19 +1,17 @@
 import { List } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { PromoCampaignsListItem } from './promoCampaignsListItem';
 import { PromoCampaign, PromoCampaigns, PromoProduct } from './utils/promoModels';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    marginTop: '16px',
-    width: '100%',
-  },
-  list: {
-    padding: 0,
-    width: '100%',
-  },
-}));
+const Container = styled('div')({
+  marginTop: '16px',
+  width: '100%',
+});
+const StyledList = styled(List)({
+  padding: 0,
+  width: '100%',
+});
 
 interface PromoCampaignsListProps {
   promoCampaigns: PromoCampaigns;
@@ -30,8 +28,6 @@ const PromoCampaignsList = ({
   onPromoCampaignSelected,
   selectedProduct,
 }: PromoCampaignsListProps): React.ReactElement => {
-  const classes = useStyles();
-
   const filterPromoCampaigns = (campaignArray: PromoCampaigns) => {
     return campaignArray.filter((c) => {
       if (!promoCampaignSearch) {
@@ -72,8 +68,8 @@ const PromoCampaignsList = ({
   );
 
   return (
-    <div className={classes.container}>
-      <List className={classes.list}>
+    <Container>
+      <StyledList>
         {filteredAndSortedPromoCampaigns.map((promoCampaign) => {
           const isSelected = Boolean(
             selectedPromoCampaign?.campaignCode === promoCampaign.campaignCode,
@@ -87,8 +83,8 @@ const PromoCampaignsList = ({
             />
           );
         })}
-      </List>
-    </div>
+      </StyledList>
+    </Container>
   );
 };
 

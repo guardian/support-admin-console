@@ -1,33 +1,29 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Button, IconButton, TextField, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Button, IconButton, TextField, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useRef } from 'react';
 import { ExclusionRule } from '../../models/exclusions';
 
-const useStyles = makeStyles(({ spacing }: Theme) => ({
-  ruleHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    gap: spacing(2),
-    alignItems: 'center',
-    width: '100%',
-  },
-  field: {
-    flex: '1 0 200px',
-    position: 'relative',
-  },
-  fieldHelperText: {
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    margin: 0,
-  },
-  actionButtons: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: spacing(1),
-  },
+const RuleHeaderRoot = styled('div')(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: theme.spacing(2),
+  alignItems: 'center',
+  width: '100%',
+}));
+
+const Field = styled(TextField)({
+  flex: '1 0 200px',
+  position: 'relative',
+});
+
+const fieldHelperTextSx = { position: 'absolute', top: '100%', left: 0, m: 0 } as const;
+
+const ActionButtons = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
 }));
 
 interface RuleHeaderState {
@@ -58,7 +54,6 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
   const { rule, index, editMode, isUnsaved, canEdit, saving, touchedNameFields } = state;
   const { onUpdateRule, onStartEditRule, onSaveRule, onCancelRule, onDeleteRule, onNameBlur } =
     handlers;
-  const classes = useStyles();
   const nameInputRef = useRef<HTMLInputElement | null>(null);
   const hasAutoFocusedRef = useRef(false);
 
@@ -90,10 +85,9 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
   };
 
   return (
-    <div className={classes.ruleHeader}>
+    <RuleHeaderRoot>
       {editMode ? (
-        <TextField
-          className={classes.field}
+        <Field
           label="Rule Name"
           value={rule.name}
           inputRef={nameInputRef}
@@ -107,7 +101,7 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
           helperText={
             touchedNameFields.has(index) && !rule.name.trim() ? 'Rule name is required' : ''
           }
-          FormHelperTextProps={{ className: classes.fieldHelperText }}
+          FormHelperTextProps={{ sx: fieldHelperTextSx }}
           disabled={!editMode}
         />
       ) : (
@@ -122,7 +116,7 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
           )}
         </div>
       )}
-      <div className={classes.actionButtons}>
+      <ActionButtons>
         {editMode ? (
           <>
             {isUnsaved && (
@@ -174,8 +168,8 @@ const RuleHeader: React.FC<RuleHeaderProps> = ({ state, handlers }) => {
             <EditIcon fontSize="small" />
           </IconButton>
         )}
-      </div>
-    </div>
+      </ActionButtons>
+    </RuleHeaderRoot>
   );
 };
 

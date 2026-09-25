@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 import {
   SupportLandingPageTest,
@@ -7,7 +6,7 @@ import {
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
 import { Methodology, RegionTargeting } from '../helpers/shared';
-import { useStyles } from '../helpers/testEditorStyles';
+import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
 import { MParticleAudienceEditor } from '../mParticleAudienceEditor';
 import ScheduleEditor from '../scheduleEditor';
 import { SingleMethodologyEditor } from '../SingleMethodologyEditor';
@@ -22,8 +21,6 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
   onTestChange,
   setValidationStatusForField,
 }: ValidatedTestEditorProps<SupportLandingPageTest>) => {
-  const classes = useStyles();
-
   const onVariantsChange = (
     update: (current: SupportLandingPageVariant[]) => SupportLandingPageVariant[],
   ): void => {
@@ -139,11 +136,9 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
   };
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Variants
-        </Typography>
+    <Container>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Variants</SectionHeader>
         <div>
           <VariantsEditor
             variants={test.variants}
@@ -156,12 +151,10 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
             onVariantClone={onVariantClone}
           />
         </div>
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Experiment Methodology
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Experiment Methodology</SectionHeader>
         <SingleMethodologyEditor
           methodology={test.methodologies[0] ?? { name: 'ABTest' }}
           testName={test.name}
@@ -169,12 +162,10 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
           isDisabled={!userHasTestLocked || test.status === 'Live'}
           onChange={onMethodologyChange}
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Target audience
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Target audience</SectionHeader>
 
         <TestEditorTargetRegionsSelector
           regionTargeting={test.regionTargeting}
@@ -182,9 +173,9 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
           isDisabled={!userHasTestLocked}
         />
 
-        <Typography variant={'h4'} className={classes.sectionHeader} style={{ marginTop: '20px' }}>
+        <SectionHeader variant={'h4'} style={{ marginTop: '20px' }}>
           mParticle Audience
-        </Typography>
+        </SectionHeader>
 
         <MParticleAudienceEditor
           mParticleAudience={test.mParticleAudience}
@@ -196,20 +187,18 @@ const SupportLandingPageTestEditor: React.FC<ValidatedTestEditorProps<SupportLan
             }));
           }}
         />
-      </div>
+      </SectionContainer>
 
-      <div className={classes.sectionContainer}>
-        <Typography variant={'h3'} className={classes.sectionHeader}>
-          Schedule
-        </Typography>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Schedule</SectionHeader>
         <ScheduleEditor
           scheduler={test.scheduler}
           disabled={!userHasTestLocked}
           onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
           onValidationChange={(isValid) => setValidationStatusForField('schedule', isValid)}
         />
-      </div>
-    </div>
+      </SectionContainer>
+    </Container>
   );
 };
 

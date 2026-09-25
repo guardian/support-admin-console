@@ -1,5 +1,5 @@
-import { Button, FormControlLabel, Switch, TextField, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Button, FormControlLabel, Switch, TextField, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { fetchCampaignTests } from '../../../utils/requests';
@@ -17,45 +17,40 @@ import StickyTopBar from './StickyCampaignBar';
 
 export type { TestChannelItem };
 
-const useStyles = makeStyles(({ spacing, palette }: Theme) => ({
-  testEditorContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    width: '100%',
-    background: palette.background.paper, // #FFFFFF
-    borderLeft: `1px solid ${palette.grey[500]}`,
-  },
-  scrollableContainer: {
-    overflowY: 'auto',
-    paddingLeft: spacing(3),
-    paddingRight: spacing(1),
-    paddingTop: spacing(2),
-  },
-  formContainer: {
-    marginBottom: spacing(4),
-    borderBottom: '1px solid black',
-  },
-  notesContainer: {
-    marginBottom: spacing(4),
-  },
-  notesHeaderLine: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  notesHeader: {
-    marginBottom: spacing(2),
-    fontSize: '18px',
-    fontWeight: 500,
-  },
-  launchLink: {
-    padding: '0 8px',
-    fontSize: '14px',
-    fontWeight: 'normal',
-    color: palette.grey[700],
-    lineHeight: 1.5,
-    marginBottom: spacing(2),
-  },
+const TestEditorContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+  width: '100%',
+  background: theme.palette.background.paper, // #FFFFFF
+  borderLeft: `1px solid ${theme.palette.grey[500]}`,
+}));
+
+const ScrollableContainer = styled(Box)(({ theme }) => ({
+  overflowY: 'auto',
+  paddingLeft: theme.spacing(3),
+  paddingRight: theme.spacing(1),
+  paddingTop: theme.spacing(2),
+}));
+
+const FormContainer = styled(Box)(({ theme }) => ({
+  marginBottom: theme.spacing(4),
+  borderBottom: '1px solid black',
+}));
+
+const NotesContainer = styled(Box)(({ theme }) => ({
+  marginBottom: theme.spacing(4),
+}));
+
+const NotesHeaderLine = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-between',
+});
+
+const NotesHeader = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
+  fontSize: '18px',
+  fontWeight: 500,
 }));
 
 interface FormData {
@@ -70,8 +65,6 @@ interface CampaignsEditorProps {
 }
 
 function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): React.ReactElement {
-  const classes = useStyles();
-
   const [testData, setTestData] = useState<Test[]>([]);
   const [editMode, setEditMode] = useState(false);
   const [showArchivedTests, setShowArchivedTests] = useState(false);
@@ -137,7 +130,7 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
   };
 
   return (
-    <div className={classes.testEditorContainer}>
+    <TestEditorContainer>
       <StickyTopBar
         name={name}
         nickname={nickname}
@@ -146,18 +139,16 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
         setShowArchivedTests={setShowArchivedTests}
         updatePage={updatePage}
       />
-      <div className={classes.scrollableContainer}>
+      <ScrollableContainer>
         {name !== unassignedCampaign.name && (
-          <div className={classes.formContainer}>
-            <div className={classes.notesContainer}>
-              <div className={classes.notesHeaderLine}>
-                <Typography className={classes.notesHeader}>
-                  Campaign metadata and notes:
-                </Typography>
+          <FormContainer>
+            <NotesContainer>
+              <NotesHeaderLine>
+                <NotesHeader>Campaign metadata and notes:</NotesHeader>
                 <Button variant="contained" onClick={() => setEditMode(!editMode)}>
                   <Typography>{editMode ? 'Save' : 'Edit'}</Typography>
                 </Button>
-              </div>
+              </NotesHeaderLine>
 
               <TextField
                 error={errors.description !== undefined}
@@ -218,8 +209,8 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
                   );
                 }}
               />
-            </div>
-          </div>
+            </NotesContainer>
+          </FormContainer>
         )}
         {testChannelOrder.map((channel) => (
           <ChannelCard
@@ -228,8 +219,8 @@ function CampaignsEditor({ campaign, updateCampaign }: CampaignsEditorProps): Re
             key={channel}
           />
         ))}
-      </div>
-    </div>
+      </ScrollableContainer>
+    </TestEditorContainer>
   );
 }
 
