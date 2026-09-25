@@ -8,6 +8,19 @@ import models.Methodology.defaultMethodologies
 
 case class BannerUI(designName: String)
 
+sealed trait BannerStepMode
+
+object BannerStepMode {
+  case object OneStep extends BannerStepMode
+  case object TwoStep extends BannerStepMode
+  case object TwoStepIfAllowed extends BannerStepMode
+
+  implicit val decoder: Decoder[BannerStepMode] =
+    deriveEnumerationDecoder[BannerStepMode]
+  implicit val encoder: Encoder[BannerStepMode] =
+    deriveEnumerationEncoder[BannerStepMode]
+}
+
 case class BannerContent(
     heading: Option[String],
     paragraphs: Option[List[String]],
@@ -27,7 +40,8 @@ case class BannerVariant(
     tickerSettings: Option[TickerSettings] = None,
     choiceCardsSettings: Option[ChoiceCardsSettings],
     promoCodes: List[String] = Nil,
-    isCollapsible: Option[Boolean] = None
+    isCollapsible: Option[Boolean] = None,
+    bannerStepMode: Option[BannerStepMode] = None
 )
 
 case class BannerTestDeploySchedule(daysBetween: Int)
