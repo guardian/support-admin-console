@@ -15,8 +15,8 @@ export const DEFAULT_SECONDARY_CTA: Cta = {
 const CODE_DEFAULT_VARIANT: BannerVariant = {
   name: 'CONTROL',
   template: { designName: 'TEST_NOT_SELECTED' },
-  bannerStepMode: BannerStepMode.OneStep,
-  isCollapsible: false,
+  bannerStepMode: BannerStepMode.TwoStepIfAllowed,
+  isCollapsible: true,
   bannerContent: {
     heading: 'We chose a different approach. Will you support it?',
     paragraphs: [
@@ -30,8 +30,8 @@ const CODE_DEFAULT_VARIANT: BannerVariant = {
 const PROD_DEFAULT_VARIANT: BannerVariant = {
   name: 'CONTROL',
   template: { designName: 'TEST_NOT_SELECTED' },
-  bannerStepMode: BannerStepMode.OneStep,
-  isCollapsible: false,
+  bannerStepMode: BannerStepMode.TwoStepIfAllowed,
+  isCollapsible: true,
   bannerContent: {
     paragraphs: [],
     highlightedText: 'Support the Guardian from as little as %%CURRENCY_SYMBOL%%1. Thank you.',

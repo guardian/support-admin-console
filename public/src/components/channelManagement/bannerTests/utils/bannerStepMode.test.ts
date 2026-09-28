@@ -1,7 +1,15 @@
 import { BannerStepMode } from '../../../../models/banner';
 import { getBannerStepMode } from './bannerStepMode';
+import { getDefaultVariant } from './defaults';
 
 describe('getBannerStepMode', () => {
+  it('defaults new variants to two-step if allowed', () => {
+    const defaultVariant = getDefaultVariant();
+
+    expect(defaultVariant.bannerStepMode).toBe(BannerStepMode.TwoStepIfAllowed);
+    expect(defaultVariant.isCollapsible).toBe(true);
+  });
+
   it('uses an explicit mode in preference to the legacy field', () => {
     expect(getBannerStepMode(BannerStepMode.TwoStepIfAllowed, false)).toBe(
       BannerStepMode.TwoStepIfAllowed,
