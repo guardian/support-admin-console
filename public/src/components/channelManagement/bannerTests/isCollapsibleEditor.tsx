@@ -1,7 +1,9 @@
-import { Box, Checkbox } from '@mui/material';
+import { Box, Radio, RadioGroup } from '@mui/material';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { styled } from '@mui/material/styles';
 import React from 'react';
+import { BannerStepMode } from '../../../models/banner';
+import { getBannerStepMode } from './utils/bannerStepMode';
 
 const Container = styled(Box)(({ theme }) => ({
   '& > * + *': {
@@ -11,32 +13,43 @@ const Container = styled(Box)(({ theme }) => ({
 
 interface IsCollapsibleEditorProps {
   isCollapsible?: boolean;
+  bannerStepMode?: BannerStepMode;
   isDisabled: boolean;
-  updateIsCollapsibleSettings: (isCollapsible: boolean) => void;
+  updateBannerStepModeSettings: (bannerStepMode: BannerStepMode) => void;
 }
 
 const IsCollapsibleEditor: React.FC<IsCollapsibleEditorProps> = ({
   isCollapsible,
+  bannerStepMode,
   isDisabled,
-  updateIsCollapsibleSettings,
+  updateBannerStepModeSettings,
 }: IsCollapsibleEditorProps) => {
-  const onChange = (): void => {
-    updateIsCollapsibleSettings(!isCollapsible);
+  const onChange = (_: React.ChangeEvent<HTMLInputElement>, value: string): void => {
+    updateBannerStepModeSettings(value as BannerStepMode);
   };
 
   return (
     <Container>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={Boolean(isCollapsible)}
-            onChange={onChange}
-            color="primary"
-            disabled={isDisabled}
-          />
-        }
-        label="Two Step Banner"
-      />
+      <RadioGroup value={getBannerStepMode(bannerStepMode, isCollapsible)} onChange={onChange}>
+        <FormControlLabel
+          value={BannerStepMode.OneStep}
+          control={<Radio />}
+          label="One-step only"
+          disabled={isDisabled}
+        />
+        <FormControlLabel
+          value={BannerStepMode.TwoStep}
+          control={<Radio />}
+          label="Two-step only"
+          disabled={isDisabled}
+        />
+        <FormControlLabel
+          value={BannerStepMode.TwoStepIfAllowed}
+          control={<Radio />}
+          label="Two-step if allowed, otherwise one-step"
+          disabled={isDisabled}
+        />
+      </RadioGroup>
     </Container>
   );
 };

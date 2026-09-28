@@ -3,7 +3,7 @@ import Alert from '@mui/material/Alert';
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { BannerContent, BannerUi, BannerVariant } from '../../../models/banner';
+import { BannerContent, BannerStepMode, BannerUi, BannerVariant } from '../../../models/banner';
 import { BannerDesign } from '../../../models/bannerDesign';
 import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import { SeparateArticleCount } from '../../../models/epic';
@@ -462,10 +462,11 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
     }));
   };
 
-  const updateIsCollapsibleSettings = (isCollapsible: boolean): void => {
+  const updateBannerStepModeSettings = (bannerStepMode: BannerStepMode): void => {
     onVariantChange((current) => ({
       ...current,
-      isCollapsible,
+      bannerStepMode,
+      isCollapsible: bannerStepMode !== BannerStepMode.OneStep,
     }));
   };
 
@@ -597,8 +598,9 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
         <SectionHeader variant="h4">Two step banner</SectionHeader>
         <IsCollapsibleEditor
           isCollapsible={variant.isCollapsible}
+          bannerStepMode={variant.bannerStepMode}
           isDisabled={!editMode}
-          updateIsCollapsibleSettings={updateIsCollapsibleSettings}
+          updateBannerStepModeSettings={updateBannerStepModeSettings}
         />
       </SectionContainer>
     </Container>
