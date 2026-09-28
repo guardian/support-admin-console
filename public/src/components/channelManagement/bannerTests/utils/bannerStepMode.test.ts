@@ -4,10 +4,23 @@ import { getDefaultVariant } from './defaults';
 
 describe('getBannerStepMode', () => {
   it('defaults new variants to two-step if allowed', () => {
-    const defaultVariant = getDefaultVariant();
+    const originalWindow = Reflect.get(globalThis, 'window') as Window | undefined;
+    Object.defineProperty(globalThis, 'window', {
+      configurable: true,
+      value: { guardian: { stage: 'CODE' } },
+    });
 
-    expect(defaultVariant.bannerStepMode).toBe(BannerStepMode.TwoStepIfAllowed);
-    expect(defaultVariant.isCollapsible).toBe(true);
+    try {
+      const defaultVariant = getDefaultVariant();
+      expect(defaultVariant.bannerStepMode).toBe(BannerStepMode.TwoStepIfAllowed);
+      expect(defaultVariant.isCollapsible).toBe(true);
+    } finally {
+      if (originalWindow) {
+        Object.defineProperty(globalThis, 'window', { configurable: true, value: originalWindow });
+      } else {
+        Reflect.deleteProperty(globalThis, 'window');
+      }
+    }
   });
 
   it('uses an explicit mode in preference to the legacy field', () => {
