@@ -10,7 +10,7 @@ deployments:
         PROD: AdminConsole-PROD.template.json
       amiParameter: AMIAdminconsole
       amiTags:
-        Recipe: jammy-membership-java11
+        Recipe: jammy-membership-java21
         AmigoStage: PROD
       amiEncrypted: true
   admin-console:
