@@ -10,7 +10,7 @@
     "sourceMap": true,
     "strict": true,
     "outDir": "./public/build",
-    "types": ["jest"]
+    "types": ["jest", "node"]
   },
   "exclude": [
     "node_modules",
