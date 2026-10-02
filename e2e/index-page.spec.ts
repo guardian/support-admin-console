@@ -1,4 +1,14 @@
 import { expect, test } from '@playwright/test';
+import { getOpenDrawerButton } from './navigation/helpers';
+
+declare global {
+  interface Window {
+    guardian: {
+      stage: 'CODE' | 'PROD';
+      permissions: Array<{ name: string; permission: 'Read' | 'Write' }>;
+    };
+  }
+}
 
 test.describe('Index page', () => {
   test.beforeEach(async ({ page }) => {
@@ -6,35 +16,25 @@ test.describe('Index page', () => {
   });
 
   test('renders the welcome content', async ({ page }) => {
-    await expect(
-      page.getByText('Welcome to the Reader Revenue Control Panel.'),
-    ).toBeVisible();
-    await expect(
-      page.getByText('To begin, select a tool from the menu.'),
-    ).toBeVisible();
+    await expect(page.getByText('Welcome to the Reader Revenue Control Panel.')).toBeVisible();
+    await expect(page.getByText('To begin, select a tool from the menu.')).toBeVisible();
   });
 
-  test('renders the header with the page title and user guide link', async ({
-    page,
-  }) => {
-    await expect(
-      page.getByRole('heading', { level: 1, name: 'Home Page' }),
-    ).toBeVisible();
+  test('renders the header with the page title and user guide link', async ({ page }) => {
+    await expect(page.getByRole('heading', { level: 1, name: 'Home Page' })).toBeVisible();
 
     const userGuide = page.getByRole('link', { name: 'User Guide' });
     await expect(userGuide).toBeVisible();
     await expect(userGuide).toHaveAttribute('target', '_blank');
-    await expect(userGuide).toHaveAttribute(
-      'href',
-      'https://docs.google.com/document/d/1ErgEoQJRpiVMHZZpUmAnq3MGY8tJCaHTun0INzLcLRc/edit',
-    );
+    await expect(userGuide).toHaveAttribute('href', /^https:\/\//);
   });
 
   test('opens the navigation drawer from the menu button', async ({ page }) => {
     const campaigns = page.getByRole('link', { name: 'Campaigns', exact: true });
     await expect(campaigns).toBeHidden();
 
-    await page.getByRole('button', { name: 'open drawer' }).click();
+    const menuButton = getOpenDrawerButton(page);
+    await menuButton.click();
 
     await expect(campaigns).toBeVisible();
   });

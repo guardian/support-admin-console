@@ -33,7 +33,6 @@ try {
   });
   console.info('Google sign-in completed successfully.');
   const response = await page.goto(new URL('/isValid', baseURL).toString());
-  console.log(response);
   const responseBody = await page.locator('body').innerText();
   if (!response?.ok() || responseBody !== 'auth is valid') {
     throw new Error('Google sign-in did not produce a valid RRCP session.');
