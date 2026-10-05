@@ -18,13 +18,14 @@ Uses [play-googleauth](https://github.com/guardian/play-googleauth) for authoris
 
 It is best practice to develop and run using a devcontainer. For this we use the Guardian's [devenv](https://github.com/guardian/devenv#devenv) tool.
 
-If using a devcontainer (with VSCode or IntelliJ), open a terminal and follow these steps:
+Whether using a devcontainer or not, open a terminal and follow these steps:
 1. get `Local Development` AWS credentials for the `membership` account (from Janus) and paste into the terminal
-2. run `./setup.sh` to fetch config from AWS
-3. run `./devrun.sh`, a script to build and run both client + server (and watch for changes)
-4. visit http://localhost:9000 in your browser
+2. run `./devrun.sh`, a script to build and run both client + server (and watch for changes)
+3. visit http://localhost:9000 in your browser
 
-The required Node and Java versions are specified in the `.tool-versions` file in the root of the project. We recommend [Mise](https://mise.jdx.dev/getting-started.html) for managing Java versions. With Mise your [shell can be configured](https://mise.jdx.dev/getting-started.html#activate-mise) to automatically switch versions when in a directory with a `.tool-versions` file. A devcontainer will take care this automatically.
+The required Node and Java versions are specified in the `.tool-versions` file in the root of the project. We recommend [Mise](https://mise.jdx.dev/getting-started.html) for this. A devcontainer will take care of this automatically.
+
+The server will use local config if available (at `/etc/gu/support-admin-console.private.conf`), otherwise it will fall back on CODE config from AWS Parameter Store. If you want to use local config then you can download the example DEV config file with `./fetch-dev-config.sh`.
 
 ### Running scala tests
 The scala backend tests use dynamodb-local. This doesn't support Apple Silicon (M1).

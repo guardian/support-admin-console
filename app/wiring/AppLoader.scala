@@ -6,7 +6,12 @@ import play.api.ApplicationLoader.Context
 import play.api._
 import play.api.libs.logback.LogbackLoggerConfigurator
 import com.gu.{AppIdentity, AwsIdentity, DevIdentity}
-import com.gu.conf.{ConfigurationLoader, FileConfigurationLocation, SSMConfigurationLocation}
+import com.gu.conf.{
+  ComposedConfigurationLocation,
+  ConfigurationLoader,
+  FileConfigurationLocation,
+  SSMConfigurationLocation
+}
 import services.Aws
 
 import scala.util.{Failure, Success, Try}
@@ -22,9 +27,13 @@ class AppLoader extends ApplicationLoader with StrictLogging {
       val loadedConfig = ConfigurationLoader.load(identity) {
         case AwsIdentity(app, stack, stage, _) => SSMConfigurationLocation(s"/$app/$stage", Aws.region.id())
         case DevIdentity(app)                  =>
-          FileConfigurationLocation(
-            new File(s"/etc/gu/support-admin-console.private.conf")
-          ) // assume conf is available locally
+          // If a local private config file exists then override any CODE Parameter Store config
+          ComposedConfigurationLocation(
+            List(
+              FileConfigurationLocation(new File(s"/etc/gu/support-admin-console.private.conf")),
+              SSMConfigurationLocation(s"/admin-console/CODE", "eu-west-1")
+            )
+          )
       }
 
       context.copy(initialConfiguration = Configuration(loadedConfig).withFallback(context.initialConfiguration))
