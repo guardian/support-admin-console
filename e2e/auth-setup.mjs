@@ -4,16 +4,10 @@ import { chromium } from '@playwright/test';
 
 // Must match the googleAuth.redirectUrl host, or the anti-forgery session cookie is lost.
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:9000';
-const authStatePath = resolve(
-  process.env.PLAYWRIGHT_AUTH_STATE ?? 'e2e/.auth/local.json',
-);
+const authStatePath = resolve(process.env.PLAYWRIGHT_AUTH_STATE ?? 'e2e/.auth/local.json');
 const applicationOrigin = new URL(baseURL).origin;
 
-if (
-  process.platform === 'linux' &&
-  !process.env.DISPLAY &&
-  !process.env.WAYLAND_DISPLAY
-) {
+if (process.platform === 'linux' && !process.env.DISPLAY && !process.env.WAYLAND_DISPLAY) {
   console.error(
     'Google sign-in needs a visible browser. Run this from a graphical session or configure display forwarding; xvfb-run is hidden and cannot be used for interactive sign-in.',
   );

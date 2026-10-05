@@ -8,7 +8,7 @@ export async function acquireSwitchSettingsLock(): Promise<void> {
   const maxWaitMs = 15000;
   const start = Date.now();
 
-  while (true) {
+  while (Date.now() - start <= maxWaitMs) {
     try {
       fs.mkdirSync(SWITCH_SETTINGS_LOCK_DIR);
       return;
@@ -16,12 +16,11 @@ export async function acquireSwitchSettingsLock(): Promise<void> {
       if (!(error instanceof Error && 'code' in error && error.code === 'EEXIST')) {
         throw error;
       }
-      if (Date.now() - start > maxWaitMs) {
-        throw new Error('Timed out waiting to acquire the switch settings lock');
-      }
       await new Promise((resolve) => setTimeout(resolve, 250));
     }
   }
+
+  throw new Error('Timed out waiting to acquire the switch settings lock');
 }
 
 export function releaseSwitchSettingsLock(): void {

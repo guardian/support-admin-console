@@ -29,6 +29,8 @@ The server will use local config if available (at `/etc/gu/support-admin-console
 
 ### Running Playwright E2E tests (awailable only locally)
 
+The full E2E suite reads and writes settings in S3. Before running it, obtain admin AWS credentials for the membership account from Janus with permission to read and write the S3 objects used by the app. Credentials without these permissions can cause tests to fail even when local authentication succeeds.
+
 Install the Chromium browser once:
 ```
 pnpm exec playwright install chromium
