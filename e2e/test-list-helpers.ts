@@ -59,7 +59,7 @@ export async function ensureTestE2EExists(page: Page): Promise<void> {
       page.waitForResponse(
         (response) => response.url().includes('/frontend/epic-tests') && response.ok(),
       ),
-      page.goto('/epic-tests'),
+      page.goto('/epic-tests', { waitUntil: 'domcontentloaded' }),
     ]);
 
     const testRows = page.getByRole('button', {

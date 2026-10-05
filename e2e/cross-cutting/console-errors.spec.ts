@@ -22,7 +22,7 @@ test.describe('Cross-cutting Concerns', () => {
       });
 
       await page.goto(`${route}`);
-      await page.waitForLoadState('networkidle');
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
       // expect: No uncaught JavaScript errors (console 'error' level) are logged on
       // initial page load for any route

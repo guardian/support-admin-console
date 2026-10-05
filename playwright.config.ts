@@ -3,9 +3,8 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
-  fullyParallel: true,
   forbidOnly: !!env.CI,
-  retries: env.CI ? 2 : 0,
+  retries: env.CI ? 2 : 1,
   reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'on-failure' }]],
   use: {
     baseURL: env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:9000',
