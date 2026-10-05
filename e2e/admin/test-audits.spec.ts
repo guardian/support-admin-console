@@ -1,6 +1,3 @@
-// spec: spec/reader-revenue-control-panel.plan.md
-// seed: e2e/seed.spec.ts
-
 import { expect, test } from '@playwright/test';
 import { ensureTestE2EExists } from '../test-list-helpers';
 

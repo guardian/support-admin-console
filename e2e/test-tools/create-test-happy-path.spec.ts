@@ -1,6 +1,3 @@
-// spec: spec/reader-revenue-control-panel.plan.md
-// seed: e2e/seed.spec.ts
-
 import { expect, test } from '@playwright/test';
 
 test.describe('Test/Campaign CRUD Tools (Epic, Header, Banner, Campaigns, etc.)', () => {

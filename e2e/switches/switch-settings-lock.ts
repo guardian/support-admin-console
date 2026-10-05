@@ -5,7 +5,7 @@ import * as path from 'path';
 const SWITCH_SETTINGS_LOCK_DIR = path.join(os.tmpdir(), 'e2e-switch-settings.lock');
 
 export async function acquireSwitchSettingsLock(): Promise<void> {
-  const maxWaitMs = 60000;
+  const maxWaitMs = 15000;
   const start = Date.now();
 
   while (true) {

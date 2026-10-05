@@ -1,6 +1,3 @@
-// spec: spec/reader-revenue-control-panel.plan.md
-// seed: e2e/seed.spec.ts
-
 import { expect, test } from '@playwright/test';
 import {
   acquireTestE2ELock,
@@ -10,7 +7,7 @@ import {
 } from '../test-list-helpers';
 
 test.beforeEach(async ({ page }, testInfo) => {
-  testInfo.setTimeout(60000);
+  testInfo.setTimeout(15000);
   await ensureTestE2EExists(page);
   await acquireTestE2ELock();
 });

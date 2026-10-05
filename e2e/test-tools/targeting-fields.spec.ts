@@ -7,7 +7,7 @@ import {
 } from '../test-list-helpers';
 
 test.beforeEach(async ({ page }, testInfo) => {
-  testInfo.setTimeout(60000);
+  testInfo.setTimeout(15000);
   await ensureTestE2EExists(page);
   await acquireTestE2ELock();
 });

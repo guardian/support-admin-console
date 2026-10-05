@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Test/Campaign CRUD Tools (Epic, Header, Banner, Campaigns, etc.)', () => {
   test('Reorder test list via drag and drop', async ({ page }) => {
-    test.setTimeout(60000);
+    test.setTimeout(15000);
 
     const dragItemTo = async (
       source: ReturnType<typeof page.getByRole>,
@@ -55,7 +55,7 @@ test.describe('Test/Campaign CRUD Tools (Epic, Header, Banner, Campaigns, etc.)'
     await Promise.all([
       page.waitForResponse(
         (response) => response.url().includes('/list/reorder') && response.ok(),
-        { timeout: 60000 },
+        { timeout: 15000 },
       ),
       page.getByRole('button', { name: 'Save order' }).click(),
     ]);
@@ -80,7 +80,7 @@ test.describe('Test/Campaign CRUD Tools (Epic, Header, Banner, Campaigns, etc.)'
     await Promise.all([
       page.waitForResponse(
         (response) => response.url().includes('/list/reorder') && response.ok(),
-        { timeout: 60000 },
+        { timeout: 15000 },
       ),
       page.getByRole('button', { name: 'Save order' }).click(),
     ]);

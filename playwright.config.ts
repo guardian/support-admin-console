@@ -6,11 +6,11 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!env.CI,
   retries: env.CI ? 2 : 0,
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]],
+  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'on-failure' }]],
   use: {
     baseURL: env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:9000',
     storageState: env.PLAYWRIGHT_AUTH_STATE ?? 'e2e/.auth/local.json',
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     video: 'retain-on-failure',
   },
   projects: [
