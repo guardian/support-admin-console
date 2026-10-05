@@ -81,6 +81,26 @@ export async function ensureTestE2EExists(page: Page): Promise<void> {
       ]);
     }
     await expect(testRows.first()).toBeVisible();
+
+    await openTestRow(page, E2E_TEST_NAME);
+    const controlVariant = page.getByRole('heading', { name: 'CONTROL', exact: true });
+    if ((await controlVariant.count()) === 0) {
+      await page.getByRole('button', { name: 'Edit test' }).click();
+      await page.getByRole('button', { name: 'New variant' }).click();
+      await page.getByRole('textbox', { name: 'Variant name' }).fill('CONTROL');
+      await page.getByRole('button', { name: 'Create variant' }).click();
+
+      await Promise.all([
+        page.waitForResponse(
+          (response) =>
+            response.url().endsWith('/frontend/epic-tests/test/update') &&
+            response.request().method() === 'POST' &&
+            response.ok(),
+        ),
+        page.getByRole('button', { name: 'Save test' }).click(),
+      ]);
+      await expect(controlVariant).toBeVisible();
+    }
   } finally {
     releaseTestE2ELock();
   }
@@ -93,10 +113,9 @@ export async function openTestRow(page: Page, name: string): Promise<void> {
 
   const testName = name.replace(/^(Draft|Live) /, '');
   const draftRow = page.getByRole('button', { name: `Draft ${testName}`, exact: true });
-  const row =
-    (await draftRow.count()) > 0
-      ? draftRow.last()
-      : page.getByRole('button', { name: `Live ${testName}`, exact: true }).last();
+  const liveRow = page.getByRole('button', { name: `Live ${testName}`, exact: true });
+  await expect(draftRow.or(liveRow).last()).toBeVisible();
+  const row = (await draftRow.count()) > 0 ? draftRow.last() : liveRow.last();
 
   // Activating the row via mouse click can bubble a pointerdown/pointerup
   // pair into the dnd-kit sortable wrapper surrounding it, which registers

@@ -48,4 +48,44 @@ test.describe('Test/Campaign CRUD Tools (Epic, Header, Banner, Campaigns, etc.)'
     await page.getByRole('button', { name: 'Edit test' }).click();
     await expect(page.getByRole('textbox', { name: 'Maximum view counts' })).toHaveValue('4');
   });
+
+  test('Epic body copy keeps new lines as separate paragraphs', async ({ page }) => {
+    let submittedParagraphs: string[] | undefined;
+    await page.route('**/frontend/epic-tests/test/update', async (route) => {
+      const updatedTest = route.request().postDataJSON() as {
+        variants: Array<{ name: string; paragraphs: string[] }>;
+      };
+      submittedParagraphs = updatedTest.variants.find(
+        (variant) => variant.name.toUpperCase() === 'BODY_COPY_NEWLINES',
+      )?.paragraphs;
+      await route.fulfill({ status: 200 });
+    });
+
+    await page.goto('/epic-tests');
+    await openTestRow(page, 'Draft TEST_E2E');
+    await page.getByRole('button', { name: 'Edit test' }).click();
+    await page.getByRole('button', { name: 'New variant' }).click();
+    await page.getByRole('textbox', { name: 'Variant name' }).fill('body_copy_newlines');
+    await page.getByRole('button', { name: 'Create variant' }).click();
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await page.getByRole('heading', { name: 'BODY_COPY_NEWLINES' }).click();
+
+    const bodyCopy = page.locator('#RTE-paragraphs .ProseMirror').last();
+    await expect(bodyCopy).toBeVisible();
+    await bodyCopy.fill('First body line');
+    await bodyCopy.press('End');
+    await bodyCopy.press('Enter');
+    await bodyCopy.type('Second body line');
+
+    await Promise.all([
+      page.waitForResponse(
+        (response) =>
+          response.url().endsWith('/frontend/epic-tests/test/update') &&
+          response.request().method() === 'POST',
+      ),
+      page.getByRole('button', { name: 'Save test' }).click(),
+    ]);
+
+    expect(submittedParagraphs).toEqual(['First body line', 'Second body line']);
+  });
 });
