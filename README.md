@@ -14,33 +14,18 @@ Uses [play-googleauth](https://github.com/guardian/play-googleauth) for authoris
 - /banner-deploy - for manually redeploying the banners
 - /campaigns - for managing groups of channel tests in a "campaign"
 
-### Running locally
+### Developing + running locally
 
-The required Node and Java versions are specified in the `.tool-versions` file in the root of the project. We recommend [Mise](https://mise.jdx.dev/getting-started.html) for managing Java versions. With Mise your [shell can be configured](https://mise.jdx.dev/getting-started.html#activate-mise) to automatically switch versions when in a directory with a `.tool-versions` file.
+It is best practice to develop and run using a devcontainer. For this we use the Guardian's [devenv](https://github.com/guardian/devenv#devenv) tool.
 
-Fetch DEV config by getting `membership` janus credentials and running:
-`./fetch-config.sh`
+Whether using a devcontainer or not, open a terminal and follow these steps:
+1. get `Local Development` AWS credentials for the `membership` account (from Janus) and paste into the terminal
+2. run `./devrun.sh`, a script to build and run both client + server (and watch for changes)
+3. visit http://localhost:9000 in your browser
 
-Build the client:
-```
-pnpm install
-pnpm build-dev
-```
+The required Node and Java versions are specified in the `.tool-versions` file in the root of the project. We recommend [Mise](https://mise.jdx.dev/getting-started.html) for this. A devcontainer will take care of this automatically.
 
-Run the play server on port http://localhost:9000/:
-```
-sbt run
-```
-
-Refresh automatically:
-```
-pnpm watch
-```
-
-Or you can use the devrun.sh script to build and run both client + server (and watch for changes):
-```
-./devrun.sh
-```
+The server will use local config if available (at `/etc/gu/support-admin-console.private.conf`), otherwise it will fall back on CODE config from AWS Parameter Store. If you want to use local config then you can download the example DEV config file with `./fetch-dev-config.sh`.
 
 ### Running scala tests
 The scala backend tests use dynamodb-local. This doesn't support Apple Silicon (M1).
