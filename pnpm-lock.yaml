@@ -53,8 +53,8 @@ importers:
         specifier: 8.29.3
         version: 8.29.3(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0))(@types/react@19.3.0)(react@19.3.0))(@mui/material@5.18.0(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0))(@types/react@19.3.0)(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@mui/system@5.18.0(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.0))(@types/react@19.3.0)(react@19.3.0))(@types/react@19.3.0)(react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@prosekit/pm':
-        specifier: 0.1.19
-        version: 0.1.19
+        specifier: 0.1.20
+        version: 0.1.20
       '@types/lodash':
         specifier: 4.17.25
         version: 4.17.25
@@ -1064,9 +1064,6 @@ packages:
 
   '@prosekit/lit@0.7.3':
     resolution: {integrity: sha512-Kd1j7BD2uZKVIdOaljj4ay9GEgTY5A2o8b0S3Z9VWUP6bN8kh8s9FA416g7MXjiIckCbfUud56AStRN3cYV1CA==}
-
-  '@prosekit/pm@0.1.19':
-    resolution: {integrity: sha512-isC0J43gxlVwqNQJZv7QPMOTmCH0uy9fqqbxJ+nqMVVnzx8l+gP9D+Xqm7hbI3k7jc5ZdrBa4BoENSK9HiymVg==}
 
   '@prosekit/pm@0.1.20':
     resolution: {integrity: sha512-FAPsThB0K6phnbsFWcFCaZqQ9tuGDPE54STm3Y2/QAnCsa7rXlNXPo3KDphr7yAWPEcDp+x/wfQ7nU/2SvbY9g==}
@@ -5851,17 +5848,6 @@ snapshots:
       - sugar-high
       - y-prosemirror
       - yjs
-
-  '@prosekit/pm@0.1.19':
-    dependencies:
-      prosemirror-commands: 1.7.2
-      prosemirror-history: 1.5.1
-      prosemirror-inputrules: 1.5.1
-      prosemirror-keymap: 1.2.3
-      prosemirror-model: 1.25.11
-      prosemirror-state: 1.4.4
-      prosemirror-transform: 1.12.2
-      prosemirror-view: 1.42.6
 
   '@prosekit/pm@0.1.20':
     dependencies:
