@@ -29,6 +29,8 @@ asciiGraphWidth := 999999999 // to ensure Snyk can read the the deeeeep dependen
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
   "com.gu.play-googleauth" %% "play-v30" % "42.2.0",
+  "com.gu.play-secret-rotation" %% "play-v30" % "19.2.0",
+  "com.gu.play-secret-rotation" %% "aws-parameterstore-sdk-v2" % "19.2.0",
   "com.google.cloud" % "google-cloud-bigquery" % "2.69.0",
   "com.gu" %% "simple-configuration-ssm" % "14.0.1",
   "software.amazon.awssdk" % "s3" % awsVersion,
