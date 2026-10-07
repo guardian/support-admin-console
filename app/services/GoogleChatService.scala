@@ -1,6 +1,7 @@
 package services
 
 import com.typesafe.scalalogging.LazyLogging
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 import play.api.libs.ws.WSClient
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -11,6 +12,8 @@ import io.circe.{Encoder, Json}
 
 // Model for the payload we send to Google Chat API - https://developers.google.com/workspace/chat/create-messages
 object GoogleChatMessage {
+  private val generic = io.circe.generic.semiauto
+
   case class GoogleChatMessage(
       text: String,
       cardsV2: List[CardV2]
@@ -62,6 +65,15 @@ object GoogleChatMessage {
   case class OpenLink(
       url: String
   )
+
+  implicit val openLinkEncoder: Encoder[OpenLink] = generic.deriveEncoder[OpenLink]
+  implicit val onClickEncoder: Encoder[OnClick] = generic.deriveEncoder[OnClick]
+  implicit val buttonEncoder: Encoder[Button] = generic.deriveEncoder[Button]
+  implicit val cardHeaderEncoder: Encoder[CardHeader] = generic.deriveEncoder[CardHeader]
+  implicit val cardSectionEncoder: Encoder[CardSection] = generic.deriveEncoder[CardSection]
+  implicit val cardEncoder: Encoder[Card] = generic.deriveEncoder[Card]
+  implicit val cardV2Encoder: Encoder[CardV2] = generic.deriveEncoder[CardV2]
+  implicit val googleChatMessageEncoder: Encoder[GoogleChatMessage] = generic.deriveEncoder[GoogleChatMessage]
 }
 
 /** This class sends messages to a Google Chat webhook url. We can use this for notifying people about changes made by

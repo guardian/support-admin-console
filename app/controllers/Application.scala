@@ -16,7 +16,7 @@ class Application(
     Ok(Json.obj("status" -> "ok", "gitCommitId" -> app.BuildInfo.gitCommitId))
   }
 
-  def index = authAction { request =>
+  def index: Action[AnyContent] = authAction { (request: AuthAction.UserIdentityRequest[AnyContent]) =>
     val permissions = permissionsService.getPermissionsForUser(request.user.email).getOrElse(Nil)
     Ok(views.html.index(stage, permissions, sdcUrlOverride))
       .withHeaders(CACHE_CONTROL -> "no-cache")

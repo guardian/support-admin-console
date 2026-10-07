@@ -44,6 +44,14 @@ case class BannerVariant(
     bannerStepMode: Option[BannerStepMode] = None
 )
 
+object BannerVariant {
+  import io.circe.generic.auto._
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[BannerVariant] = deriveConfiguredDecoder[BannerVariant]
+  implicit val encoder: Encoder[BannerVariant] = deriveConfiguredEncoder[BannerVariant]
+}
+
 case class BannerTestDeploySchedule(daysBetween: Int)
 
 case class BannerTest(

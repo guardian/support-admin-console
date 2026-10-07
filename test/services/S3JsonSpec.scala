@@ -115,7 +115,7 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
     cacheControl = None
   )
 
-  val dummyS3Client = new S3Client {
+  val dummyS3Client: S3Client = new S3Client {
     var mockStore: Option[RawVersionedS3Data] = None
 
     def get: S3Action[RawVersionedS3Data] = { _ =>
@@ -165,7 +165,7 @@ class S3JsonSpec extends AnyFlatSpec with Matchers with EitherValues {
       1.second
     )
 
-    implicit val patience = new Patience[Json]
+    implicit val patience: Patience[Json] = new Patience[Json]
     val jsonDiff = diffson.diff(
       parse(expectedJson).toOption.get,
       parse(jsonFromClient.value).toOption.get

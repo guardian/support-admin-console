@@ -21,7 +21,7 @@ case class AmountValuesObject(
     amounts: List[Int],
     defaultAmount: Int,
     hideChooseYourAmount: Boolean,
-    mParticleAmountAttribute: Option[MParticleAmountAttribute] = None,
+    mParticleAmountAttribute: Option[MParticleAmountAttribute] = None
 )
 
 case class OneTimeCheckoutVariant(
@@ -31,6 +31,14 @@ case class OneTimeCheckoutVariant(
     amounts: AmountValuesObject,
     tickerSettings: Option[TickerSettings] = None
 )
+
+object OneTimeCheckoutVariant {
+  import io.circe.generic.auto._
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[OneTimeCheckoutVariant] = deriveConfiguredDecoder[OneTimeCheckoutVariant]
+  implicit val encoder: Encoder[OneTimeCheckoutVariant] = deriveConfiguredEncoder[OneTimeCheckoutVariant]
+}
 
 case class OneTimeCheckoutTest(
     name: String,

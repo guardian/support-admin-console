@@ -51,7 +51,7 @@ abstract class DynamoService(stage: String, client: DynamoDbClient) extends Stri
             .build()
         )
         .items()
-    }.mapError(DynamoGetError)
+    }.mapError(DynamoGetError.apply)
 
   protected def put(putRequest: PutItemRequest): ZIO[Any, DynamoError, Unit] =
     attemptBlocking {
@@ -82,7 +82,7 @@ abstract class DynamoService(stage: String, client: DynamoDbClient) extends Stri
         .map(items => items.asScala.toList)
         .getOrElse(Nil)
 
-    }.mapError(DynamoPutError)
+    }.mapError(DynamoPutError.apply)
 
   /** Dynamodb limits us to batches of 25 items, and may return unprocessed items in the response. This function groups
     * items into batches of 25, and also checks the `unprocessedItems` in case we need to send any again. It uses an
@@ -131,6 +131,6 @@ abstract class DynamoService(stage: String, client: DynamoDbClient) extends Stri
       val result = client.transactWriteItems(request)
       logger.info(s"TransactWriteItemsResponse: $result")
       ()
-    }.mapError(DynamoPutError)
+    }.mapError(DynamoPutError.apply)
 
 }

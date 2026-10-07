@@ -310,8 +310,8 @@ GET /country-groups                   controllers.promos.CountryController.all
 
 # ----- Access Management ----- #
 GET /access-management                              controllers.Application.index
-GET   /frontend/access-management/users              controllers.AccessManagementController.getUsers
-POST  /frontend/access-management/users              controllers.AccessManagementController.updateUser
+GET   /frontend/access-management/users              controllers.AccessManagementController.getUsers()
+POST  /frontend/access-management/users              controllers.AccessManagementController.updateUser()
 
 # ----- Student Landing Page 'tests' ----- #
 GET   /frontend/student-landing-page-tests                            controllers.StudentLandingPageController.get

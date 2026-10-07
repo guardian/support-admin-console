@@ -18,7 +18,7 @@ import zio.ZIO.attemptBlocking
 
 object DynamoChannelTestsAudit {
   // The model that we write to the audit table
-  case class ChannelTestAudit[T: Encoder: Decoder](
+  case class ChannelTestAudit[T](
       channelAndName: String, // The partition key is the channel and test name combined
       timestamp: OffsetDateTime, // The range key is the timestamp of the change
       ttlInSecondsSinceEpoch: Long, // Expiry time in seconds since Epoch
@@ -55,7 +55,7 @@ class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient)
             .build()
         )
         .items
-    }.mapError(DynamoGetError)
+    }.mapError(DynamoGetError.apply)
 
   def createAudit[T <: ChannelTest[T]: Encoder: Decoder](test: T, userEmail: String): ZIO[Any, DynamoError, Unit] = {
     val channelAndName = s"${test.channel.get}_${test.name}"
@@ -113,12 +113,12 @@ class DynamoChannelTestsAudit(stage: String, client: DynamoDbClient)
   def getAuditsForChannelTest(
       channel: String,
       name: String
-  ): ZIO[Any, DynamoError, List[ChannelTestAudit[ChannelTest[_]]]] = {
+  ): ZIO[Any, DynamoError, List[ChannelTestAudit[ChannelTest[?]]]] = {
     val channelAndName = s"${channel}_$name"
 
     getAuditsFromDynamo(channelAndName).map { results =>
       results.asScala
-        .map(item => dynamoMapToJson(item).as[ChannelTestAudit[ChannelTest[_]]])
+        .map(item => dynamoMapToJson(item).as[ChannelTestAudit[ChannelTest[?]]])
         .flatMap {
           case Right(audit) => Some(audit)
           case Left(error)  =>

@@ -27,7 +27,7 @@ object SupportFrontendSwitches {
   implicit val switchGroupDecoder: Decoder[SwitchGroup] = deriveConfiguredDecoder[SwitchGroup]
   implicit val switchGroupEncoder: Encoder[SwitchGroup] = deriveConfiguredEncoder[SwitchGroup]
   implicit val SupportFrontendSwitchesDecoder: Decoder[SupportFrontendSwitches] =
-    Decoder.decodeMap[GroupName, SwitchGroup](KeyDecoder.decodeKeyString, switchGroupDecoder)
+    Decoder.decodeMap[GroupName, SwitchGroup](using KeyDecoder.decodeKeyString, switchGroupDecoder)
   implicit val SupportFrontendSwitchesEncoder: Encoder[SupportFrontendSwitches] =
-    Encoder.encodeMap[GroupName, SwitchGroup](KeyEncoder.encodeKeyString, switchGroupEncoder)
+    Encoder.encodeMap[GroupName, SwitchGroup](using KeyEncoder.encodeKeyString, switchGroupEncoder)
 }
