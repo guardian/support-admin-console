@@ -1,6 +1,8 @@
 package models.promos
 
 import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 import ProductCatalog._
 
@@ -67,8 +69,8 @@ object ProductCatalog {
 
   object Pricing {
     implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val encoder: Encoder[Pricing] = io.circe.generic.extras.semiauto.deriveConfiguredEncoder[Pricing]
-    implicit val decoder: Decoder[Pricing] = io.circe.generic.extras.semiauto.deriveConfiguredDecoder[Pricing]
+    implicit val encoder: Encoder[Pricing] = deriveConfiguredEncoder[Pricing]
+    implicit val decoder: Decoder[Pricing] = deriveConfiguredDecoder[Pricing]
   }
 
   case class RatePlan(
@@ -80,8 +82,8 @@ object ProductCatalog {
 
   object RatePlan {
     implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val encoder: Encoder[RatePlan] = io.circe.generic.extras.semiauto.deriveConfiguredEncoder[RatePlan]
-    implicit val decoder: Decoder[RatePlan] = io.circe.generic.extras.semiauto.deriveConfiguredDecoder[RatePlan]
+    implicit val encoder: Encoder[RatePlan] = deriveConfiguredEncoder[RatePlan]
+    implicit val decoder: Decoder[RatePlan] = deriveConfiguredDecoder[RatePlan]
   }
 
   sealed trait BillingPeriod
@@ -111,9 +113,9 @@ object ProductCatalog {
 
   object GuardianWeeklyRatePlans {
     implicit val encoder: Encoder[GuardianWeeklyRatePlans] =
-      io.circe.generic.semiauto.deriveEncoder[GuardianWeeklyRatePlans]
+      deriveEncoder[GuardianWeeklyRatePlans]
     implicit val decoder: Decoder[GuardianWeeklyRatePlans] =
-      io.circe.generic.semiauto.deriveDecoder[GuardianWeeklyRatePlans]
+      deriveDecoder[GuardianWeeklyRatePlans]
   }
 
   case class HomeDeliveryAndSubscriptionCardRatePlans(
@@ -127,9 +129,9 @@ object ProductCatalog {
 
   object HomeDeliveryAndSubscriptionCardRatePlans {
     implicit val encoder: Encoder[HomeDeliveryAndSubscriptionCardRatePlans] =
-      io.circe.generic.semiauto.deriveEncoder[HomeDeliveryAndSubscriptionCardRatePlans]
+      deriveEncoder[HomeDeliveryAndSubscriptionCardRatePlans]
     implicit val decoder: Decoder[HomeDeliveryAndSubscriptionCardRatePlans] =
-      io.circe.generic.semiauto.deriveDecoder[HomeDeliveryAndSubscriptionCardRatePlans]
+      deriveDecoder[HomeDeliveryAndSubscriptionCardRatePlans]
   }
 
   case class NationalDeliveryRatePlans(
@@ -140,9 +142,9 @@ object ProductCatalog {
 
   object NationalDeliveryRatePlans {
     implicit val encoder: Encoder[NationalDeliveryRatePlans] =
-      io.circe.generic.semiauto.deriveEncoder[NationalDeliveryRatePlans]
+      deriveEncoder[NationalDeliveryRatePlans]
     implicit val decoder: Decoder[NationalDeliveryRatePlans] =
-      io.circe.generic.semiauto.deriveDecoder[NationalDeliveryRatePlans]
+      deriveDecoder[NationalDeliveryRatePlans]
   }
 
   case class SupporterPlusRatePlans(
@@ -154,9 +156,9 @@ object ProductCatalog {
 
   object SupporterPlusRatePlans {
     implicit val encoder: Encoder[SupporterPlusRatePlans] =
-      io.circe.generic.semiauto.deriveEncoder[SupporterPlusRatePlans]
+      deriveEncoder[SupporterPlusRatePlans]
     implicit val decoder: Decoder[SupporterPlusRatePlans] =
-      io.circe.generic.semiauto.deriveDecoder[SupporterPlusRatePlans]
+      deriveDecoder[SupporterPlusRatePlans]
   }
 
   case class TierThreeRatePlans(
@@ -167,8 +169,8 @@ object ProductCatalog {
   ) extends ProductRatePlans
 
   object TierThreeRatePlans {
-    implicit val encoder: Encoder[TierThreeRatePlans] = io.circe.generic.semiauto.deriveEncoder[TierThreeRatePlans]
-    implicit val decoder: Decoder[TierThreeRatePlans] = io.circe.generic.semiauto.deriveDecoder[TierThreeRatePlans]
+    implicit val encoder: Encoder[TierThreeRatePlans] = deriveEncoder[TierThreeRatePlans]
+    implicit val decoder: Decoder[TierThreeRatePlans] = deriveDecoder[TierThreeRatePlans]
   }
 
   case class DigitalSubscriptionRatePlans(
@@ -181,9 +183,9 @@ object ProductCatalog {
 
   object DigitalSubscriptionRatePlans {
     implicit val encoder: Encoder[DigitalSubscriptionRatePlans] =
-      io.circe.generic.semiauto.deriveEncoder[DigitalSubscriptionRatePlans]
+      deriveEncoder[DigitalSubscriptionRatePlans]
     implicit val decoder: Decoder[DigitalSubscriptionRatePlans] =
-      io.circe.generic.semiauto.deriveDecoder[DigitalSubscriptionRatePlans]
+      deriveDecoder[DigitalSubscriptionRatePlans]
   }
 
   trait ProductDetails[R <: ProductRatePlans] {
