@@ -2,6 +2,8 @@ package wiring
 
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.gu.googleauth._
+import com.gu.play.secretrotation.{RotatingSecretComponents, SnapshotProvider, TransitionTiming}
+import com.gu.play.secretrotation.aws.parameterstore.{AwsSdkV2, SecretSupplier}
 import play.api.routing.Router
 import controllers._
 import controllers.banner._
@@ -31,6 +33,7 @@ import services.{
   S3
 }
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient
+import software.amazon.awssdk.services.ssm.SsmClient
 import software.amazon.awssdk.services.s3.model.GetObjectRequest
 
 import java.time.Duration
@@ -45,7 +48,22 @@ class AppComponents(context: Context, stage: String)
     with AhcWSComponents
     with NoHttpFiltersComponents
     with AssetsComponents
+    with RotatingSecretComponents
     with Filters {
+
+  override val secretStateSupplier: SnapshotProvider = new SecretSupplier(
+    TransitionTiming(
+      usageDelay = Duration.ofMinutes(3),
+      overlapDuration = Duration.ofHours(2)
+    ),
+    s"/admin-console/$stage/play.http.secret.key",
+    AwsSdkV2(
+      SsmClient.builder
+        .region(Aws.region)
+        .credentialsProvider(Aws.credentialsProvider.build())
+        .build()
+    )
+  )
 
   override def authConfig = {
     val clientId = configuration.get[String]("googleAuth.clientId")
@@ -53,13 +71,15 @@ class AppComponents(context: Context, stage: String)
     val redirectUrl = configuration.get[String]("googleAuth.redirectUrl")
     val domain = configuration.get[String]("googleAuth.domain")
 
-    // TODO - play secret rotation
     GoogleAuthConfig(
       clientId,
       clientSecret,
       redirectUrl,
       List(domain),
-      antiForgeryChecker = AntiForgeryChecker.borrowSettingsFromPlay(httpConfiguration)
+      antiForgeryChecker = AntiForgeryChecker(
+        secretStateSupplier,
+        AntiForgeryChecker.signatureAlgorithmFromPlay(httpConfiguration)
+      )
     )
   }
 
