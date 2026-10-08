@@ -69,6 +69,21 @@ class Scala3JsonCompatibilitySpec extends AnyFlatSpec with Matchers with EitherV
     products.SupporterPlus.billingPeriodsCopy shouldBe None
   }
 
+  "ticker settings codecs" should "apply the default goal copy when decoding older channel tests" in {
+    val expected = parse(
+      """{"name":"CONTROL","heading":null,"paragraphs":[],"tickerSettings":{"currencySymbol":"£","copy":{"countLabel":"supporters"},"name":"global"},"cta":null,"secondaryCta":null,"separateArticleCount":null,"showChoiceCards":null,"choiceCardsSettings":null,"bylineWithImage":null,"defaultChoiceCardFrequency":null,"showSignInLink":null,"newsletterSignup":null}"""
+    ).value
+
+    val variant = expected.as[EpicVariant].value
+
+    variant.tickerSettings.map(_.copy.goalCopy) shouldBe Some("goal")
+    variant.asJson.hcursor
+      .downField("tickerSettings")
+      .downField("copy")
+      .get[String]("goalCopy")
+      .value shouldBe "goal"
+  }
+
   "product catalog codecs" should "retain currency defaults and billing period enum values" in {
     val pricing = parse("""{"GBP":12}""").value.as[Pricing].value
     val billingPeriod = parse(""""Month"""").value.as[BillingPeriod].value
