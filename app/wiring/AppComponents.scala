@@ -60,7 +60,7 @@ class AppComponents(context: Context, stage: String)
     AwsSdkV2(
       SsmClient.builder
         .region(Aws.region)
-        .credentialsProvider(Aws.credentialsProvider.build())
+        .credentialsProvider(Aws.credentialsProvider)
         .build()
     )
   )
