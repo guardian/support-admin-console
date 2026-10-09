@@ -18,19 +18,12 @@ object ChoiceCardsSettings {
 
   sealed trait RatePlan
   object RatePlan {
-    object Monthly extends RatePlan
-    object Annual extends RatePlan
+    case object Monthly extends RatePlan
+    case object Annual extends RatePlan
 
     implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val ratePlanEncoder: Encoder[RatePlan] = Encoder.encodeString.contramap {
-      case Monthly => "Monthly"
-      case Annual  => "Annual"
-    }
-    implicit val ratePlanDecoder: Decoder[RatePlan] = Decoder.decodeString.emap {
-      case "Monthly" => Right(Monthly)
-      case "Annual"  => Right(Annual)
-      case value     => Left(s"Unexpected value: $value")
-    }
+    implicit val ratePlanEncoder: Encoder[RatePlan] = deriveEnumerationEncoder[RatePlan]
+    implicit val ratePlanDecoder: Decoder[RatePlan] = deriveEnumerationDecoder[RatePlan]
   }
 
   sealed trait Product {

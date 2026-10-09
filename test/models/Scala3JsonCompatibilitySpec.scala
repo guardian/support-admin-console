@@ -57,6 +57,16 @@ class Scala3JsonCompatibilitySpec extends AnyFlatSpec with Matchers with EitherV
     settings.asJson shouldBe expected
   }
 
+  "choice card rate plan codecs" should "round-trip Monthly and Annual using their existing JSON values" in {
+    val monthly: ChoiceCardsSettings.RatePlan = ChoiceCardsSettings.RatePlan.Monthly
+    val annual: ChoiceCardsSettings.RatePlan = ChoiceCardsSettings.RatePlan.Annual
+
+    monthly.asJson.noSpaces.shouldBe("\"Monthly\"")
+    annual.asJson.noSpaces.shouldBe("\"Annual\"")
+    parse(monthly.asJson.noSpaces).value.as[ChoiceCardsSettings.RatePlan].value.shouldBe(monthly)
+    parse(annual.asJson.noSpaces).value.as[ChoiceCardsSettings.RatePlan].value.shouldBe(annual)
+  }
+
   "support landing page codecs" should "retain defaults for omitted optional product fields" in {
     val expected = parse(
       """{"Contribution":{"title":"One-off","benefits":[],"cta":{"copy":"Contribute"}},"SupporterPlus":{"title":"All-access","benefits":[],"cta":{"copy":"Subscribe"}}}"""
