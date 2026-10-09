@@ -24,8 +24,13 @@ import {
   ListenerAction,
   ListenerCondition,
 } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import type { Policy } from 'aws-cdk-lib/aws-iam';
-import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
+import { AccountPrincipal, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam';
+import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Bucket } from 'aws-cdk-lib/aws-s3';
+import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { MultiDynamoTableReadPolicy, MultiDynamoTableWritePolicy } from './dynamo-managed-policy';
 
@@ -283,6 +288,61 @@ export class AdminConsole extends GuStack {
     const { domainName } = props;
 
     const app = 'admin-console';
+
+    if (this.stage === 'CODE') {
+      const parameterName = `/${app}/${this.stage}/play.http.secret.key`;
+      const failures = new Queue(this, 'PlaySecretRotationFailures', {
+        retentionPeriod: Duration.days(14),
+      });
+      const rotator = new Function(this, 'PlaySecretRotation', {
+        runtime: Runtime.JAVA_21,
+        handler: 'com.gu.play.secretrotation.aws.parameterstore.Lambda::lambdaHandler',
+        memorySize: 512,
+        timeout: Duration.seconds(30),
+        reservedConcurrentExecutions: 1,
+        retryAttempts: 0,
+        maxEventAge: Duration.hours(1),
+        deadLetterQueue: failures,
+        environment: { PARAMETER_NAME: parameterName },
+        code: Code.fromBucket(
+          Bucket.fromBucketName(this, 'PlaySecretRotationArtifacts', 'membership-dist'),
+          `${this.stack}/${this.stage}/${app}/play-secret-rotation/21.0.1/aws-parameterstore-lambda.jar`,
+        ),
+      });
+      rotator.addToRolePolicy(
+        new PolicyStatement({ actions: ['ssm:DescribeParameters'], resources: ['*'] }),
+      );
+      rotator.addToRolePolicy(
+        new PolicyStatement({
+          actions: ['ssm:PutParameter'],
+          resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter${parameterName}`],
+        }),
+      );
+      new Rule(this, 'DailyPlaySecretRotation', {
+        schedule: Schedule.rate(Duration.days(1)),
+        targets: [
+          new LambdaFunction(rotator, {
+            retryAttempts: 0,
+            maxEventAge: Duration.hours(1),
+            deadLetterQueue: failures,
+          }),
+        ],
+      });
+      rotator.metricErrors().createAlarm(this, 'PlaySecretRotationErrors', {
+        threshold: 1,
+        evaluationPeriods: 1,
+        alarmDescription:
+          'CODE Play secret rotation failed; inspect Lambda logs and the failure queue.',
+      });
+      failures
+        .metricApproximateNumberOfMessagesVisible()
+        .createAlarm(this, 'PlaySecretRotationUndelivered', {
+          threshold: 1,
+          evaluationPeriods: 1,
+          alarmDescription:
+            'CODE Play secret rotation failure queue contains an event; investigate before replaying.',
+        });
+    }
 
     const channelTestsDynamoTable = this.buildTestsTable();
     const archivedTestsDynamoTable = this.buildArchivedTestsTable();
