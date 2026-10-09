@@ -18,8 +18,8 @@ object ChoiceCardsSettings {
 
   sealed trait RatePlan
   object RatePlan {
-    object Monthly extends RatePlan
-    object Annual extends RatePlan
+    case object Monthly extends RatePlan
+    case object Annual extends RatePlan
 
     implicit val customConfig: Configuration = Configuration.default.withDefaults
     implicit val ratePlanEncoder: Encoder[RatePlan] = deriveEnumerationEncoder[RatePlan]

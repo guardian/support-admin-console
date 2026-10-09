@@ -33,7 +33,7 @@ class CirceSpec extends AnyFlatSpec with Matchers with EitherValues {
 
     val resultJson: Json = Circe.dynamoToJson(dynamoAttributes)
 
-    implicit val patience = new Patience[Json]
+    implicit val patience: Patience[Json] = new Patience[Json]
     val jsonDiff = diffson.diff(resultJson, initialJson)
 
     jsonDiff should be(JsonPatch(Nil))

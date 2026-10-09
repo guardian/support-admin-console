@@ -67,7 +67,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient)
             .build()
         )
         .items
-    }.mapError(DynamoGetError)
+    }.mapError(DynamoGetError.apply)
 
   private def getAllInCampaign(
       campaignName: String
@@ -87,7 +87,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient)
             .build()
         )
         .items
-    }.mapError(DynamoGetError)
+    }.mapError(DynamoGetError.apply)
 
   private def update(updateRequest: UpdateItemRequest): ZIO[Any, DynamoError, Unit] =
     attemptBlocking {
@@ -143,7 +143,7 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient)
         .get(tableName)
         .map(_.asScala.toList)
         .getOrElse(Nil)
-    }.mapError(DynamoGetError)
+    }.mapError(DynamoGetError.apply)
   }
 
   def getTests[T <: ChannelTest[T]: Decoder](
@@ -164,11 +164,11 @@ class DynamoChannelTests(stage: String, client: DynamoDbClient)
 
   // Returns all tests in a campaign, sorted by channel
   import models.ChannelTest.channelTestDecoder
-  def getAllTestsInCampaign(campaignName: String): ZIO[Any, DynamoGetError, List[ChannelTest[_]]] =
+  def getAllTestsInCampaign(campaignName: String): ZIO[Any, DynamoGetError, List[ChannelTest[?]]] =
     getAllInCampaign(campaignName)
       .map(results =>
         results.asScala
-          .map(item => dynamoMapToJson(item).as[ChannelTest[_]])
+          .map(item => dynamoMapToJson(item).as[ChannelTest[?]])
           .flatMap {
             case Right(test) => Some(test)
             case Left(error) =>

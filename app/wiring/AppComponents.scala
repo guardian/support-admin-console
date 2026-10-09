@@ -60,7 +60,7 @@ class AppComponents(context: Context, stage: String)
     AwsSdkV2(
       SsmClient.builder
         .region(Aws.region)
-        .credentialsProvider(Aws.credentialsProvider.build())
+        .credentialsProvider(Aws.credentialsProvider)
         .build()
     )
   )
@@ -110,7 +110,7 @@ class AppComponents(context: Context, stage: String)
 
   private val authAction =
     new AuthAction[AnyContent](authConfig, controllers.routes.Login.loginAction, controllerComponents.parsers.default)(
-      executionContext
+      using executionContext
     ) andThen
       // User must have 2fa enforced
       requireGroup[AuthAction.UserIdentityRequest](Set(twoFactorAuthEnforceGoogleGroup)) andThen
@@ -125,7 +125,7 @@ class AppComponents(context: Context, stage: String)
 
   val dynamoClient = DynamoDbClient.builder
     .region(Aws.region)
-    .credentialsProvider(Aws.credentialsProvider.build)
+    .credentialsProvider(Aws.credentialsProvider)
     .build
 
   val permissionsService = new DynamoPermissionsCache(stage, dynamoClient, runtime)

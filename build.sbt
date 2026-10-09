@@ -2,7 +2,7 @@ name := "support-admin-console"
 
 version := "1.0-SNAPSHOT"
 
-scalaVersion := "2.13.18"
+scalaVersion := "3.9.0"
 
 val circeVersion = "0.14.16"
 val awsVersion = "2.54.0"
@@ -33,19 +33,21 @@ libraryDependencies ++= Seq(
   "com.gu.play-secret-rotation" %% "aws-parameterstore-sdk-v2" % "19.2.0",
   "com.google.cloud" % "google-cloud-bigquery" % "2.69.0",
   "com.gu" %% "simple-configuration-ssm" % "14.0.1",
+  "software.amazon.awssdk" % "signin" % awsVersion,
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "io.circe" %% "circe-generic-extras" % "0.14.4",
+  "io.circe" %% "circe-generic-extras" % "0.14.5-RC1",
   "com.dripower" %% "play-circe" % "3014.1",
   "com.beachape" %% "enumeratum" % "1.9.8",
   "com.beachape" %% "enumeratum-circe" % "1.9.8",
   ws,
   "dev.zio" %% "zio" % zioVersion,
   "dev.zio" %% "zio-streams" % zioVersion,
-  "com.gu" %% "support-internationalisation" % "0.16",
+  ("com.gu" %% "support-internationalisation" % "0.16")
+    .exclude("com.typesafe.scala-logging", "scala-logging_2.13"),
   "org.scalatest" %% "scalatest" % "3.2.20" % "test",
   "org.gnieh" %% "diffson-circe" % "4.7.0" % "test"
 )

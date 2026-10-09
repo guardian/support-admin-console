@@ -40,6 +40,14 @@ case class EpicVariant(
     showSignInLink: Option[Boolean],
     newsletterSignup: Option[NewsletterSignup]
 )
+
+object EpicVariant {
+  import io.circe.generic.auto._
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[EpicVariant] = deriveConfiguredDecoder[EpicVariant]
+  implicit val encoder: Encoder[EpicVariant] = deriveConfiguredEncoder[EpicVariant]
+}
 case class EpicTest(
     name: String,
     channel: Option[Channel],
@@ -69,7 +77,7 @@ case class EpicTest(
     methodologies: List[Methodology] = defaultMethodologies,
     mParticleAudience: Option[Int] = None,
     scheduler: Option[Scheduler] = None,
-    mParticleTemplates: Option[List[String]],
+    mParticleTemplates: Option[List[String]]
 ) extends ChannelTest[EpicTest] {
 
   override def withChannel(channel: Channel): EpicTest = this.copy(channel = Some(channel))

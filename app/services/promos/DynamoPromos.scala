@@ -148,7 +148,7 @@ class DynamoPromos(stage: String, client: DynamoDbClient) extends DynamoService(
             .build()
         )
         .items
-    }.mapError(DynamoGetError)
+    }.mapError(DynamoGetError.apply)
 
   def updatePromo(promo: Promo, email: String): ZIO[Any, DynamoError, Unit] = {
     val item = jsonToDynamo(promo.asJson).m().asScala.toMap -
