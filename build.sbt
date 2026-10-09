@@ -32,7 +32,7 @@ libraryDependencies ++= Seq(
   "com.gu.play-secret-rotation" %% "play-v30" % "19.2.0",
   "com.gu.play-secret-rotation" %% "aws-parameterstore-sdk-v2" % "19.2.0",
   "com.google.cloud" % "google-cloud-bigquery" % "2.69.0",
-  "com.gu" %% "simple-configuration-ssm" % "14.0.1",
+  "com.gu" %% "simple-configuration-ssm" % "15.0.0",
   "software.amazon.awssdk" % "s3" % awsVersion,
   "software.amazon.awssdk" % "dynamodb" % awsVersion,
   "io.circe" %% "circe-core" % circeVersion,
