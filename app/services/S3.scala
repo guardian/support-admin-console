@@ -86,7 +86,7 @@ object S3 extends S3Client with StrictLogging {
             )
           }
         }
-        .mapError(S3GetObjectError)
+        .mapError(S3GetObjectError.apply)
     }
   }
 
@@ -147,7 +147,7 @@ object S3 extends S3Client with StrictLogging {
 
   val s3Client: AwsS3Client = AwsS3Client.builder
     .region(Aws.region)
-    .credentialsProvider(Aws.credentialsProvider.build)
+    .credentialsProvider(Aws.credentialsProvider)
     .build
 
   def get: S3Action[RawVersionedS3Data] = { objectSettings =>

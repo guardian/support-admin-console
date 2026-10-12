@@ -17,6 +17,12 @@ case class ProductBenefit(
     label: Option[Label] = None
 )
 
+object ProductBenefit {
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[ProductBenefit] = deriveConfiguredDecoder[ProductBenefit]
+  implicit val encoder: Encoder[ProductBenefit] = deriveConfiguredEncoder[ProductBenefit]
+}
+
 case class Label(
     copy: String
 )
@@ -30,6 +36,12 @@ case class LandingPageProductDescription(
     cta: LandingPageCta
 )
 
+object LandingPageProductDescription {
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[LandingPageProductDescription] = deriveConfiguredDecoder[LandingPageProductDescription]
+  implicit val encoder: Encoder[LandingPageProductDescription] = deriveConfiguredEncoder[LandingPageProductDescription]
+}
+
 case class LandingPageCta(
     copy: String
 )
@@ -39,6 +51,12 @@ case class Products(
     SupporterPlus: LandingPageProductDescription,
     DigitalSubscription: Option[LandingPageProductDescription] = None
 )
+
+object Products {
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[Products] = deriveConfiguredDecoder[Products]
+  implicit val encoder: Encoder[Products] = deriveConfiguredEncoder[Products]
+}
 
 case class DefaultProductSelection(
     productType: String,
@@ -53,6 +71,14 @@ case class SupportLandingPageVariant(
     countdownSettings: Option[CountdownSettings] = None,
     defaultProductSelection: Option[DefaultProductSelection] = None
 )
+
+object SupportLandingPageVariant {
+  import io.circe.generic.auto._
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[SupportLandingPageVariant] = deriveConfiguredDecoder[SupportLandingPageVariant]
+  implicit val encoder: Encoder[SupportLandingPageVariant] = deriveConfiguredEncoder[SupportLandingPageVariant]
+}
 
 case class SupportLandingPageTest(
     name: String,

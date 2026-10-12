@@ -3,6 +3,11 @@ logs/
 elm-stuff/
 public/build/
 node_modules/
+playwright-report/
+test-results/
+.playwright-mcp/
+/playwright/.auth/
+e2e/.auth/
 .idea
 .vscode
 .DS_Store

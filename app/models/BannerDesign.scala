@@ -2,7 +2,6 @@ package models
 
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.extras.Configuration
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 sealed trait BannerDesignStatus
 
@@ -75,6 +74,11 @@ case class HexColour(
     kind: String
 )
 
+object HexColour {
+  implicit val encoder: Encoder[HexColour] = io.circe.generic.semiauto.deriveEncoder[HexColour]
+  implicit val decoder: Decoder[HexColour] = io.circe.generic.semiauto.deriveDecoder[HexColour]
+}
+
 case class BannerDesignBasicColours(
     background: HexColour,
     bodyText: HexColour,
@@ -94,9 +98,19 @@ case class CtaStateDesign(
     border: Option[HexColour]
 )
 
+object CtaStateDesign {
+  implicit val encoder: Encoder[CtaStateDesign] = io.circe.generic.semiauto.deriveEncoder[CtaStateDesign]
+  implicit val decoder: Decoder[CtaStateDesign] = io.circe.generic.semiauto.deriveDecoder[CtaStateDesign]
+}
+
 case class CtaDesign(
     default: CtaStateDesign
 )
+
+object CtaDesign {
+  implicit val encoder: Encoder[CtaDesign] = io.circe.generic.semiauto.deriveEncoder[CtaDesign]
+  implicit val decoder: Decoder[CtaDesign] = io.circe.generic.semiauto.deriveDecoder[CtaDesign]
+}
 
 case class TickerDesign(
     filledProgress: HexColour,
@@ -108,10 +122,10 @@ case class TickerDesign(
 
 object TickerDesign {
   import io.circe.generic.auto._
-  implicit val encoder: Encoder[TickerDesign] = deriveEncoder[TickerDesign]
+  implicit val encoder: Encoder[TickerDesign] = io.circe.generic.semiauto.deriveEncoder[TickerDesign]
 
   // Modify the Decoder to use existing values for the new fields
-  private val normalDecoder: Decoder[TickerDesign] = deriveDecoder[TickerDesign]
+  private val normalDecoder: Decoder[TickerDesign] = io.circe.generic.semiauto.deriveDecoder[TickerDesign]
   implicit val decoder: Decoder[TickerDesign] = normalDecoder.map(design => {
     val headlineColour = design.headlineColour.getOrElse(design.filledProgress)
     val totalColour = design.totalColour.getOrElse(design.filledProgress)
@@ -129,6 +143,13 @@ case class BannerDesignColours(
     ticker: TickerDesign
 )
 
+object BannerDesignColours {
+  import io.circe.generic.auto._
+
+  implicit val encoder: Encoder[BannerDesignColours] = io.circe.generic.semiauto.deriveEncoder[BannerDesignColours]
+  implicit val decoder: Decoder[BannerDesignColours] = io.circe.generic.semiauto.deriveDecoder[BannerDesignColours]
+}
+
 case class BannerDesign(
     name: String,
     style: Option[String],
@@ -140,3 +161,10 @@ case class BannerDesign(
     lockStatus: Option[LockStatus],
     fonts: Option[Fonts]
 )
+
+object BannerDesign {
+  import io.circe.generic.auto._
+
+  implicit val encoder: Encoder[BannerDesign] = io.circe.generic.semiauto.deriveEncoder[BannerDesign]
+  implicit val decoder: Decoder[BannerDesign] = io.circe.generic.semiauto.deriveDecoder[BannerDesign]
+}

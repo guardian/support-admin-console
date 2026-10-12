@@ -18,6 +18,14 @@ case class GutterVariant(
     promoCodes: List[String] = Nil
 )
 
+object GutterVariant {
+  import io.circe.generic.auto._
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[GutterVariant] = deriveConfiguredDecoder[GutterVariant]
+  implicit val encoder: Encoder[GutterVariant] = deriveConfiguredEncoder[GutterVariant]
+}
+
 case class GutterTest(
     name: String,
     channel: Option[Channel],

@@ -44,6 +44,12 @@ export default [
     },
     rules: {
       curly: 2,
+      'react/display-name': 'off',
+    },
+  },
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
       '@typescript-eslint/no-inferrable-types': [
         'error',
         {
@@ -59,7 +65,6 @@ export default [
       '@typescript-eslint/consistent-type-imports': 'off',
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-unnecessary-type-constraint': 'off',
-      'react/display-name': 'off',
     },
   },
 ];

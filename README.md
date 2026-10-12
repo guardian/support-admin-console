@@ -27,6 +27,46 @@ The required Node and Java versions are specified in the `.tool-versions` file i
 
 The server will use local config if available (at `/etc/gu/support-admin-console.private.conf`), otherwise it will fall back on CODE config from AWS Parameter Store. If you want to use local config then you can download the example DEV config file with `./fetch-dev-config.sh`.
 
+### Play application secret rotation
+
+The Play application secret is rotated using the `play.http.secret.key` SecureString in AWS Systems Manager Parameter Store. The app reads the current and previous parameter versions and transitions between them; no rotation Lambda is required for a manual rotation.
+
+To rotate a stage manually, open Parameter Store in `eu-west-1` and edit the existing parameter:
+
+- CODE: `/admin-console/CODE/play.http.secret.key`
+- PROD: `/admin-console/PROD/play.http.secret.key`
+
+Keep the parameter type as `SecureString` and its KMS key as `alias/aws/ssm`. Replace the value and save it as a new parameter version; do not delete and recreate the parameter. Generate a value with `openssl rand -hex 32` (64 hexadecimal characters). Only perform this after the rotation-enabled app has been deployed to that stage.
+
+The app is configured with a 3-minute usage delay and a 2-hour overlap. After a value is published, the app starts using it after the delay and continues accepting the previous value during the overlap. For an emergency rotation, publish the replacement immediately using the same procedure, but be aware that this does not immediately invalidate a compromised secret. Immediate revocation would require changing the transition behavior and can invalidate active sessions and in-flight authentication/CSRF requests.
+
+To roll back, retrieve the known-good value from Parameter Store history and save it as a new version of the same parameter. The app will transition back using the same delay and overlap.
+
+### Running Playwright E2E tests (awailable only locally)
+
+The full E2E suite reads and writes settings in S3. Before running it, obtain admin AWS credentials for the membership account from Janus with permission to read and write the S3 objects used by the app. Credentials without these permissions can cause tests to fail even when local authentication succeeds.
+
+Install the Chromium browser once:
+```
+pnpm exec playwright install chromium
+```
+
+#### Set up local authentication
+
+Playwright loads the saved authentication state configured in `playwright.config.ts`. Create it by starting the app with `./devrun.sh` (requires the local DEV config and AWS credentials), then running this command in another terminal:
+```
+pnpm test:e2e:auth-setup
+```
+
+The command opens a visible Chromium window for Google sign-in, validates the session, and saves browser storage to `e2e/.auth/local.json`. This file is local and gitignored. You only need to run setup once while the saved session remains valid; rerun it if the session expires or becomes invalid, the file is removed, or you change the target app origin. Use the same `PLAYWRIGHT_BASE_URL` for setup and tests.
+
+Once authentication is set up, start the app with `./devrun.sh` and run the E2E tests in another terminal:
+```
+pnpm test:e2e
+```
+
+By default tests target `http://localhost:9000`. Set `PLAYWRIGHT_BASE_URL` to test another running instance.
+
 ### Running scala tests
 The scala backend tests use dynamodb-local. This doesn't support Apple Silicon (M1).
 
