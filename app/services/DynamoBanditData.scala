@@ -67,12 +67,15 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
             .build()
         )
         .items()
-    }.mapError(DynamoGetError)
+    }.mapError(DynamoGetError.apply)
   }
 
-  private def sampleMean(samples: Seq[VariantSample], population: Double): Double =
+  private def sampleMean(samples: IterableOnce[VariantSample], population: Double): Double =
     if (population == 0) 0
-    else samples.foldLeft(0d)((acc, sample) => acc + (sample.views / population) * sample.annualisedValueInGBPPerView)
+    else
+      samples.iterator.foldLeft(0d)((acc, sample) =>
+        acc + (sample.views / population) * sample.annualisedValueInGBPPerView
+      )
 
   private def buildVariantSummaries(samples: Array[TestSample]): List[VariantSummary] =
     samples
@@ -124,7 +127,7 @@ class DynamoBanditData(stage: String, client: DynamoDbClient) extends StrictLogg
           }
           .toArray
       }
-      .map { samples: Array[TestSample] =>
+      .map { (samples: Array[TestSample]) =>
         val variantSummaries = buildVariantSummaries(samples)
         val enrichedSamples = buildEnrichedSamples(samples, sampleCount)
 

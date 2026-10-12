@@ -2,11 +2,11 @@ package models
 
 import io.circe.Decoder.Result
 import io.circe.{Decoder, DecodingFailure, Encoder, HCursor, Json}
+import io.circe.generic.semiauto.deriveDecoder
 import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.semiauto.{
   deriveConfiguredDecoder,
   deriveConfiguredEncoder,
-  deriveDecoder,
   deriveEnumerationDecoder,
   deriveEnumerationEncoder
 }
@@ -53,8 +53,8 @@ trait ChannelTest[T] {
 object ChannelTest {
   import Channel._
 
-  implicit def channelTestDecoder: Decoder[ChannelTest[_]] = new Decoder[ChannelTest[_]] {
-    override def apply(c: HCursor): Result[ChannelTest[_]] = {
+  implicit def channelTestDecoder: Decoder[ChannelTest[?]] = new Decoder[ChannelTest[?]] {
+    override def apply(c: HCursor): Result[ChannelTest[?]] = {
       c.downField("channel").as[Channel].flatMap {
         case Header             => HeaderTest.headerTestDecoder(c)
         case Banner1 | Banner2  => BannerTest.bannerTestDecoder(c)
@@ -68,8 +68,8 @@ object ChannelTest {
     }
   }
 
-  implicit def channelTestEncoder: Encoder[ChannelTest[_]] = new Encoder[ChannelTest[_]] {
-    override def apply(test: ChannelTest[_]): Json = test match {
+  implicit def channelTestEncoder: Encoder[ChannelTest[?]] = new Encoder[ChannelTest[?]] {
+    override def apply(test: ChannelTest[?]): Json = test match {
       case header: HeaderTest                         => HeaderTest.headerTestEncoder(header)
       case banner: BannerTest                         => BannerTest.bannerTestEncoder(banner)
       case gutter: GutterTest                         => GutterTest.gutterTestEncoder(gutter)
