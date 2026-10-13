@@ -1,10 +1,8 @@
 package models
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder}
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 
-sealed trait Methodology {
+sealed trait Methodology derives ConfiguredCodec {
   val testName: Option[String]
 }
 
@@ -29,8 +27,5 @@ case class Roulette(
 case object Methodology {
   val defaultMethodologies = List(ABTest())
 
-  implicit val customConfig: Configuration = Configuration.default.withDiscriminator("name")
-
-  implicit val methodologyDecoder: Decoder[Methodology] = deriveConfiguredDecoder[Methodology]
-  implicit val methodologyEncoder: Encoder[Methodology] = deriveConfiguredEncoder[Methodology]
+  given Configuration = Configuration.default.withDiscriminator("name")
 }

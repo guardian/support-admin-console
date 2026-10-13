@@ -1,34 +1,30 @@
 package models
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
+import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
 
-sealed trait TickerName
+sealed trait TickerName derives ConfiguredEnumCodec
 object TickerName {
   case object US extends TickerName
   case object AU extends TickerName
   case object global extends TickerName
 
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val encoder: Encoder[TickerName] = deriveEnumerationEncoder[TickerName]
-  implicit val decoder: Decoder[TickerName] = deriveEnumerationDecoder[TickerName]
+  given Configuration = Configuration.default
 }
 
 case class TickerCopy(
     countLabel: String,
     goalCopy: String = "goal"
-)
+) derives ConfiguredCodec
 
 object TickerCopy {
-  import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder}
-
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[TickerCopy] = deriveConfiguredDecoder[TickerCopy]
-  implicit val encoder: Encoder[TickerCopy] = deriveConfiguredEncoder[TickerCopy]
+  given Configuration = Configuration.default.withDefaults
 }
 
 case class TickerSettings(
     currencySymbol: String,
     copy: TickerCopy,
     name: TickerName
-)
+) derives ConfiguredCodec
+
+object TickerSettings {
+  given Configuration = Configuration.default.withDefaults
+}

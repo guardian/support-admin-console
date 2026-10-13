@@ -1,8 +1,6 @@
 package models
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.semiauto._
-import io.circe.generic.extras.Configuration
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 
 case class ChannelSwitches(
     enableEpics: Boolean,
@@ -18,10 +16,8 @@ case class ChannelSwitches(
     enableAuxia: Boolean = false,
     enableAuxiaForBanners: Boolean = false,
     enableGandalfSignInGate: Boolean = false
-)
+) derives ConfiguredCodec
 
 object ChannelSwitches {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[ChannelSwitches] = deriveConfiguredDecoder[ChannelSwitches]
-  implicit val encoder: Encoder[ChannelSwitches] = deriveConfiguredEncoder[ChannelSwitches]
+  given Configuration = Configuration.default.withDefaults
 }

@@ -1,5 +1,6 @@
 package models
 
+import io.circe.Encoder
 import io.circe.parser._
 import org.scalatest.EitherValues
 import org.scalatest.flatspec.AnyFlatSpec
@@ -52,7 +53,7 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
 
   it should "round-trip the Gandalf switch through the encoder" in {
     val decoded = decode[ChannelSwitches](fullJson).toOption.get
-    val encoded = ChannelSwitches.encoder.apply(decoded)
+    val encoded = Encoder[ChannelSwitches].apply(decoded)
     val redecoded = decode[ChannelSwitches](encoded.noSpaces).toOption.get
 
     redecoded shouldBe decoded

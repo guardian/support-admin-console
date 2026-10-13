@@ -1,24 +1,22 @@
 package models
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
 import models.Methodology.defaultMethodologies
 
-case class BannerUI(designName: String)
+case class BannerUI(designName: String) derives ConfiguredCodec
 
-sealed trait BannerStepMode
+object BannerUI {
+  given Configuration = Configuration.default.withDefaults
+}
+
+sealed trait BannerStepMode derives ConfiguredEnumCodec
 
 object BannerStepMode {
   case object OneStep extends BannerStepMode
   case object TwoStep extends BannerStepMode
   case object TwoStepIfAllowed extends BannerStepMode
 
-  implicit val decoder: Decoder[BannerStepMode] =
-    deriveEnumerationDecoder[BannerStepMode]
-  implicit val encoder: Encoder[BannerStepMode] =
-    deriveEnumerationEncoder[BannerStepMode]
+  given Configuration = Configuration.default
 }
 
 case class BannerContent(
@@ -28,7 +26,11 @@ case class BannerContent(
     highlightedText: Option[String],
     cta: Option[Cta],
     secondaryCta: Option[SecondaryCta]
-)
+) derives ConfiguredCodec
+
+object BannerContent {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class BannerVariant(
     name: String,
@@ -42,18 +44,17 @@ case class BannerVariant(
     promoCodes: List[String] = Nil,
     isCollapsible: Option[Boolean] = None,
     bannerStepMode: Option[BannerStepMode] = None
-)
+) derives ConfiguredCodec
 
 object BannerVariant {
-  import io.circe.generic.auto._
-
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[BannerVariant] = deriveConfiguredDecoder[BannerVariant]
-  implicit val encoder: Encoder[BannerVariant] = deriveConfiguredEncoder[BannerVariant]
+  given Configuration = Configuration.default.withDefaults
 }
 
-case class BannerTestDeploySchedule(daysBetween: Int)
+case class BannerTestDeploySchedule(daysBetween: Int) derives ConfiguredCodec
 
+object BannerTestDeploySchedule {
+  given Configuration = Configuration.default.withDefaults
+}
 case class BannerTest(
     name: String,
     channel: Option[Channel],
@@ -78,7 +79,7 @@ case class BannerTest(
     mParticleAudience: Option[Int] = None,
     scheduler: Option[Scheduler] = None,
     mParticleTemplates: Option[List[String]]
-) extends ChannelTest[BannerTest] {
+) extends ChannelTest[BannerTest] derives ConfiguredCodec {
 
   override def withChannel(channel: Channel): BannerTest =
     this.copy(channel = Some(channel))
@@ -87,9 +88,5 @@ case class BannerTest(
 }
 
 object BannerTest {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val bannerTestDecoder: Decoder[BannerTest] =
-    deriveConfiguredDecoder[BannerTest]
-  implicit val bannerTestEncoder: Encoder[BannerTest] =
-    deriveConfiguredEncoder[BannerTest]
+  given Configuration = Configuration.default.withDefaults
 }

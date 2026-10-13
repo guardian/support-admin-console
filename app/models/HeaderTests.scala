@@ -1,9 +1,6 @@
 package models
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder}
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
 case class HeaderContent(
@@ -11,14 +8,22 @@ case class HeaderContent(
     subheading: String,
     primaryCta: Option[Cta],
     secondaryCta: Option[Cta]
-)
+) derives ConfiguredCodec
+
+object HeaderContent {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class HeaderVariant(
     name: String,
     content: HeaderContent,
     mobileContent: Option[HeaderContent],
     promoCodes: List[String] = Nil
-)
+) derives ConfiguredCodec
+
+object HeaderVariant {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class HeaderTest(
     name: String,
@@ -38,15 +43,13 @@ case class HeaderTest(
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     methodologies: List[Methodology] = defaultMethodologies,
     mParticleAudience: Option[Int] = None,
-    scheduler: Option[Scheduler] = None,
-) extends ChannelTest[HeaderTest] {
+    scheduler: Option[Scheduler] = None
+) extends ChannelTest[HeaderTest] derives ConfiguredCodec {
 
   override def withChannel(channel: Channel): HeaderTest = this.copy(channel = Some(channel))
   override def withPriority(priority: Int): HeaderTest = this.copy(priority = Some(priority))
 }
 
 object HeaderTest {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val headerTestDecoder: Decoder[HeaderTest] = deriveConfiguredDecoder[HeaderTest]
-  implicit val headerTestEncoder: Encoder[HeaderTest] = deriveConfiguredEncoder[HeaderTest]
+  given Configuration = Configuration.default.withDefaults
 }
