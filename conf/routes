@@ -58,6 +58,8 @@ GET /super-mode                                     controllers.Application.inde
 
 GET /exclusions                                     controllers.Application.index
 
+GET /inline1-tests                                  controllers.Application.index
+
 GET /banner-designs                                 controllers.Application.index
 GET /banner-designs/:name                           controllers.Application.indexWithName(name: String)
 
