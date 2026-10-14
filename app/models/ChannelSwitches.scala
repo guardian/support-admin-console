@@ -14,6 +14,7 @@ case class ChannelSwitches(
     enableHardcodedBannerTests: Boolean,
     enableScheduledBannerDeploys: Boolean = true,
     enableGutterLiveblogs: Boolean = true,
+    enableInline1Tests: Boolean = false,
     enableMParticle: Boolean = false,
     enableAuxia: Boolean = false,
     enableAuxiaForBanners: Boolean = false,
