@@ -1,16 +1,13 @@
 package models
 
 import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
-import ChoiceCardsSettings._
+import ChoiceCardsSettings.*
+import io.circe.Codec
 
-case class ChoiceCardsSettings(choiceCards: List[ChoiceCard]) derives ConfiguredCodec
+case class ChoiceCardsSettings(choiceCards: List[ChoiceCard]) derives Codec.AsObject
 
 object ChoiceCardsSettings {
-  case class ProductBenefit(copy: String) derives ConfiguredCodec
-
-  object ProductBenefit {
-    given Configuration = Configuration.default.withDefaults
-  }
+  case class ProductBenefit(copy: String) derives Codec.AsObject
 
   sealed trait RatePlan derives ConfiguredEnumCodec
   object RatePlan {
@@ -53,17 +50,9 @@ object ChoiceCardsSettings {
     given Configuration = Configuration.default
   }
 
-  case class DestinationTest(testName: String, variantName: String) derives ConfiguredCodec
+  case class DestinationTest(testName: String, variantName: String) derives Codec.AsObject
 
-  object DestinationTest {
-    given Configuration = Configuration.default.withDefaults
-  }
-
-  case class Pill(copy: String) derives ConfiguredCodec
-
-  object Pill {
-    given Configuration = Configuration.default.withDefaults
-  }
+  case class Pill(copy: String) derives Codec.AsObject
 
   case class ChoiceCard(
       product: Product,

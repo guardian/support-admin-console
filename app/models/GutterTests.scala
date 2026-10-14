@@ -1,5 +1,6 @@
 package models
 
+import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
@@ -7,11 +8,7 @@ case class GutterContent(
     image: Option[Image],
     bodyCopy: Option[List[String]],
     cta: Option[Cta]
-) derives ConfiguredCodec
-
-object GutterContent {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class GutterVariant(
     name: String,

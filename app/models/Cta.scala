@@ -1,12 +1,9 @@
 package models
 
+import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 
-case class Cta(text: String, baseUrl: String) derives ConfiguredCodec
-
-object Cta {
-  given Configuration = Configuration.default.withDefaults
-}
+case class Cta(text: String, baseUrl: String) derives Codec.AsObject
 
 sealed trait SecondaryCta derives ConfiguredCodec
 

@@ -1,6 +1,7 @@
 package models
 
 import enumeratum.{CirceEnum, Enum, EnumEntry}
+import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
@@ -16,11 +17,7 @@ object SeparateArticleCountType extends Enum[SeparateArticleCountType] with Circ
 case class SeparateArticleCount(
     `type`: SeparateArticleCountType,
     copy: Option[String]
-) derives ConfiguredCodec
-
-object SeparateArticleCount {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class EpicVariant(
     name: String,

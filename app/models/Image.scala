@@ -1,22 +1,14 @@
 package models
 
-import io.circe.derivation.{Configuration, ConfiguredCodec}
+import io.circe.Codec
 
 case class Image(
     mainUrl: String,
     altText: String
-) derives ConfiguredCodec
-
-object Image {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class BylineWithImage(
     name: String,
     description: Option[String],
     headshot: Option[Image]
-) derives ConfiguredCodec
-
-object BylineWithImage {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject

@@ -1,16 +1,13 @@
 package models
 
+import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
 case class SupportLandingPageCopy(
     heading: String,
     subheading: String
-) derives ConfiguredCodec
-
-object SupportLandingPageCopy {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class ProductBenefit(
     copy: String,
@@ -24,11 +21,7 @@ object ProductBenefit {
 
 case class Label(
     copy: String
-) derives ConfiguredCodec
-
-object Label {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class LandingPageProductDescription(
     title: String,
@@ -45,11 +38,7 @@ object LandingPageProductDescription {
 
 case class LandingPageCta(
     copy: String
-) derives ConfiguredCodec
-
-object LandingPageCta {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class Products(
     Contribution: LandingPageProductDescription,
@@ -64,11 +53,7 @@ object Products {
 case class DefaultProductSelection(
     productType: String,
     billingPeriod: String
-) derives ConfiguredCodec
-
-object DefaultProductSelection {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class SupportLandingPageVariant(
     name: String,

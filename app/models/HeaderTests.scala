@@ -1,5 +1,6 @@
 package models
 
+import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
@@ -8,11 +9,7 @@ case class HeaderContent(
     subheading: String,
     primaryCta: Option[Cta],
     secondaryCta: Option[Cta]
-) derives ConfiguredCodec
-
-object HeaderContent {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class HeaderVariant(
     name: String,

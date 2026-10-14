@@ -1,9 +1,6 @@
 package models
 
-import io.circe.derivation.{Configuration, ConfiguredCodec}
+import io.circe.Codec
+import io.circe.derivation.ConfiguredCodec
 
-case class ControlProportionSettings(proportion: Float, offset: Int) derives ConfiguredCodec
-
-object ControlProportionSettings {
-  given Configuration = Configuration.default.withDefaults
-}
+case class ControlProportionSettings(proportion: Float, offset: Int) derives Codec.AsObject

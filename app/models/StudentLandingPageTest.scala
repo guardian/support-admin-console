@@ -1,5 +1,6 @@
 package models
 
+import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
@@ -7,22 +8,14 @@ case class Institution(
     acronym: String,
     name: String,
     logoUrl: String
-) derives ConfiguredCodec
-
-object Institution {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class ResponsiveImage(
     mobileUrl: String,
     tabletUrl: String,
     desktopUrl: String,
     altText: String
-) derives ConfiguredCodec
-
-object ResponsiveImage {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class StudentLandingPageVariant(
     name: String,
@@ -31,11 +24,7 @@ case class StudentLandingPageVariant(
     institution: Institution,
     promoCodes: List[String],
     image: ResponsiveImage
-) derives ConfiguredCodec
-
-object StudentLandingPageVariant {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class StudentLandingPageTest(
     name: String,

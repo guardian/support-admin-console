@@ -1,13 +1,10 @@
 package models
 
+import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
 import models.Methodology.defaultMethodologies
 
-case class BannerUI(designName: String) derives ConfiguredCodec
-
-object BannerUI {
-  given Configuration = Configuration.default.withDefaults
-}
+case class BannerUI(designName: String) derives Codec.AsObject
 
 sealed trait BannerStepMode derives ConfiguredEnumCodec
 
@@ -26,11 +23,7 @@ case class BannerContent(
     highlightedText: Option[String],
     cta: Option[Cta],
     secondaryCta: Option[SecondaryCta]
-) derives ConfiguredCodec
-
-object BannerContent {
-  given Configuration = Configuration.default.withDefaults
-}
+) derives Codec.AsObject
 
 case class BannerVariant(
     name: String,
@@ -50,11 +43,8 @@ object BannerVariant {
   given Configuration = Configuration.default.withDefaults
 }
 
-case class BannerTestDeploySchedule(daysBetween: Int) derives ConfiguredCodec
+case class BannerTestDeploySchedule(daysBetween: Int) derives Codec.AsObject
 
-object BannerTestDeploySchedule {
-  given Configuration = Configuration.default.withDefaults
-}
 case class BannerTest(
     name: String,
     channel: Option[Channel],
