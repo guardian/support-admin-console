@@ -19,6 +19,14 @@ case class TickerCopy(
     goalCopy: String = "goal"
 )
 
+object TickerCopy {
+  import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder}
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[TickerCopy] = deriveConfiguredDecoder[TickerCopy]
+  implicit val encoder: Encoder[TickerCopy] = deriveConfiguredEncoder[TickerCopy]
+}
+
 case class TickerSettings(
     currencySymbol: String,
     copy: TickerCopy,

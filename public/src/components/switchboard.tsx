@@ -85,7 +85,7 @@ const InputGroup = styled('div')(({ theme }) => ({
 const SwitchLayout = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',
-  '&:nth-child(even)': {
+  '&:nth-of-type(even)': {
     backgroundColor: '#e7e7e7',
   },
 });

@@ -71,7 +71,7 @@ class DynamoPromoCampaigns(stage: String, client: DynamoDbClient)
             None
         }
         .toList
-    }.mapError(DynamoGetError)
+    }.mapError(DynamoGetError.apply)
 
   def createPromoCampaign(promoCampaign: PromoCampaign): ZIO[Any, DynamoError, Unit] = {
     val item = jsonToDynamo(promoCampaign.asJson).m()

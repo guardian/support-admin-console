@@ -52,6 +52,14 @@ case class CheckoutNudgeVariant(
     promoCodes: Option[List[String]] = None
 )
 
+object CheckoutNudgeVariant {
+  import io.circe.generic.auto._
+
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val decoder: Decoder[CheckoutNudgeVariant] = deriveConfiguredDecoder[CheckoutNudgeVariant]
+  implicit val encoder: Encoder[CheckoutNudgeVariant] = deriveConfiguredEncoder[CheckoutNudgeVariant]
+}
+
 case class CheckoutNudge(
     nudgeCopy: Copy,
     thankyouCopy: Copy,

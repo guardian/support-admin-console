@@ -8,7 +8,14 @@ export interface Variant {
 export type TestPlatform = 'APPLE_NEWS' | 'DOTCOM' | 'SUPPORT';
 
 export type TestType =
-  'EPIC' | 'BANNER' | 'GUTTER' | 'HEADER' | 'LANDING_PAGE' | 'CHECKOUT_NUDGE' | 'ONE_TIME_CHECKOUT';
+  | 'EPIC'
+  | 'BANNER'
+  | 'GUTTER'
+  | 'HEADER'
+  | 'LANDING_PAGE'
+  | 'CHECKOUT_NUDGE'
+  | 'ONE_TIME_CHECKOUT'
+  | 'INLINE1';
 
 export type EpicModuleName = 'ContributionsEpic' | 'ContributionsLiveblogEpic';
 

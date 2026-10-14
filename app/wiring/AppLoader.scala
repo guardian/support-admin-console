@@ -24,13 +24,14 @@ class AppLoader extends ApplicationLoader with StrictLogging {
     val isDev = context.environment.mode == Mode.Dev
 
     def addConfigToContext(identity: AppIdentity): Try[Context] = Try {
-      val loadedConfig = ConfigurationLoader.load(identity) {
+      val loadedConfig = ConfigurationLoader.load(identity, Aws.credentialsProvider) {
         case AwsIdentity(app, stack, stage, _) => SSMConfigurationLocation(s"/$app/$stage", Aws.region.id())
         case DevIdentity(app)                  =>
           // If a local private config file exists then override any CODE Parameter Store config
           ComposedConfigurationLocation(
             List(
               FileConfigurationLocation(new File(s"/etc/gu/support-admin-console.private.conf")),
+              FileConfigurationLocation(new File(s"conf/DEV.public.conf")),
               SSMConfigurationLocation(s"/admin-console/CODE", Aws.region.id())
             )
           )
@@ -42,7 +43,7 @@ class AppLoader extends ApplicationLoader with StrictLogging {
     val application: Try[Application] = for {
       identity <-
         if (isDev) Success(DevIdentity("admin-console"))
-        else AppIdentity.whoAmI(defaultAppName = "admin-console", Aws.credentialsProvider.build())
+        else AppIdentity.whoAmI(defaultAppName = "admin-console", Aws.credentialsProvider)
       newContext <- addConfigToContext(identity)
       stage = identity match {
         case AwsIdentity(_, _, s, _) => s
