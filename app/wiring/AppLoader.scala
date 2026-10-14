@@ -31,6 +31,7 @@ class AppLoader extends ApplicationLoader with StrictLogging {
           ComposedConfigurationLocation(
             List(
               FileConfigurationLocation(new File(s"/etc/gu/support-admin-console.private.conf")),
+              FileConfigurationLocation(new File(s"conf/DEV.public.conf")),
               SSMConfigurationLocation(s"/admin-console/CODE", Aws.region.id())
             )
           )
