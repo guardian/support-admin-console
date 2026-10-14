@@ -1,14 +1,12 @@
 package models
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.auto._
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder}
+import io.circe.Codec
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
 case class Inline1Variant(
     name: String
-)
+) derives Codec.AsObject
 
 case class Inline1Test(
     name: String,
@@ -21,7 +19,7 @@ case class Inline1Test(
     methodologies: List[Methodology] = defaultMethodologies,
     scheduler: Option[Scheduler] = None,
     variants: List[Inline1Variant]
-) extends ChannelTest[Inline1Test] {
+) extends ChannelTest[Inline1Test] derives ConfiguredCodec {
   override def withChannel(channel: Channel): Inline1Test =
     this.copy(channel = Some(channel))
 
@@ -30,7 +28,5 @@ case class Inline1Test(
 }
 
 object Inline1Test {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val inline1TestDecoder: Decoder[Inline1Test] = deriveConfiguredDecoder[Inline1Test]
-  implicit val inline1TestEncoder: Encoder[Inline1Test] = deriveConfiguredEncoder[Inline1Test]
+  given Configuration = Configuration.default.withDefaults
 }
