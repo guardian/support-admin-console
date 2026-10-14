@@ -64,6 +64,11 @@ const GutterTestsForm = lazy(() =>
     default: m.GutterTestsForm,
   })),
 );
+const Inline1TestsForm = lazy(() =>
+  import('./components/channelManagement/inline1Tests/inline1TestsForm').then((m) => ({
+    default: m.Inline1TestsForm,
+  })),
+);
 const HeaderTestsForm = lazy(() =>
   import('./components/channelManagement/headerTests/headerTestsForm').then((m) => ({
     default: m.HeaderTestsForm,
@@ -238,6 +243,10 @@ const AppRouter = () => {
           <Route
             path="/gutter-liveblog-tests/:testName?"
             element={createComponent(<GutterTestsForm />, 'Gutter Liveblog Tests')}
+          />
+          <Route
+            path="/inline1-tests/:testName?"
+            element={createComponent(<Inline1TestsForm />, 'Inline1 Tests')}
           />
           <Route
             path="/channel-switches"

@@ -276,6 +276,16 @@ class AppComponents(context: Context, stage: String)
       dynamoTestsAuditService,
       permissionsService
     ),
+    new Inline1TestsController(
+      authAction,
+      controllerComponents,
+      stage,
+      runtime,
+      dynamoTestsService,
+      dynamoArchivedChannelTests,
+      dynamoTestsAuditService,
+      permissionsService
+    ),
     new PromoCampaignsController(
       authAction,
       controllerComponents,
