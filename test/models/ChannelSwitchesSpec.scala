@@ -20,10 +20,22 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
       |  "enableHardcodedBannerTests": false,
       |  "enableScheduledBannerDeploys": true,
       |  "enableGutterLiveblogs": true,
+      |  "enableInline1Tests": true,
       |  "enableMParticle": false,
       |  "enableAuxia": true,
       |  "enableAuxiaForBanners": true,
       |  "enableGandalfSignInGate": true
+      |}
+      |""".stripMargin
+
+  private val legacyJson =
+    """
+      |{
+      |  "enableEpics": true,
+      |  "enableBanners": true,
+      |  "enableSuperMode": false,
+      |  "enableHardcodedEpicTests": false,
+      |  "enableHardcodedBannerTests": false
       |}
       |""".stripMargin
 
@@ -34,17 +46,6 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
   }
 
   it should "default the Gandalf switch to off when absent, for backward compatibility with existing S3 documents" in {
-    val legacyJson =
-      """
-        |{
-        |  "enableEpics": true,
-        |  "enableBanners": true,
-        |  "enableSuperMode": false,
-        |  "enableHardcodedEpicTests": false,
-        |  "enableHardcodedBannerTests": false
-        |}
-        |""".stripMargin
-
     val decoded = decode[ChannelSwitches](legacyJson).toOption.get
 
     decoded.enableGandalfSignInGate shouldBe false
@@ -58,5 +59,20 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
 
     redecoded shouldBe decoded
     redecoded.enableGandalfSignInGate shouldBe true
+  }
+
+  it should "default the Inline1 switch to off when absent, for backward compatibility with existing S3 documents" in {
+    val decoded = decode[ChannelSwitches](legacyJson).toOption.get
+
+    decoded.enableInline1Tests shouldBe false
+  }
+
+  it should "round-trip the Inline1 switch through the encoder" in {
+    val decoded = decode[ChannelSwitches](fullJson).toOption.get
+    val encoded = ChannelSwitches.encoder.apply(decoded)
+    val redecoded = decode[ChannelSwitches](encoded.noSpaces).toOption.get
+
+    redecoded shouldBe decoded
+    redecoded.enableInline1Tests shouldBe true
   }
 }
