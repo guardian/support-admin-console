@@ -63,6 +63,7 @@ object ChannelTest {
         case CheckoutNudge      => CheckoutNudgeTest.checkoutNudgeTestDecoder(c)
         case StudentLandingPage => StudentLandingPageTest.studentLandingPageTestDecoder(c)
         case OneTimeCheckout    => OneTimeCheckoutTest.OneTimeCheckoutTestDecoder(c)
+        case Inline1            => Inline1Test.inline1TestDecoder(c)
         case epic               => EpicTest.epicTestDecoder(c)
       }
     }
@@ -78,6 +79,7 @@ object ChannelTest {
       case studentLandingPage: StudentLandingPageTest =>
         StudentLandingPageTest.studentLandingPageTestEncoder(studentLandingPage)
       case oneTimeCheckout: OneTimeCheckoutTest => OneTimeCheckoutTest.OneTimeCheckoutTestEncoder(oneTimeCheckout)
+      case inline1: Inline1Test                 => Inline1Test.inline1TestEncoder(inline1)
       case epic: EpicTest                       => EpicTest.epicTestEncoder(epic)
     }
   }

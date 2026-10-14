@@ -288,6 +288,20 @@ POST  /frontend/checkout-nudge-tests/test/unlock/:testName      controllers.Chec
 POST  /frontend/checkout-nudge-tests/test/takecontrol/:testName controllers.CheckoutNudgeController.forceLockTest(testName: String)
 POST  /frontend/checkout-nudge-tests/test/status/:rawStatus     controllers.CheckoutNudgeController.setStatus(rawStatus: String)
 
+# ----- Inline1 tests ----- #
+GET   /frontend/inline1-tests                                controllers.Inline1TestsController.get
+POST  /frontend/inline1-tests/list/lock                      controllers.Inline1TestsController.lockList
+POST  /frontend/inline1-tests/list/unlock                    controllers.Inline1TestsController.unlockList
+POST  /frontend/inline1-tests/list/takecontrol               controllers.Inline1TestsController.takeControlOfList
+POST  /frontend/inline1-tests/list/reorder                   controllers.Inline1TestsController.reorderList
+GET   /frontend/inline1-tests/test/:testName                 controllers.Inline1TestsController.getTest(testName: String)
+POST  /frontend/inline1-tests/test/update                    controllers.Inline1TestsController.updateTest
+POST  /frontend/inline1-tests/test/create                    controllers.Inline1TestsController.createTest
+POST  /frontend/inline1-tests/test/lock/:testName            controllers.Inline1TestsController.lockTest(testName: String)
+POST  /frontend/inline1-tests/test/unlock/:testName          controllers.Inline1TestsController.unlockTest(testName: String)
+POST  /frontend/inline1-tests/test/takecontrol/:testName     controllers.Inline1TestsController.forceLockTest(testName: String)
+POST  /frontend/inline1-tests/test/status/:rawStatus         controllers.Inline1TestsController.setStatus(rawStatus: String)
+
 # Promo Campaigns endpoints
 GET /promos/campaign/:campaignCode          controllers.promos.PromoCampaignsController.get(campaignCode: String)
 GET /promos/campaigns/:product              controllers.promos.PromoCampaignsController.getAll(product: String)
