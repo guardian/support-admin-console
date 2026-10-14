@@ -53,6 +53,7 @@ object ChannelTest {
         case CheckoutNudge      => c.as[CheckoutNudgeTest]
         case StudentLandingPage => c.as[StudentLandingPageTest]
         case OneTimeCheckout    => c.as[OneTimeCheckoutTest]
+        case Inline1            => c.as[Inline1Test]
         case epic               => c.as[EpicTest]
       }
     }
@@ -67,6 +68,7 @@ object ChannelTest {
       case checkoutNudge: CheckoutNudgeTest           => checkoutNudge.asJson
       case studentLandingPage: StudentLandingPageTest => studentLandingPage.asJson
       case oneTimeCheckout: OneTimeCheckoutTest       => oneTimeCheckout.asJson
+      case inline1: Inline1Test                       => inline1.asJson
       case epic: EpicTest                             => epic.asJson
     }
   }

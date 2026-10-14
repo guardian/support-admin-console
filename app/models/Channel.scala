@@ -16,6 +16,7 @@ object Channel {
   case object CheckoutNudge extends Channel
   case object StudentLandingPage extends Channel
   case object OneTimeCheckout extends Channel
+  case object Inline1 extends Channel
 
   given Configuration = Configuration.default
 }
