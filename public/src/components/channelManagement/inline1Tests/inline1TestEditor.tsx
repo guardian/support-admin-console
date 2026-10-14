@@ -9,7 +9,7 @@ import { ControlProportionSettings } from '../helpers/controlProportionSettings'
 import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
 import ScheduleEditor from '../scheduleEditor';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { getDefaultVariant } from './defaults';
+import { getDefaultVariant } from './utils/defaults';
 
 const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
   test,

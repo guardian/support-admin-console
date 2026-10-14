@@ -1,5 +1,5 @@
-import { Inline1Test, Inline1Variant } from '../../../models/inline1';
-import { UserCohort } from '../helpers/shared';
+import { Inline1Test, Inline1Variant } from '../../../../models/inline1';
+import { UserCohort } from '../../helpers/shared';
 
 export const getDefaultVariant = (): Inline1Variant => ({
   name: 'CONTROL',
