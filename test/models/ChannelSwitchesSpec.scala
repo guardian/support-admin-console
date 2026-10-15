@@ -69,7 +69,7 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
 
   it should "round-trip the Inline1 switch through the encoder" in {
     val decoded = decode[ChannelSwitches](fullJson).toOption.get
-    val encoded = ChannelSwitches.encoder.apply(decoded)
+    val encoded = Encoder[ChannelSwitches].apply(decoded)
     val redecoded = decode[ChannelSwitches](encoded.noSpaces).toOption.get
 
     redecoded shouldBe decoded
