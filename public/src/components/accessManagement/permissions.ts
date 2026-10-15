@@ -32,6 +32,10 @@ export const permissions: Permission[] = [
     name: 'default-choice-cards',
     displayName: 'Default Choice Cards',
   },
+  {
+    name: 'inline1-tests',
+    displayName: 'Inline1 tests',
+  },
 ];
 
 export type PermissionName = (typeof permissions)[number]['name'];
