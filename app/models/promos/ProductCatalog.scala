@@ -1,7 +1,6 @@
 package models.promos
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder}
+import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}
 import ProductCatalog._
@@ -65,12 +64,10 @@ object ProductCatalog {
       GBP: Option[Double] = None,
       NZD: Option[Double] = None,
       USD: Option[Double] = None
-  )
+  ) derives ConfiguredCodec
 
   object Pricing {
-    implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val encoder: Encoder[Pricing] = deriveConfiguredEncoder[Pricing]
-    implicit val decoder: Decoder[Pricing] = deriveConfiguredDecoder[Pricing]
+    given Configuration = Configuration.default.withDefaults
   }
 
   case class RatePlan(
@@ -78,24 +75,19 @@ object ProductCatalog {
       id: String,
       pricing: Pricing,
       termLengthInMonths: Option[Int] = None
-  )
+  ) derives ConfiguredCodec
 
   object RatePlan {
-    implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val encoder: Encoder[RatePlan] = deriveConfiguredEncoder[RatePlan]
-    implicit val decoder: Decoder[RatePlan] = deriveConfiguredDecoder[RatePlan]
+    given Configuration = Configuration.default.withDefaults
   }
 
-  sealed trait BillingPeriod
+  sealed trait BillingPeriod derives ConfiguredEnumCodec
   object BillingPeriod {
     case object Month extends BillingPeriod
     case object Annual extends BillingPeriod
     case object Quarter extends BillingPeriod
 
-    import io.circe.generic.extras.semiauto._
-    implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val encoder: Encoder[BillingPeriod] = deriveEnumerationEncoder[BillingPeriod]
-    implicit val decoder: Decoder[BillingPeriod] = deriveEnumerationDecoder[BillingPeriod]
+    given Configuration = Configuration.default
   }
 
   sealed trait ProductRatePlans

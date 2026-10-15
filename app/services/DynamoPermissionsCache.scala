@@ -1,9 +1,8 @@
 package services
 
 import com.typesafe.scalalogging.StrictLogging
+import io.circe.derivation.{Configuration, ConfiguredEnumCodec}
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
 import io.circe.generic.auto._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import models.DynamoErrors.{DynamoGetError, DynamoError}
@@ -19,13 +18,11 @@ import java.util.concurrent.atomic.AtomicReference
 
 object UserPermissions {
   // The model for the user permissions that we store in DynamoDb
-  sealed trait Permission
+  sealed trait Permission derives ConfiguredEnumCodec
   object Permission {
     case object Read extends Permission
     case object Write extends Permission
-    implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val decoder: Decoder[Permission] = deriveEnumerationDecoder[Permission]
-    implicit val encoder: Encoder[Permission] = deriveEnumerationEncoder[Permission]
+    given Configuration = Configuration.default
   }
   case class PagePermission(name: String, permission: Permission)
   case class UserPermissions(email: String, permissions: List[PagePermission])

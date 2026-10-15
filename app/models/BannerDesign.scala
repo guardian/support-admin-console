@@ -1,19 +1,16 @@
 package models
 
+import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.Configuration
 
-sealed trait BannerDesignStatus
+sealed trait BannerDesignStatus derives ConfiguredEnumCodec
 
 object BannerDesignStatus {
   case object Live extends BannerDesignStatus
 
   case object Draft extends BannerDesignStatus
 
-  import io.circe.generic.extras.semiauto._
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val statusEncoder: Encoder[BannerDesignStatus] = deriveEnumerationEncoder[BannerDesignStatus]
-  implicit val statusDecoder: Decoder[BannerDesignStatus] = deriveEnumerationDecoder[BannerDesignStatus]
+  given Configuration = Configuration.default
 }
 
 case class HeaderImage(
@@ -23,20 +20,18 @@ case class HeaderImage(
     altText: String
 )
 
-sealed trait FontSize
+sealed trait FontSize derives ConfiguredEnumCodec
 object FontSize {
   case object small extends FontSize
   case object medium extends FontSize
   case object large extends FontSize
 
-  import io.circe.generic.extras.semiauto._
-  implicit val decoder: Decoder[FontSize] = deriveEnumerationDecoder[FontSize]
-  implicit val encoder: Encoder[FontSize] = deriveEnumerationEncoder[FontSize]
+  given Configuration = Configuration.default
 }
 case class Font(size: FontSize)
 case class Fonts(heading: Font)
 
-sealed trait BannerDesignVisual
+sealed trait BannerDesignVisual derives ConfiguredCodec
 object BannerDesignVisual {
   case class Image(
       kind: String = "Image",
@@ -59,12 +54,7 @@ object BannerDesignVisual {
       pillBackgroundColour: Option[HexColour]
   ) extends BannerDesignVisual
 
-  import io.circe.generic.extras.auto._
-  implicit val customConfig: Configuration = Configuration.default.withDiscriminator("kind")
-
-  import io.circe.generic.extras.semiauto._
-  implicit val encoder: Encoder[BannerDesignVisual] = deriveConfiguredEncoder[BannerDesignVisual]
-  implicit val decoder: Decoder[BannerDesignVisual] = deriveConfiguredDecoder[BannerDesignVisual]
+  given Configuration = Configuration.default.withDiscriminator("kind")
 }
 
 case class HexColour(

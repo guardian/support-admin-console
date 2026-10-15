@@ -1,18 +1,14 @@
 package models
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.semiauto._
-import io.circe.generic.extras.Configuration
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 
 case class DateRange(
     start: String, // ISO date "YYYY-MM-DD", inclusive
     end: String // ISO date "YYYY-MM-DD", inclusive
-)
+) derives ConfiguredCodec
 
 object DateRange {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[DateRange] = deriveConfiguredDecoder[DateRange]
-  implicit val encoder: Encoder[DateRange] = deriveConfiguredEncoder[DateRange]
+  given Configuration = Configuration.default.withDefaults
 }
 
 case class ExclusionRule(
@@ -23,22 +19,18 @@ case class ExclusionRule(
       None, // suppress if the page is one of these network fronts (uk, us, au, europe, international)
     dateRange: Option[DateRange] = None, // ISO date "YYYY-MM-DD", inclusive
     contentTypes: Option[List[String]] = None // e.g. ["Article"], ["Front"]; absent = all content types
-)
+) derives ConfiguredCodec
 
 object ExclusionRule {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[ExclusionRule] = deriveConfiguredDecoder[ExclusionRule]
-  implicit val encoder: Encoder[ExclusionRule] = deriveConfiguredEncoder[ExclusionRule]
+  given Configuration = Configuration.default.withDefaults
 }
 
 case class ChannelExclusions(
     rules: List[ExclusionRule]
-)
+) derives ConfiguredCodec
 
 object ChannelExclusions {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[ChannelExclusions] = deriveConfiguredDecoder[ChannelExclusions]
-  implicit val encoder: Encoder[ChannelExclusions] = deriveConfiguredEncoder[ChannelExclusions]
+  given Configuration = Configuration.default.withDefaults
 }
 
 case class ChannelExclusionSettings(
@@ -46,10 +38,8 @@ case class ChannelExclusionSettings(
     banner: Option[ChannelExclusions] = None,
     gutterAsk: Option[ChannelExclusions] = None,
     header: Option[ChannelExclusions] = None
-)
+) derives ConfiguredCodec
 
 object ChannelExclusionSettings {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[ChannelExclusionSettings] = deriveConfiguredDecoder[ChannelExclusionSettings]
-  implicit val encoder: Encoder[ChannelExclusionSettings] = deriveConfiguredEncoder[ChannelExclusionSettings]
+  given Configuration = Configuration.default.withDefaults
 }

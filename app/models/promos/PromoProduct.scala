@@ -1,9 +1,7 @@
 package models.promos
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
-import io.circe.{Decoder, Encoder}
+import io.circe.derivation.{Configuration, ConfiguredEnumCodec}
 
-sealed trait PromoProduct
+sealed trait PromoProduct derives ConfiguredEnumCodec
 case object SupporterPlus extends PromoProduct
 case object TierThree extends PromoProduct
 case object DigitalSubscription extends PromoProduct
@@ -11,7 +9,5 @@ case object Newspaper extends PromoProduct
 case object Weekly extends PromoProduct
 
 object PromoProduct {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[PromoProduct] = deriveEnumerationDecoder[PromoProduct]
-  implicit val encoder: Encoder[PromoProduct] = deriveEnumerationEncoder[PromoProduct]
+  given Configuration = Configuration.default
 }

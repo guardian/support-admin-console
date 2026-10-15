@@ -1,32 +1,23 @@
 package models
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.Configuration
-import io.circe.generic.auto._
-import ChoiceCardsSettings._
-import io.circe.generic.extras.semiauto.{
-  deriveConfiguredDecoder,
-  deriveConfiguredEncoder,
-  deriveEnumerationDecoder,
-  deriveEnumerationEncoder
-}
+import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
+import ChoiceCardsSettings.*
+import io.circe.Codec
 
-case class ChoiceCardsSettings(choiceCards: List[ChoiceCard])
+case class ChoiceCardsSettings(choiceCards: List[ChoiceCard]) derives Codec.AsObject
 
 object ChoiceCardsSettings {
-  case class ProductBenefit(copy: String)
+  case class ProductBenefit(copy: String) derives Codec.AsObject
 
-  sealed trait RatePlan
+  sealed trait RatePlan derives ConfiguredEnumCodec
   object RatePlan {
     case object Monthly extends RatePlan
     case object Annual extends RatePlan
 
-    implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val ratePlanEncoder: Encoder[RatePlan] = deriveEnumerationEncoder[RatePlan]
-    implicit val ratePlanDecoder: Decoder[RatePlan] = deriveEnumerationDecoder[RatePlan]
+    given Configuration = Configuration.default
   }
 
-  sealed trait Product {
+  sealed trait Product derives ConfiguredCodec {
     val supportTier: String
   }
   object Product {
@@ -48,24 +39,20 @@ object ChoiceCardsSettings {
         supportTier: String = "OneOff"
     ) extends Product
 
-    implicit val customConfig: Configuration = Configuration.default.withDiscriminator("supportTier")
-    implicit val productDecoder: Decoder[Product] = deriveConfiguredDecoder[Product]
-    implicit val productEncoder: Encoder[Product] = deriveConfiguredEncoder[Product]
+    given Configuration = Configuration.default.withDiscriminator("supportTier")
   }
 
-  sealed trait Destination
+  sealed trait Destination derives ConfiguredEnumCodec
   object Destination {
     case object LandingPage extends Destination
     case object Checkout extends Destination
 
-    implicit val customConfig: Configuration = Configuration.default.withDefaults
-    implicit val encoder: Encoder[Destination] = deriveEnumerationEncoder[Destination]
-    implicit val decoder: Decoder[Destination] = deriveEnumerationDecoder[Destination]
+    given Configuration = Configuration.default
   }
 
-  case class DestinationTest(testName: String, variantName: String)
+  case class DestinationTest(testName: String, variantName: String) derives Codec.AsObject
 
-  case class Pill(copy: String)
+  case class Pill(copy: String) derives Codec.AsObject
 
   case class ChoiceCard(
       product: Product,
@@ -76,9 +63,11 @@ object ChoiceCardsSettings {
       isDefault: Boolean,
       destination: Option[Destination],
       destinationTest: Option[DestinationTest]
-  )
+  ) derives ConfiguredCodec
 
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val choiceCardsSettingsDecoder: Decoder[ChoiceCardsSettings] = deriveConfiguredDecoder[ChoiceCardsSettings]
-  implicit val choiceCardsSettingsEncoder: Encoder[ChoiceCardsSettings] = deriveConfiguredEncoder[ChoiceCardsSettings]
+  object ChoiceCard {
+    given Configuration = Configuration.default.withDefaults
+  }
+
+  given Configuration = Configuration.default.withDefaults
 }

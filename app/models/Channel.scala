@@ -1,10 +1,8 @@
 package models
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveEnumerationDecoder, deriveEnumerationEncoder}
+import io.circe.derivation.{Configuration, ConfiguredEnumCodec}
 
-sealed trait Channel
+sealed trait Channel derives ConfiguredEnumCodec
 
 object Channel {
   case object Epic extends Channel
@@ -20,7 +18,5 @@ object Channel {
   case object OneTimeCheckout extends Channel
   case object Inline1 extends Channel
 
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val statusEncoder: Encoder[Channel] = deriveEnumerationEncoder[Channel]
-  implicit val statusDecoder: Decoder[Channel] = deriveEnumerationDecoder[Channel]
+  given Configuration = Configuration.default
 }
