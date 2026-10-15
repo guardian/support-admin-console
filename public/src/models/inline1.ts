@@ -7,7 +7,6 @@ import {
   UserCohort,
   Variant,
 } from '../components/channelManagement/helpers/shared';
-import { Region } from '../utils/models';
 
 export type Inline1Variant = Variant;
 
@@ -15,7 +14,6 @@ export interface Inline1Test extends Test {
   name: string;
   nickname?: string;
   status: Status;
-  locations: Region[];
   regionTargeting: RegionTargeting;
   userCohort?: UserCohort;
   contextTargeting: PageContextTargeting;

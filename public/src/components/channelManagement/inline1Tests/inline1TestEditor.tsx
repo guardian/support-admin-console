@@ -35,7 +35,7 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
   ): void => onTestChange((current) => ({ ...current, controlProportionSettings }));
 
   const onRegionTargetingChange = (regionTargeting: RegionTargeting): void =>
-    onTestChange((current) => ({ ...current, regionTargeting, locations: [] }));
+    onTestChange((current) => ({ ...current, regionTargeting }));
 
   const onCohortChange = (userCohort: UserCohort): void =>
     onTestChange((current) => ({ ...current, userCohort }));
