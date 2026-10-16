@@ -6,8 +6,17 @@ import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
 import CampaignSelector from '../CampaignSelector';
 import { ControlProportionSettings } from '../helpers/controlProportionSettings';
+import {
+  ConsentStatus,
+  PageContextTargeting,
+  RegionTargeting,
+  SignedInStatus,
+  UserCohort,
+} from '../helpers/shared';
 import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
 import ScheduleEditor from '../scheduleEditor';
+import TestEditorContextTargeting from '../testEditorContextTargeting';
+import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import { getDefaultVariant } from './utils/defaults';
 
@@ -24,6 +33,24 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
   const onControlProportionSettingsChange = (
     controlProportionSettings?: ControlProportionSettings,
   ): void => onTestChange((current) => ({ ...current, controlProportionSettings }));
+
+  const onRegionTargetingChange = (regionTargeting: RegionTargeting): void =>
+    onTestChange((current) => ({ ...current, regionTargeting }));
+
+  const onCohortChange = (userCohort: UserCohort): void =>
+    onTestChange((current) => ({ ...current, userCohort }));
+
+  const onSignedInStatusChange = (signedInStatus: SignedInStatus): void =>
+    onTestChange((current) => ({ ...current, signedInStatus }));
+
+  const onConsentStatusChange = (consentStatus: ConsentStatus): void =>
+    onTestChange((current) => ({ ...current, consentStatus }));
+
+  const onMParticleAudienceChange = (mParticleAudience?: number): void =>
+    onTestChange((current) => ({ ...current, mParticleAudience }));
+
+  const onContextTargetingChange = (contextTargeting: PageContextTargeting): void =>
+    onTestChange((current) => ({ ...current, contextTargeting }));
 
   const onVariantsChange = (update: (current: Inline1Variant[]) => Inline1Variant[]): void => {
     onTestChange((current) => ({ ...current, variants: update(current.variants) }));
@@ -102,6 +129,40 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
             disabled={!userHasTestLocked}
           />
         </div>
+      </SectionContainer>
+
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Target content</SectionHeader>
+        <TestEditorContextTargeting
+          contextTargeting={test.contextTargeting}
+          editMode={userHasTestLocked}
+          updateContextTargeting={onContextTargetingChange}
+        />
+      </SectionContainer>
+
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Target audience</SectionHeader>
+        <TestEditorTargetAudienceSelector
+          regionTargeting={test.regionTargeting}
+          onRegionTargetingUpdate={onRegionTargetingChange}
+          selectedCohort={test.userCohort ?? UserCohort.AllNonSupporters}
+          onCohortChange={onCohortChange}
+          selectedDeviceType={'All'}
+          onDeviceTypeChange={() => undefined}
+          isDisabled={!userHasTestLocked}
+          showSupporterStatusSelector={true}
+          showDeviceTypeSelector={false}
+          showSignedInStatusSelector={true}
+          selectedSignedInStatus={test.signedInStatus}
+          onSignedInStatusChange={onSignedInStatusChange}
+          selectedConsentStatus={test.consentStatus}
+          onConsentStatusChange={onConsentStatusChange}
+          showConsentStatusSelector={true}
+          mParticleAudienceEditor={{
+            mParticleAudience: test.mParticleAudience,
+            onMParticleAudienceChange,
+          }}
+        />
       </SectionContainer>
 
       <SectionContainer>
