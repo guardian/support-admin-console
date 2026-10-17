@@ -1,33 +1,28 @@
 package models
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto._
-import io.circe.generic.extras.auto._
+import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
 import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
 
-sealed trait SwitchState
+sealed trait SwitchState derives ConfiguredEnumCodec
 case object On extends SwitchState
 case object Off extends SwitchState
 
+object SwitchState {
+  given Configuration = Configuration.default
+}
+
 object SupportFrontendSwitches {
 
-  case class Switch(description: String, state: SwitchState)
+  case class Switch(description: String, state: SwitchState) derives ConfiguredCodec
   type SwitchName = String
-  case class SwitchGroup(description: String, switches: Map[SwitchName, Switch])
+  case class SwitchGroup(description: String, switches: Map[SwitchName, Switch]) derives ConfiguredCodec
   type GroupName = String
   type SupportFrontendSwitches = Map[GroupName, SwitchGroup]
 
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val stateDecoder: Decoder[SwitchState] = deriveEnumerationDecoder[SwitchState]
-  implicit val stateEncoder: Encoder[SwitchState] = deriveEnumerationEncoder[SwitchState]
-  import io.circe.generic.extras.semiauto._
+  given Configuration = Configuration.default.withDefaults
 
-  implicit val switchDecoder: Decoder[Switch] = deriveConfiguredDecoder[Switch]
-  implicit val switchEncoder: Encoder[Switch] = deriveConfiguredEncoder[Switch]
-  implicit val switchGroupDecoder: Decoder[SwitchGroup] = deriveConfiguredDecoder[SwitchGroup]
-  implicit val switchGroupEncoder: Encoder[SwitchGroup] = deriveConfiguredEncoder[SwitchGroup]
   implicit val SupportFrontendSwitchesDecoder: Decoder[SupportFrontendSwitches] =
-    Decoder.decodeMap[GroupName, SwitchGroup](using KeyDecoder.decodeKeyString, switchGroupDecoder)
+    Decoder.decodeMap[GroupName, SwitchGroup](using KeyDecoder.decodeKeyString, summon[Decoder[SwitchGroup]])
   implicit val SupportFrontendSwitchesEncoder: Encoder[SupportFrontendSwitches] =
-    Encoder.encodeMap[GroupName, SwitchGroup](using KeyEncoder.encodeKeyString, switchGroupEncoder)
+    Encoder.encodeMap[GroupName, SwitchGroup](using KeyEncoder.encodeKeyString, summon[Encoder[SwitchGroup]])
 }

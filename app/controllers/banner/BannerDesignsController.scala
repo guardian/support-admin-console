@@ -212,12 +212,11 @@ class BannerDesignsController(
     }
 
   private def getAllBannerTests(): ZIO[Any, DynamoError, List[BannerTest]] = {
-    import models.BannerTest._
     ZIO
       .collectAllPar(
         List(
-          dynamoTests.getAllTests(Channel.Banner1),
-          dynamoTests.getAllTests(Channel.Banner2)
+          dynamoTests.getAllTests[BannerTest](Channel.Banner1),
+          dynamoTests.getAllTests[BannerTest](Channel.Banner2)
         )
       )
       .map(_.flatten)

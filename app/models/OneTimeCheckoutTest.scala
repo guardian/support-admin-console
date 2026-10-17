@@ -1,20 +1,15 @@
 package models
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder}
+import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
 import models.Methodology.defaultMethodologies
 import models.Channel.OneTimeCheckout
 
-sealed trait MParticleAmountAttribute
+sealed trait MParticleAmountAttribute derives ConfiguredEnumCodec
 
 object MParticleAmountAttribute {
   case object last_single_contribution_amount extends MParticleAmountAttribute
 
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val encoder: Encoder[MParticleAmountAttribute] = deriveEnumerationEncoder[MParticleAmountAttribute]
-  implicit val decoder: Decoder[MParticleAmountAttribute] = deriveEnumerationDecoder[MParticleAmountAttribute]
+  given Configuration = Configuration.default
 }
 
 case class AmountValuesObject(
@@ -22,7 +17,11 @@ case class AmountValuesObject(
     defaultAmount: Int,
     hideChooseYourAmount: Boolean,
     mParticleAmountAttribute: Option[MParticleAmountAttribute] = None
-)
+) derives ConfiguredCodec
+
+object AmountValuesObject {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class OneTimeCheckoutVariant(
     name: String,
@@ -30,14 +29,10 @@ case class OneTimeCheckoutVariant(
     subheading: String,
     amounts: AmountValuesObject,
     tickerSettings: Option[TickerSettings] = None
-)
+) derives ConfiguredCodec
 
 object OneTimeCheckoutVariant {
-  import io.circe.generic.auto._
-
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[OneTimeCheckoutVariant] = deriveConfiguredDecoder[OneTimeCheckoutVariant]
-  implicit val encoder: Encoder[OneTimeCheckoutVariant] = deriveConfiguredEncoder[OneTimeCheckoutVariant]
+  given Configuration = Configuration.default.withDefaults
 }
 
 case class OneTimeCheckoutTest(
@@ -53,7 +48,7 @@ case class OneTimeCheckoutTest(
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     mParticleAudience: Option[Int] = None,
     mParticleTemplates: Option[List[String]] = None
-) extends ChannelTest[OneTimeCheckoutTest] {
+) extends ChannelTest[OneTimeCheckoutTest] derives ConfiguredCodec {
   override val scheduler: Option[Scheduler] = None
 
   override def withChannel(channel: Channel): OneTimeCheckoutTest =
@@ -63,9 +58,5 @@ case class OneTimeCheckoutTest(
 }
 
 object OneTimeCheckoutTest {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val OneTimeCheckoutTestDecoder: Decoder[OneTimeCheckoutTest] =
-    deriveConfiguredDecoder[OneTimeCheckoutTest]
-  implicit val OneTimeCheckoutTestEncoder: Encoder[OneTimeCheckoutTest] =
-    deriveConfiguredEncoder[OneTimeCheckoutTest]
+  given Configuration = Configuration.default.withDefaults
 }

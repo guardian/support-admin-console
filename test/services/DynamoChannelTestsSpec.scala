@@ -115,7 +115,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
     expectToSucceedWith {
       for {
         _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
-        tests <- dynamo.getAllTests(Channel.Epic)
+        tests <- dynamo.getAllTests[EpicTest](Channel.Epic)
       } yield tests
     }(tests => tests should be(epicTests))
   }
@@ -125,7 +125,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
       for {
         _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
         _ <- dynamo.deleteTests(epicTests.map(_.name), Channel.Epic)
-        tests <- dynamo.getAllTests(Channel.Epic)
+        tests <- dynamo.getAllTests[EpicTest](Channel.Epic)
       } yield tests
     }(tests => tests should be(Nil))
   }
@@ -135,7 +135,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
       for {
         _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
         _ <- dynamo.createTest(buildEpic("test3"), Channel.Epic) // should create with priority of 2
-        tests <- dynamo.getAllTests(Channel.Epic)
+        tests <- dynamo.getAllTests[EpicTest](Channel.Epic)
       } yield tests(2)
     }(test => test.priority should be(Some(2)))
   }
@@ -175,7 +175,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
         _ <- dynamo.createTest(buildEpic("test1"), Channel.Epic)
         _ <- dynamo.lockTest("test1", Channel.Epic, "me1@me.com", force = false)
         _ <- dynamo.updateTest(buildEpic("test1").copy(nickname = Some("new nickname")), Channel.Epic, "me1@me.com")
-        tests <- dynamo.getAllTests(Channel.Epic)
+        tests <- dynamo.getAllTests[EpicTest](Channel.Epic)
       } yield tests.head
     }(test => test.nickname should be(Some("new nickname")))
   }
@@ -194,7 +194,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
       for {
         _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
         _ <- dynamo.setPriorities(List("test2", "test1"), Channel.Epic) // swap the priorities
-        tests <- dynamo.getAllTests(Channel.Epic)
+        tests <- dynamo.getAllTests[EpicTest](Channel.Epic)
       } yield tests
     }(tests => tests.map(_.name) should be(List("test2", "test1")))
   }
@@ -204,7 +204,7 @@ class DynamoChannelTestsSpec extends AsyncFlatSpec with Matchers with BeforeAndA
       for {
         _ <- dynamo.createOrUpdateTests(epicTests, Channel.Epic)
         _ <- dynamo.updateStatuses(List("test2"), Channel.Epic, Status.Archived)
-        tests <- dynamo.getAllTests(Channel.Epic) // excludes archived tests
+        tests <- dynamo.getAllTests[EpicTest](Channel.Epic) // excludes archived tests
       } yield tests
     }(tests => tests.map(_.name) should be(List("test1")))
   }

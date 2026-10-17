@@ -1,3 +1,6 @@
 package models
 
-case class NewsletterSignup(newsletterId: String, successDescription: String)
+import io.circe.Codec
+import io.circe.derivation.ConfiguredCodec
+
+case class NewsletterSignup(newsletterId: String, successDescription: String) derives Codec.AsObject

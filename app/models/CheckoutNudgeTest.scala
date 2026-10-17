@@ -1,13 +1,9 @@
 package models
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.auto._
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto._
-import io.circe.syntax._
+import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
 import models.Methodology.defaultMethodologies
 
-sealed trait ProductType
+sealed trait ProductType derives ConfiguredEnumCodec
 
 object ProductType {
   case object OneTimeContribution extends ProductType
@@ -15,49 +11,53 @@ object ProductType {
   case object SupporterPlus extends ProductType
   case object DigitalSubscription extends ProductType
 
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val encoder: Encoder[ProductType] = deriveEnumerationEncoder[ProductType]
-  implicit val decoder: Decoder[ProductType] = deriveEnumerationDecoder[ProductType]
+  given Configuration = Configuration.default
 }
 
-sealed trait RatePlan
+sealed trait RatePlan derives ConfiguredEnumCodec
 
 object RatePlan {
   case object OneTime extends RatePlan
   case object Monthly extends RatePlan
   case object Annual extends RatePlan
 
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val encoder: Encoder[RatePlan] = deriveEnumerationEncoder[RatePlan]
-  implicit val decoder: Decoder[RatePlan] = deriveEnumerationDecoder[RatePlan]
+  given Configuration = Configuration.default
 }
 
 case class Product(
     product: ProductType,
     ratePlan: Option[RatePlan] = None
-)
+) derives ConfiguredCodec
+
+object Product {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class Copy(
     heading: String,
     body: Option[String] = None
-)
+) derives ConfiguredCodec
+
+object Copy {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class Benefits(
     label: String
-)
+) derives ConfiguredCodec
+
+object Benefits {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class CheckoutNudgeVariant(
     name: String,
     nudge: Option[CheckoutNudge] = None,
     promoCodes: Option[List[String]] = None
-)
+) derives ConfiguredCodec
 
 object CheckoutNudgeVariant {
-  import io.circe.generic.auto._
-
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[CheckoutNudgeVariant] = deriveConfiguredDecoder[CheckoutNudgeVariant]
-  implicit val encoder: Encoder[CheckoutNudgeVariant] = deriveConfiguredEncoder[CheckoutNudgeVariant]
+  given Configuration = Configuration.default.withDefaults
 }
 
 case class CheckoutNudge(
@@ -65,7 +65,11 @@ case class CheckoutNudge(
     thankyouCopy: Copy,
     benefits: Option[Benefits] = None,
     nudgeToProduct: Product
-)
+) derives ConfiguredCodec
+
+object CheckoutNudge {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class CheckoutNudgeTest(
     name: String,
@@ -80,7 +84,7 @@ case class CheckoutNudgeTest(
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     methodologies: List[Methodology] = defaultMethodologies,
     scheduler: Option[Scheduler] = None
-) extends ChannelTest[CheckoutNudgeTest] {
+) extends ChannelTest[CheckoutNudgeTest] derives ConfiguredCodec {
 
   override def withChannel(channel: Channel): CheckoutNudgeTest =
     this.copy(channel = Some(channel))
@@ -89,9 +93,5 @@ case class CheckoutNudgeTest(
 }
 
 object CheckoutNudgeTest {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val checkoutNudgeTestDecoder: Decoder[CheckoutNudgeTest] =
-    deriveConfiguredDecoder[CheckoutNudgeTest]
-  implicit val checkoutNudgeTestEncoder: Encoder[CheckoutNudgeTest] =
-    deriveConfiguredEncoder[CheckoutNudgeTest]
+  given Configuration = Configuration.default.withDefaults
 }
