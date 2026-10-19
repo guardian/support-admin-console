@@ -4,8 +4,36 @@ import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
+sealed trait Inline1Message derives ConfiguredCodec
+
+case class Inline1SupportMessage(
+    `type`: String = "Inline1SupportMessage",
+    heading: String,
+    body: String,
+    primaryCta: Cta,
+    image: Option[ResponsiveImage]
+) extends Inline1Message
+
+case class Inline1PuzzlesMessage(
+    `type`: String = "Inline1PuzzlesMessage"
+) extends Inline1Message
+
+case class Inline1NewsletterMessage(
+    `type`: String = "Inline1NewsletterMessage",
+    newsletterId: String,
+    frequency: String,
+    heading: String,
+    body: String,
+    imageUrl: Option[String]
+) extends Inline1Message
+
+object Inline1Message {
+  given Configuration = Configuration.default.withDiscriminator("type")
+}
+
 case class Inline1Variant(
-    name: String
+    name: String,
+    message: Inline1Message
 ) derives Codec.AsObject
 
 case class Inline1Test(
