@@ -13,14 +13,13 @@ import { ResponsiveImage } from './shared';
 interface Inline1SupportMessage {
   type: 'Inline1SupportMessage';
   heading: string;
-  body: string; // paragraphs?
-  primaryCta: Cta; // mandatory?
-  secondaryCta?: Cta;
+  body: string;
+  primaryCta: Cta;
   image?: ResponsiveImage;
 }
 interface Inline1PuzzlesMessage {
   type: 'Inline1PuzzlesMessage';
-  // is anything configurable?
+  // The puzzles message is not configurable
 }
 interface Inline1NewsletterMessage {
   type: 'Inline1NewsletterMessage';
@@ -28,7 +27,7 @@ interface Inline1NewsletterMessage {
   frequency: string; // e.g. "Weekly"
   heading: string;
   body: string;
-  imageUrl?: string; // optional?
+  imageUrl?: string;
 }
 
 type Inline1Message = Inline1SupportMessage | Inline1PuzzlesMessage | Inline1NewsletterMessage;
