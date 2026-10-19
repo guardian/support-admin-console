@@ -49,6 +49,7 @@ case class Inline1Test(
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     mParticleAudience: Option[Int] = None,
+    message: Inline1Message,
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     methodologies: List[Methodology] = defaultMethodologies,
     scheduler: Option[Scheduler] = None,

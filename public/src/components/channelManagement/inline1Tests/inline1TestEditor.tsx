@@ -1,6 +1,8 @@
 import { Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Inline1Test, Inline1Variant } from '../../../models/inline1';
+import type { Inline1MessageType } from '../../../models/inline1';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import VariantsEditor from '../../tests/variants/variantsEditor';
 import VariantSummary from '../../tests/variants/variantSummary';
@@ -17,8 +19,30 @@ import { Container, SectionContainer, SectionHeader } from '../helpers/testEdito
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
+import TypedRadioGroup from '../TypedRadioGroup';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { getDefaultVariant } from './utils/defaults';
+import {
+  getDefaultInline1NewsletterMessage,
+  getDefaultInline1SupportMessage,
+  getDefaultVariant,
+} from './utils/defaults';
+
+const HorizontalRadioGroup = styled('div')({
+  '& .MuiFormGroup-root': {
+    flexDirection: 'row',
+  },
+});
+
+const getDefaultMessage = (messageType: Inline1MessageType): Inline1Variant['message'] => {
+  switch (messageType) {
+    case 'Inline1SupportMessage':
+      return getDefaultInline1SupportMessage();
+    case 'Inline1PuzzlesMessage':
+      return { type: 'Inline1PuzzlesMessage' };
+    case 'Inline1NewsletterMessage':
+      return getDefaultInline1NewsletterMessage();
+  }
+};
 
 const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
   test,
@@ -56,12 +80,27 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
     onTestChange((current) => ({ ...current, variants: update(current.variants) }));
   };
 
+  const onMessageTypeChange = (messageType: Inline1MessageType): void => {
+    onTestChange((current) => ({
+      ...current,
+      message: getDefaultMessage(messageType),
+      variants: current.variants.map((variant) =>
+        variant.message.type === messageType
+          ? variant
+          : { ...variant, message: getDefaultMessage(messageType) },
+      ),
+    }));
+  };
+
   const onVariantDelete = (deletedVariantName: string): void => {
     onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
   };
 
   const createVariant = (name: string): void => {
-    onVariantsChange((current) => [...current, { ...getDefaultVariant(), name }]);
+    onVariantsChange((current) => [
+      ...current,
+      { ...getDefaultVariant(), name, message: getDefaultMessage(test.message.type) },
+    ]);
   };
 
   const onVariantClone = (originalVariant: Inline1Variant, clonedVariantName: string): void => {
@@ -87,6 +126,22 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
 
   return (
     <Container>
+      <SectionContainer>
+        <SectionHeader variant={'h3'}>Inline1Message type</SectionHeader>
+        <HorizontalRadioGroup>
+          <TypedRadioGroup<Inline1MessageType>
+            selectedValue={test.message.type}
+            onChange={onMessageTypeChange}
+            isDisabled={!userHasTestLocked}
+            labels={{
+              Inline1SupportMessage: 'Supporter revenue / App download',
+              Inline1PuzzlesMessage: 'Puzzles',
+              Inline1NewsletterMessage: 'Newsletter signups',
+            }}
+          />
+        </HorizontalRadioGroup>
+      </SectionContainer>
+
       <SectionContainer>
         <SectionHeader variant={'h3'}>Variants</SectionHeader>
         <div>
