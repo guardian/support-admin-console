@@ -4,6 +4,15 @@ import { UserCohort } from '../../helpers/shared';
 
 export const getDefaultVariant = (): Inline1Variant => ({
   name: 'CONTROL',
+  message: {
+    type: 'Inline1SupportMessage',
+    heading: '',
+    body: '',
+    primaryCta: {
+      text: 'Support us',
+      baseUrl: 'https://support.theguardian.com',
+    },
+  },
 });
 
 export const getDefaultTest = (): Inline1Test => ({
