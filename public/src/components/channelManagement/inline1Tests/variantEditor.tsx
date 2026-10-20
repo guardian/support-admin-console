@@ -19,7 +19,7 @@ import {
 } from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
 import { ImageEditorToggle } from '../imageEditor';
-import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
+import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 
 const Container = styled('div')(({ theme }) => ({
@@ -60,6 +60,37 @@ interface MessageEditorProps<M extends Inline1Message> {
   inline1EditorConfig?: Inline1EditorConfig;
 }
 
+interface CopyFieldConfig {
+  validateCopy: (text: string | undefined) => string | undefined;
+  rteMenuConstraints: RteMenuConstraints;
+}
+
+// Derives the heading/body rich text validation + toolbar config from the editor's platform.
+// Shared by both the support-revenue message and newsletter message editors below.
+const buildCopyFieldConfig = (inline1EditorConfig?: Inline1EditorConfig): CopyFieldConfig => {
+  const templateValidator = templateValidatorForPlatform('DOTCOM');
+  const { platform } = inline1EditorConfig ?? { platform: 'DOTCOM' };
+  const enableHtml = platform === 'DOTCOM';
+  const htmlValidator = enableHtml ? () => undefined : noHtmlValidator;
+
+  return {
+    validateCopy: (text) => (text ? (templateValidator(text) ?? htmlValidator(text)) : undefined),
+    rteMenuConstraints: {
+      enableHtml,
+      enableBold: true,
+      enableItalic: true,
+      enableStrikethrough: true,
+      enableCopyTemplates: true,
+      enableLink: true,
+      enableCurrencyTemplate: VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE),
+      enableCountryNameTemplate: VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE),
+      enableArticleCountTemplate: VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE),
+      enableDateTemplate: VALID_TEMPLATES[platform].includes(DATE),
+      enableDayTemplate: VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK),
+    },
+  };
+};
+
 const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
   message,
   onChange,
@@ -68,21 +99,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
   inline1EditorConfig,
 }: MessageEditorProps<SupportMessage>) => {
   const setValidationStatusForField = useValidation(onValidationChange);
-  const templateValidator = templateValidatorForPlatform('DOTCOM');
-
-  const { platform } = inline1EditorConfig ?? { platform: 'DOTCOM' };
-  const enableHtml = platform === 'DOTCOM';
-  const htmlValidator = enableHtml ? () => undefined : noHtmlValidator;
-  const lineValidator = (text: string | undefined) => {
-    if (text) {
-      return templateValidator(text) ?? htmlValidator(text);
-    }
-  };
-  const enableCurrencyTemplate = VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE);
-  const enableCountryNameTemplate = VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE);
-  const enableArticleCountTemplate = VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE);
-  const enableDateTemplate = VALID_TEMPLATES[platform].includes(DATE);
-  const enableDayTemplate = VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK);
+  const { validateCopy, rteMenuConstraints } = buildCopyFieldConfig(inline1EditorConfig);
 
   const {
     handleSubmit,
@@ -144,10 +161,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
         <Controller
           name="heading"
           control={control}
-          rules={{
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: lineValidator,
-          }}
+          rules={{ required: EMPTY_ERROR_HELPER_TEXT, validate: validateCopy }}
           render={({ field }) => (
             <RichTextEditorSingleLine
               error={errors.heading !== undefined}
@@ -160,19 +174,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
               name="heading"
               label="Heading"
               disabled={isDisabled}
-              rteMenuConstraints={{
-                enableHtml,
-                enableBold: true,
-                enableItalic: true,
-                enableStrikethrough: true,
-                enableCopyTemplates: true,
-                enableLink: true,
-                enableCurrencyTemplate,
-                enableCountryNameTemplate,
-                enableArticleCountTemplate,
-                enableDateTemplate,
-                enableDayTemplate,
-              }}
+              rteMenuConstraints={rteMenuConstraints}
             />
           )}
         />
@@ -180,10 +182,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
         <Controller
           name="body"
           control={control}
-          rules={{
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: lineValidator,
-          }}
+          rules={{ required: EMPTY_ERROR_HELPER_TEXT, validate: validateCopy }}
           render={({ field }) => (
             <RichTextEditorSingleLine
               error={errors.body !== undefined}
@@ -196,19 +195,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
               name="body"
               label="Body"
               disabled={isDisabled}
-              rteMenuConstraints={{
-                enableHtml,
-                enableBold: true,
-                enableItalic: true,
-                enableStrikethrough: true,
-                enableCopyTemplates: true,
-                enableLink: true,
-                enableCurrencyTemplate,
-                enableCountryNameTemplate,
-                enableArticleCountTemplate,
-                enableDateTemplate,
-                enableDayTemplate,
-              }}
+              rteMenuConstraints={rteMenuConstraints}
             />
           )}
         />
@@ -244,9 +231,9 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
   onChange,
   onValidationChange,
   isDisabled,
-  inline1EditorConfig
+  inline1EditorConfig,
 }: MessageEditorProps<NewsletterMessage>) => {
-  const templateValidator = templateValidatorForPlatform('DOTCOM');
+  const { validateCopy, rteMenuConstraints } = buildCopyFieldConfig(inline1EditorConfig);
   const {
     register,
     handleSubmit,
@@ -255,20 +242,6 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
     control,
     formState: { errors },
   } = useForm<NewsletterMessage>({ mode: 'onChange', defaultValues: message });
-
-  const { platform } = inline1EditorConfig ?? { platform: 'DOTCOM' };
-  const enableHtml = platform === 'DOTCOM';
-  const htmlValidator = enableHtml ? () => undefined : noHtmlValidator;
-  const lineValidator = (text: string | undefined) => {
-    if (text) {
-      return templateValidator(text) ?? htmlValidator(text);
-    }
-  };
-  const enableCurrencyTemplate = VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE);
-  const enableCountryNameTemplate = VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE);
-  const enableArticleCountTemplate = VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE);
-  const enableDateTemplate = VALID_TEMPLATES[platform].includes(DATE);
-  const enableDayTemplate = VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK);
 
   useEffect(() => {
     reset(message);
@@ -300,30 +273,13 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
     });
   };
 
-  const richTextMenuConstraints = {
-    enableHtml,
-    enableBold: true,
-    enableItalic: true,
-    enableStrikethrough: true,
-    enableCopyTemplates: true,
-    enableLink: true,
-    enableCurrencyTemplate,
-    enableCountryNameTemplate,
-    enableArticleCountTemplate,
-    enableDateTemplate,
-    enableDayTemplate,
-  };
-
   return (
     <Container>
       <SectionHeader variant="h4">Newsletter signups content</SectionHeader>
       <Controller
         name="heading"
         control={control}
-        rules={{
-          required: EMPTY_ERROR_HELPER_TEXT,
-          validate: templateValidator,
-        }}
+        rules={{ required: EMPTY_ERROR_HELPER_TEXT, validate: validateCopy }}
         render={({ field }) => (
           <RichTextEditorSingleLine
             error={errors.heading !== undefined}
@@ -336,17 +292,14 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
             name="heading"
             label="Heading"
             disabled={isDisabled}
-            rteMenuConstraints={richTextMenuConstraints}
+            rteMenuConstraints={rteMenuConstraints}
           />
         )}
       />
       <Controller
         name="body"
         control={control}
-        rules={{
-          required: EMPTY_ERROR_HELPER_TEXT,
-          validate: templateValidator,
-        }}
+        rules={{ required: EMPTY_ERROR_HELPER_TEXT, validate: validateCopy }}
         render={({ field }) => (
           <RichTextEditorSingleLine
             error={errors.body !== undefined}
@@ -359,7 +312,7 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
             name="body"
             label="Body"
             disabled={isDisabled}
-            rteMenuConstraints={richTextMenuConstraints}
+            rteMenuConstraints={rteMenuConstraints}
           />
         )}
       />
@@ -423,6 +376,7 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
   onValidationChange,
   onMessageTypeChange,
   isDisabled,
+  inline1EditorConfig,
 }: Inline1VariantEditorProps) => {
   let messageEditor: React.ReactElement;
 
@@ -434,6 +388,7 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
           onChange={(message) => onChange({ ...variant, message })}
           onValidationChange={onValidationChange}
           isDisabled={isDisabled}
+          inline1EditorConfig={inline1EditorConfig}
         />
       );
       break;
@@ -447,6 +402,7 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
           onChange={(message) => onChange({ ...variant, message })}
           onValidationChange={onValidationChange}
           isDisabled={isDisabled}
+          inline1EditorConfig={inline1EditorConfig}
         />
       );
       break;
