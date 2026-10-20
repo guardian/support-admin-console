@@ -322,3 +322,12 @@ export interface UserPermissions {
   email: string;
   permissions: PagePermission[];
 }
+
+export interface Inline1EditorConfig {
+  // test level settings
+  allowMultipleVariants: boolean;
+}
+
+export const INLINE1_EDITOR_CONFIG: Inline1EditorConfig = {
+  allowMultipleVariants: false,
+};
