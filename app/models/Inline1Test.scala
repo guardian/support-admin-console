@@ -11,7 +11,7 @@ case class Inline1SupportMessage(
     heading: String,
     body: String,
     primaryCta: Cta,
-    image: Option[ResponsiveImage]
+    imageUrl: Option[String]
 ) extends Inline1Message
 
 case class Inline1PuzzlesMessage(

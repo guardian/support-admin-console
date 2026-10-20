@@ -26,7 +26,7 @@ class Inline1TestSpec extends AnyFlatSpec with Matchers with EitherValues {
   "Inline1Test codecs" should "round-trip every message type offered by the editor" in {
     val tests = List(
       decodeTest(
-        """{"type":"Inline1SupportMessage","heading":"Support us","body":"Body","primaryCta":{"text":"Support","baseUrl":"https://support.theguardian.com"},"image":null}"""
+        """{"type":"Inline1SupportMessage","heading":"Support us","body":"Body","primaryCta":{"text":"Support","baseUrl":"https://support.theguardian.com"},"imageUrl":"https://media.guim.co.uk/example.jpg"}"""
       ),
       decodeTest("""{"type":"Inline1PuzzlesMessage"}"""),
       decodeTest(

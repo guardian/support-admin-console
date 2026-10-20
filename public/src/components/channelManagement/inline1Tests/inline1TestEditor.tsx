@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Inline1Test, Inline1Variant } from '../../../models/inline1';
@@ -26,6 +25,7 @@ import {
   getDefaultInline1SupportMessage,
   getDefaultVariant,
 } from './utils/defaults';
+import Inline1VariantEditor from './variantEditor';
 
 const HorizontalRadioGroup = styled('div')({
   '& .MuiFormGroup-root': {
@@ -80,6 +80,12 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
     onTestChange((current) => ({ ...current, variants: update(current.variants) }));
   };
 
+  const onVariantChange = (variantName: string, updatedVariant: Inline1Variant): void => {
+    onVariantsChange((current) =>
+      current.map((variant) => (variant.name === variantName ? updatedVariant : variant)),
+    );
+  };
+
   const onMessageTypeChange = (messageType: Inline1MessageType): void => {
     onTestChange((current) => ({
       ...current,
@@ -108,9 +114,15 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
   };
 
   const renderVariantEditor = (variant: Inline1Variant): React.ReactElement => (
-    <Typography key={`inline1-${test.name}-${variant.name}`}>
-      No editable content yet for variant {variant.name}.
-    </Typography>
+    <Inline1VariantEditor
+      key={`inline1-${test.name}-${variant.name}`}
+      variant={variant}
+      onChange={(updatedVariant) => onVariantChange(variant.name, updatedVariant)}
+      onValidationChange={(isValid) =>
+        setValidationStatusForField(`variant-${variant.name}`, isValid)
+      }
+      isDisabled={!userHasTestLocked}
+    />
   );
 
   const renderVariantSummary = (variant: Inline1Variant): React.ReactElement => (

@@ -8,14 +8,13 @@ import {
   UserCohort,
   Variant,
 } from '../components/channelManagement/helpers/shared';
-import { ResponsiveImage } from './shared';
 
 interface Inline1SupportMessage {
   type: 'Inline1SupportMessage';
   heading: string;
   body: string;
   primaryCta: Cta;
-  image?: ResponsiveImage;
+  imageUrl?: string;
 }
 interface Inline1PuzzlesMessage {
   type: 'Inline1PuzzlesMessage';
