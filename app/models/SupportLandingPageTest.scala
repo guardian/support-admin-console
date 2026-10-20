@@ -1,25 +1,27 @@
 package models
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder}
+import io.circe.Codec
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
 case class SupportLandingPageCopy(
     heading: String,
     subheading: String
-)
+) derives Codec.AsObject
 
 case class ProductBenefit(
     copy: String,
     tooltip: Option[String] = None,
     label: Option[Label] = None
-)
+) derives ConfiguredCodec
+
+object ProductBenefit {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class Label(
     copy: String
-)
+) derives Codec.AsObject
 
 case class LandingPageProductDescription(
     title: String,
@@ -28,22 +30,30 @@ case class LandingPageProductDescription(
     label: Option[Label] = None,
     benefits: List[ProductBenefit],
     cta: LandingPageCta
-)
+) derives ConfiguredCodec
+
+object LandingPageProductDescription {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class LandingPageCta(
     copy: String
-)
+) derives Codec.AsObject
 
 case class Products(
     Contribution: LandingPageProductDescription,
     SupporterPlus: LandingPageProductDescription,
     DigitalSubscription: Option[LandingPageProductDescription] = None
-)
+) derives ConfiguredCodec
+
+object Products {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class DefaultProductSelection(
     productType: String,
     billingPeriod: String
-)
+) derives Codec.AsObject
 
 case class SupportLandingPageVariant(
     name: String,
@@ -52,7 +62,11 @@ case class SupportLandingPageVariant(
     tickerSettings: Option[TickerSettings] = None,
     countdownSettings: Option[CountdownSettings] = None,
     defaultProductSelection: Option[DefaultProductSelection] = None
-)
+) derives ConfiguredCodec
+
+object SupportLandingPageVariant {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class SupportLandingPageTest(
     name: String,
@@ -67,7 +81,7 @@ case class SupportLandingPageTest(
     methodologies: List[Methodology] = defaultMethodologies,
     mParticleAudience: Option[Int] = None,
     scheduler: Option[Scheduler] = None
-) extends ChannelTest[SupportLandingPageTest] {
+) extends ChannelTest[SupportLandingPageTest] derives ConfiguredCodec {
 
   override def withChannel(channel: Channel): SupportLandingPageTest =
     this.copy(channel = Some(channel))
@@ -76,9 +90,5 @@ case class SupportLandingPageTest(
 }
 
 object SupportLandingPageTest {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val landingPageTestDecoder: Decoder[SupportLandingPageTest] =
-    deriveConfiguredDecoder[SupportLandingPageTest]
-  implicit val landingPageTestEncoder: Encoder[SupportLandingPageTest] =
-    deriveConfiguredEncoder[SupportLandingPageTest]
+  given Configuration = Configuration.default.withDefaults
 }

@@ -30,6 +30,7 @@ type SwitchName =
   | 'enableHardcodedBannerTests'
   | 'enableScheduledBannerDeploys'
   | 'enableGutterLiveblogs'
+  | 'enableInline1Tests'
   | 'enableMParticle'
   | 'enableAuxia'
   | 'enableAuxiaForBanners'
@@ -134,6 +135,12 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         name="enableGutterLiveblogs"
         label="Enable Gutter Liveblogs"
         enabled={switches.enableGutterLiveblogs}
+        setSwitch={onSwitchChange}
+      />
+      <ChannelSwitch
+        name="enableInline1Tests"
+        label="Enable Inline1 tests"
+        enabled={switches.enableInline1Tests}
         setSwitch={onSwitchChange}
       />
       <ChannelSwitch

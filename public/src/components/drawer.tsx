@@ -170,6 +170,11 @@ export default function NavDrawer(): React.ReactElement {
             <ListItemText primary="Liveblog Gutter" />
           </DrawerListItem>
         </DrawerLink>
+        {/*<DrawerLink key="Inline1" to="/inline1-tests">*/}
+        {/*  <DrawerListItem key="Inline1">*/}
+        {/*    <ListItemText primary="Inline1" />*/}
+        {/*  </DrawerListItem>*/}
+        {/*</DrawerLink>*/}
         <DrawerLink key="Banner 1" to="/banner-tests">
           <DrawerListItem key="Banner 1">
             <ListItemText primary="Banner 1" />

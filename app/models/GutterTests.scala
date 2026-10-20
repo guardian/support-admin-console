@@ -1,22 +1,24 @@
 package models
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.Codec
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
 case class GutterContent(
     image: Option[Image],
     bodyCopy: Option[List[String]],
     cta: Option[Cta]
-)
+) derives Codec.AsObject
 
 case class GutterVariant(
     name: String,
     content: Option[GutterContent],
     promoCodes: List[String] = Nil
-)
+) derives ConfiguredCodec
+
+object GutterVariant {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class GutterTest(
     name: String,
@@ -37,7 +39,7 @@ case class GutterTest(
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     methodologies: List[Methodology] = defaultMethodologies,
     scheduler: Option[Scheduler] = None
-) extends ChannelTest[GutterTest] {
+) extends ChannelTest[GutterTest] derives ConfiguredCodec {
 
   override def withChannel(channel: Channel): GutterTest =
     this.copy(channel = Some(channel))
@@ -46,9 +48,5 @@ case class GutterTest(
 }
 
 object GutterTest {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val gutterTestDecoder: Decoder[GutterTest] =
-    deriveConfiguredDecoder[GutterTest]
-  implicit val gutterTestEncoder: Encoder[GutterTest] =
-    deriveConfiguredEncoder[GutterTest]
+  given Configuration = Configuration.default.withDefaults
 }

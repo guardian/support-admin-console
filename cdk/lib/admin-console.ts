@@ -336,6 +336,12 @@ export class AdminConsole extends GuStack {
         actions: ['ssm:GetParametersByPath'],
         resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter/${app}/${this.stage}`],
       }),
+      new GuAllowPolicy(this, 'PlaySecretRead', {
+        actions: ['ssm:GetParameters'],
+        resources: [
+          `arn:aws:ssm:${this.region}:${this.account}:parameter/${app}/${this.stage}/play.http.secret.key`,
+        ],
+      }),
       new GuGetS3ObjectsPolicy(this, 'SettingsBucketGet', {
         bucketName: 'support-admin-console',
         paths: [`${this.stage}/*`, 'google-auth-service-account-certificate.json'],

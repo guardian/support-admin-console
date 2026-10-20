@@ -27,6 +27,7 @@ export enum FrontendSettingsType {
   SupportLandingPageTests = 'support-landing-page-tests',
   StudentLandingPageTests = 'student-landing-page-tests',
   CheckoutNudgeTests = 'checkout-nudge-tests',
+  Inline1Tests = 'inline1-tests',
   AccessManagement = 'access-management',
   OneTimeCheckout = 'one-time-checkout-tests',
   ExclusionsSettings = 'exclusions',

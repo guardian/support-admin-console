@@ -1,17 +1,11 @@
 package models
 
 import io.circe.Decoder.Result
-import io.circe.{Decoder, DecodingFailure, Encoder, HCursor, Json}
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{
-  deriveConfiguredDecoder,
-  deriveConfiguredEncoder,
-  deriveDecoder,
-  deriveEnumerationDecoder,
-  deriveEnumerationEncoder
-}
+import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
+import io.circe.syntax.*
+import io.circe.{Decoder, Encoder, HCursor, Json}
 
-sealed trait Status
+sealed trait Status derives ConfiguredEnumCodec
 
 object Status {
   case object Live extends Status
@@ -20,20 +14,16 @@ object Status {
 
   case object Archived extends Status
 
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val statusEncoder: Encoder[Status] = deriveEnumerationEncoder[Status]
-  implicit val statusDecoder: Decoder[Status] = deriveEnumerationDecoder[Status]
+  given Configuration = Configuration.default
 }
 
 case class Scheduler(
     start: Option[String] = None, // ISO datetime "YYYY-MM-DDTHH:MM" in UTC, inclusive
     end: Option[String] = None // ISO datetime "YYYY-MM-DDTHH:MM" in UTC, inclusive
-)
+) derives ConfiguredCodec
 
 object Scheduler {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val schedulerDecoder: Decoder[Scheduler] = deriveConfiguredDecoder[Scheduler]
-  implicit val schedulerEncoder: Encoder[Scheduler] = deriveConfiguredEncoder[Scheduler]
+  given Configuration = Configuration.default.withDefaults
 }
 
 trait ChannelTest[T] {
@@ -53,32 +43,33 @@ trait ChannelTest[T] {
 object ChannelTest {
   import Channel._
 
-  implicit def channelTestDecoder: Decoder[ChannelTest[_]] = new Decoder[ChannelTest[_]] {
-    override def apply(c: HCursor): Result[ChannelTest[_]] = {
+  implicit def channelTestDecoder: Decoder[ChannelTest[?]] = new Decoder[ChannelTest[?]] {
+    override def apply(c: HCursor): Result[ChannelTest[?]] = {
       c.downField("channel").as[Channel].flatMap {
-        case Header             => HeaderTest.headerTestDecoder(c)
-        case Banner1 | Banner2  => BannerTest.bannerTestDecoder(c)
-        case GutterLiveblog     => GutterTest.gutterTestDecoder(c)
-        case SupportLandingPage => SupportLandingPageTest.landingPageTestDecoder(c)
-        case CheckoutNudge      => CheckoutNudgeTest.checkoutNudgeTestDecoder(c)
-        case StudentLandingPage => StudentLandingPageTest.studentLandingPageTestDecoder(c)
-        case OneTimeCheckout    => OneTimeCheckoutTest.OneTimeCheckoutTestDecoder(c)
-        case epic               => EpicTest.epicTestDecoder(c)
+        case Header             => c.as[HeaderTest]
+        case Banner1 | Banner2  => c.as[BannerTest]
+        case GutterLiveblog     => c.as[GutterTest]
+        case SupportLandingPage => c.as[SupportLandingPageTest]
+        case CheckoutNudge      => c.as[CheckoutNudgeTest]
+        case StudentLandingPage => c.as[StudentLandingPageTest]
+        case OneTimeCheckout    => c.as[OneTimeCheckoutTest]
+        case Inline1            => c.as[Inline1Test]
+        case epic               => c.as[EpicTest]
       }
     }
   }
 
-  implicit def channelTestEncoder: Encoder[ChannelTest[_]] = new Encoder[ChannelTest[_]] {
-    override def apply(test: ChannelTest[_]): Json = test match {
-      case header: HeaderTest                         => HeaderTest.headerTestEncoder(header)
-      case banner: BannerTest                         => BannerTest.bannerTestEncoder(banner)
-      case gutter: GutterTest                         => GutterTest.gutterTestEncoder(gutter)
-      case landingPage: SupportLandingPageTest        => SupportLandingPageTest.landingPageTestEncoder(landingPage)
-      case checkoutNudge: CheckoutNudgeTest           => CheckoutNudgeTest.checkoutNudgeTestEncoder(checkoutNudge)
-      case studentLandingPage: StudentLandingPageTest =>
-        StudentLandingPageTest.studentLandingPageTestEncoder(studentLandingPage)
-      case oneTimeCheckout: OneTimeCheckoutTest => OneTimeCheckoutTest.OneTimeCheckoutTestEncoder(oneTimeCheckout)
-      case epic: EpicTest                       => EpicTest.epicTestEncoder(epic)
+  implicit def channelTestEncoder: Encoder[ChannelTest[?]] = new Encoder[ChannelTest[?]] {
+    override def apply(test: ChannelTest[?]): Json = test match {
+      case header: HeaderTest                         => header.asJson
+      case banner: BannerTest                         => banner.asJson
+      case gutter: GutterTest                         => gutter.asJson
+      case landingPage: SupportLandingPageTest        => landingPage.asJson
+      case checkoutNudge: CheckoutNudgeTest           => checkoutNudge.asJson
+      case studentLandingPage: StudentLandingPageTest => studentLandingPage.asJson
+      case oneTimeCheckout: OneTimeCheckoutTest       => oneTimeCheckout.asJson
+      case inline1: Inline1Test                       => inline1.asJson
+      case epic: EpicTest                             => epic.asJson
     }
   }
 }

@@ -1,10 +1,8 @@
 package models
 
 import enumeratum.{CirceEnum, Enum, EnumEntry}
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder}
+import io.circe.Codec
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
 import scala.collection.immutable.IndexedSeq
@@ -19,7 +17,7 @@ object SeparateArticleCountType extends Enum[SeparateArticleCountType] with Circ
 case class SeparateArticleCount(
     `type`: SeparateArticleCountType,
     copy: Option[String]
-)
+) derives Codec.AsObject
 
 case class EpicVariant(
     name: String,
@@ -39,7 +37,11 @@ case class EpicVariant(
     defaultChoiceCardFrequency: Option[String],
     showSignInLink: Option[Boolean],
     newsletterSignup: Option[NewsletterSignup]
-)
+) derives ConfiguredCodec
+
+object EpicVariant {
+  given Configuration = Configuration.default.withDefaults
+}
 case class EpicTest(
     name: String,
     channel: Option[Channel],
@@ -69,15 +71,13 @@ case class EpicTest(
     methodologies: List[Methodology] = defaultMethodologies,
     mParticleAudience: Option[Int] = None,
     scheduler: Option[Scheduler] = None,
-    mParticleTemplates: Option[List[String]],
-) extends ChannelTest[EpicTest] {
+    mParticleTemplates: Option[List[String]]
+) extends ChannelTest[EpicTest] derives ConfiguredCodec {
 
   override def withChannel(channel: Channel): EpicTest = this.copy(channel = Some(channel))
   override def withPriority(priority: Int): EpicTest = this.copy(priority = Some(priority))
 }
 
 object EpicTest {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val epicTestDecoder: Decoder[EpicTest] = deriveConfiguredDecoder[EpicTest]
-  implicit val epicTestEncoder: Encoder[EpicTest] = deriveConfiguredEncoder[EpicTest]
+  given Configuration = Configuration.default.withDefaults
 }

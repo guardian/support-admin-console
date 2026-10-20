@@ -1,24 +1,19 @@
 package models
 
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder, Json}
+import io.circe.Codec
+import io.circe.derivation.{Configuration, ConfiguredCodec, ConfiguredEnumCodec}
 import models.Methodology.defaultMethodologies
 
-case class BannerUI(designName: String)
+case class BannerUI(designName: String) derives Codec.AsObject
 
-sealed trait BannerStepMode
+sealed trait BannerStepMode derives ConfiguredEnumCodec
 
 object BannerStepMode {
   case object OneStep extends BannerStepMode
   case object TwoStep extends BannerStepMode
   case object TwoStepIfAllowed extends BannerStepMode
 
-  implicit val decoder: Decoder[BannerStepMode] =
-    deriveEnumerationDecoder[BannerStepMode]
-  implicit val encoder: Encoder[BannerStepMode] =
-    deriveEnumerationEncoder[BannerStepMode]
+  given Configuration = Configuration.default
 }
 
 case class BannerContent(
@@ -28,7 +23,7 @@ case class BannerContent(
     highlightedText: Option[String],
     cta: Option[Cta],
     secondaryCta: Option[SecondaryCta]
-)
+) derives Codec.AsObject
 
 case class BannerVariant(
     name: String,
@@ -42,9 +37,13 @@ case class BannerVariant(
     promoCodes: List[String] = Nil,
     isCollapsible: Option[Boolean] = None,
     bannerStepMode: Option[BannerStepMode] = None
-)
+) derives ConfiguredCodec
 
-case class BannerTestDeploySchedule(daysBetween: Int)
+object BannerVariant {
+  given Configuration = Configuration.default.withDefaults
+}
+
+case class BannerTestDeploySchedule(daysBetween: Int) derives Codec.AsObject
 
 case class BannerTest(
     name: String,
@@ -70,7 +69,7 @@ case class BannerTest(
     mParticleAudience: Option[Int] = None,
     scheduler: Option[Scheduler] = None,
     mParticleTemplates: Option[List[String]]
-) extends ChannelTest[BannerTest] {
+) extends ChannelTest[BannerTest] derives ConfiguredCodec {
 
   override def withChannel(channel: Channel): BannerTest =
     this.copy(channel = Some(channel))
@@ -79,9 +78,5 @@ case class BannerTest(
 }
 
 object BannerTest {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val bannerTestDecoder: Decoder[BannerTest] =
-    deriveConfiguredDecoder[BannerTest]
-  implicit val bannerTestEncoder: Encoder[BannerTest] =
-    deriveConfiguredEncoder[BannerTest]
+  given Configuration = Configuration.default.withDefaults
 }

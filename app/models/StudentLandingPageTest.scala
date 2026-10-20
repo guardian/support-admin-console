@@ -1,23 +1,22 @@
 package models
 
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.auto._
-import io.circe.generic.extras.semiauto._
-import io.circe.generic.extras.Configuration
+import io.circe.Codec
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
 case class Institution(
     acronym: String,
     name: String,
     logoUrl: String
-)
+) derives Codec.AsObject
 
 case class ResponsiveImage(
     mobileUrl: String,
     tabletUrl: String,
     desktopUrl: String,
     altText: String
-)
+) derives Codec.AsObject
+
 case class StudentLandingPageVariant(
     name: String,
     heading: String,
@@ -25,7 +24,7 @@ case class StudentLandingPageVariant(
     institution: Institution,
     promoCodes: List[String],
     image: ResponsiveImage
-)
+) derives Codec.AsObject
 
 case class StudentLandingPageTest(
     name: String,
@@ -38,7 +37,7 @@ case class StudentLandingPageTest(
     variants: List[StudentLandingPageVariant],
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     methodologies: List[Methodology] = defaultMethodologies
-) extends ChannelTest[StudentLandingPageTest] {
+) extends ChannelTest[StudentLandingPageTest] derives ConfiguredCodec {
   override val scheduler: Option[Scheduler] = None
 
   override def withChannel(channel: Channel): StudentLandingPageTest =
@@ -48,9 +47,5 @@ case class StudentLandingPageTest(
 }
 
 object StudentLandingPageTest {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val studentLandingPageTestDecoder: Decoder[StudentLandingPageTest] =
-    deriveConfiguredDecoder[StudentLandingPageTest]
-  implicit val studentLandingPageTestEncoder: Encoder[StudentLandingPageTest] =
-    deriveConfiguredEncoder[StudentLandingPageTest]
+  given Configuration = Configuration.default.withDefaults
 }

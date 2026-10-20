@@ -1,17 +1,11 @@
 package models
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto._
-import io.circe.{Decoder, Encoder}
 
-case class Cta(text: String, baseUrl: String)
+import io.circe.Codec
+import io.circe.derivation.{Configuration, ConfiguredCodec}
 
-object Cta {
-  implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val secondaryCtaDecoder: Decoder[Cta] = deriveConfiguredDecoder[Cta]
-  implicit val secondaryCtaEncoder: Encoder[Cta] = deriveConfiguredEncoder[Cta]
-}
+case class Cta(text: String, baseUrl: String) derives Codec.AsObject
 
-sealed trait SecondaryCta
+sealed trait SecondaryCta derives ConfiguredCodec
 
 case class CustomSecondaryCta(
     `type`: String = "CustomSecondaryCta",
@@ -23,8 +17,5 @@ case class ContributionsReminderSecondaryCta(
 ) extends SecondaryCta
 
 object SecondaryCta {
-  implicit val customConfig: Configuration = Configuration.default.withDiscriminator("type")
-
-  implicit val secondaryCtaDecoder: Decoder[SecondaryCta] = deriveConfiguredDecoder[SecondaryCta]
-  implicit val secondaryCtaEncoder: Encoder[SecondaryCta] = deriveConfiguredEncoder[SecondaryCta]
+  given Configuration = Configuration.default.withDiscriminator("type")
 }
