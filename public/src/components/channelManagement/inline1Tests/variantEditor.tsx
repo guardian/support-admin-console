@@ -3,11 +3,13 @@ import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
+import type { Inline1MessageType } from '../../../models/inline1';
 import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
 import { Image } from '../helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT, templateValidatorForPlatform } from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
 import { ImageEditorToggle } from '../imageEditor';
+import TypedRadioGroup from '../TypedRadioGroup';
 
 const Container = styled('div')(({ theme }) => ({
   width: '100%',
@@ -22,6 +24,12 @@ const Section = styled('div')(({ theme }) => ({
     marginTop: theme.spacing(1),
   },
 }));
+
+const HorizontalRadioGroup = styled('div')({
+  '& .MuiFormGroup-root': {
+    flexDirection: 'row',
+  },
+});
 
 const SectionHeader = styled(Typography)(({ theme }) => ({
   fontSize: 16,
@@ -259,6 +267,7 @@ interface Inline1VariantEditorProps {
   variant: Inline1Variant;
   onChange: (variant: Inline1Variant) => void;
   onValidationChange: (isValid: boolean) => void;
+  onMessageTypeChange: (messageType: Inline1MessageType) => void;
   isDisabled: boolean;
 }
 
@@ -266,11 +275,14 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
   variant,
   onChange,
   onValidationChange,
+  onMessageTypeChange,
   isDisabled,
 }: Inline1VariantEditorProps) => {
+  let messageEditor: React.ReactElement;
+
   switch (variant.message.type) {
     case 'Inline1SupportMessage':
-      return (
+      messageEditor = (
         <SupportMessageEditor
           message={variant.message}
           onChange={(message) => onChange({ ...variant, message })}
@@ -278,10 +290,12 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
           isDisabled={isDisabled}
         />
       );
+      break;
     case 'Inline1PuzzlesMessage':
-      return <PuzzlesMessageEditor onValidationChange={onValidationChange} />;
+      messageEditor = <PuzzlesMessageEditor onValidationChange={onValidationChange} />;
+      break;
     case 'Inline1NewsletterMessage':
-      return (
+      messageEditor = (
         <NewsletterMessageEditor
           message={variant.message}
           onChange={(message) => onChange({ ...variant, message })}
@@ -289,7 +303,26 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
           isDisabled={isDisabled}
         />
       );
+      break;
   }
+
+  return (
+    <>
+      <HorizontalRadioGroup>
+        <TypedRadioGroup<Inline1MessageType>
+          selectedValue={variant.message.type}
+          onChange={onMessageTypeChange}
+          isDisabled={isDisabled}
+          labels={{
+            Inline1SupportMessage: 'Supporter revenue / App download',
+            Inline1PuzzlesMessage: 'Puzzles',
+            Inline1NewsletterMessage: 'Newsletter signups',
+          }}
+        />
+      </HorizontalRadioGroup>
+      {messageEditor}
+    </>
+  );
 };
 
 export default Inline1VariantEditor;

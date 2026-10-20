@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Inline1Test, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
@@ -18,7 +17,6 @@ import { Container, SectionContainer, SectionHeader } from '../helpers/testEdito
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import TypedRadioGroup from '../TypedRadioGroup';
 import { ValidatedTestEditorProps } from '../validatedTestEditor';
 import {
   getDefaultInline1NewsletterMessage,
@@ -26,12 +24,6 @@ import {
   getDefaultVariant,
 } from './utils/defaults';
 import Inline1VariantEditor from './variantEditor';
-
-const HorizontalRadioGroup = styled('div')({
-  '& .MuiFormGroup-root': {
-    flexDirection: 'row',
-  },
-});
 
 const getDefaultMessage = (messageType: Inline1MessageType): Inline1Variant['message'] => {
   switch (messageType) {
@@ -89,15 +81,17 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
     );
   };
 
-  const onMessageTypeChange = (messageType: Inline1MessageType): void => {
-    onTestChange((current) => ({
-      ...current,
-      variants: current.variants.map((variant) =>
-        variant.message.type === messageType
+  const onMessageTypeChange = (
+    variantName: string,
+    messageType: Inline1MessageType,
+  ): void => {
+    onVariantsChange((current) =>
+      current.map((variant) =>
+        variant.name !== variantName || variant.message.type === messageType
           ? variant
           : { ...variant, message: getDefaultMessage(messageType) },
       ),
-    }));
+    );
   };
 
   const onVariantDelete = (deletedVariantName: string): void => {
@@ -123,6 +117,7 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
       onValidationChange={(isValid) =>
         setValidationStatusForField(`variant-${variant.name}`, isValid)
       }
+      onMessageTypeChange={(messageType) => onMessageTypeChange(variant.name, messageType)}
       isDisabled={!userHasTestLocked}
     />
   );
@@ -140,22 +135,6 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
 
   return (
     <Container>
-      <SectionContainer>
-        <SectionHeader variant={'h3'}>Inline1Message type</SectionHeader>
-        <HorizontalRadioGroup>
-          <TypedRadioGroup<Inline1MessageType>
-            selectedValue={selectedMessageType}
-            onChange={onMessageTypeChange}
-            isDisabled={!userHasTestLocked}
-            labels={{
-              Inline1SupportMessage: 'Supporter revenue / App download',
-              Inline1PuzzlesMessage: 'Puzzles',
-              Inline1NewsletterMessage: 'Newsletter signups',
-            }}
-          />
-        </HorizontalRadioGroup>
-      </SectionContainer>
-
       <SectionContainer>
         <SectionHeader variant={'h3'}>Variants</SectionHeader>
         <div>
