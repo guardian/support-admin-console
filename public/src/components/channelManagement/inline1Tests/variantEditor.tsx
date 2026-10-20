@@ -244,6 +244,7 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
   onChange,
   onValidationChange,
   isDisabled,
+  inline1EditorConfig
 }: MessageEditorProps<NewsletterMessage>) => {
   const templateValidator = templateValidatorForPlatform('DOTCOM');
   const {
@@ -251,8 +252,23 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
     handleSubmit,
     reset,
     trigger,
+    control,
     formState: { errors },
   } = useForm<NewsletterMessage>({ mode: 'onChange', defaultValues: message });
+
+  const { platform } = inline1EditorConfig ?? { platform: 'DOTCOM' };
+  const enableHtml = platform === 'DOTCOM';
+  const htmlValidator = enableHtml ? () => undefined : noHtmlValidator;
+  const lineValidator = (text: string | undefined) => {
+    if (text) {
+      return templateValidator(text) ?? htmlValidator(text);
+    }
+  };
+  const enableCurrencyTemplate = VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE);
+  const enableCountryNameTemplate = VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE);
+  const enableArticleCountTemplate = VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE);
+  const enableDateTemplate = VALID_TEMPLATES[platform].includes(DATE);
+  const enableDayTemplate = VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK);
 
   useEffect(() => {
     reset(message);
@@ -269,11 +285,9 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
   }, [errors.newsletterId, errors.frequency, errors.heading, errors.body, onValidationChange]);
 
   const requiredFields: Array<{
-    name: 'heading' | 'body' | 'newsletterId' | 'frequency';
+    name: 'newsletterId' | 'frequency';
     label: string;
   }> = [
-    { name: 'heading', label: 'Heading' },
-    { name: 'body', label: 'Body' },
     { name: 'newsletterId', label: 'Newsletter ID' },
     { name: 'frequency', label: 'Frequency' },
   ];
@@ -286,9 +300,69 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
     });
   };
 
+  const richTextMenuConstraints = {
+    enableHtml,
+    enableBold: true,
+    enableItalic: true,
+    enableStrikethrough: true,
+    enableCopyTemplates: true,
+    enableLink: true,
+    enableCurrencyTemplate,
+    enableCountryNameTemplate,
+    enableArticleCountTemplate,
+    enableDateTemplate,
+    enableDayTemplate,
+  };
+
   return (
     <Container>
       <SectionHeader variant="h4">Newsletter signups content</SectionHeader>
+      <Controller
+        name="heading"
+        control={control}
+        rules={{
+          required: EMPTY_ERROR_HELPER_TEXT,
+          validate: templateValidator,
+        }}
+        render={({ field }) => (
+          <RichTextEditorSingleLine
+            error={errors.heading !== undefined}
+            helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
+            copyData={field.value}
+            updateCopy={(value) => {
+              field.onChange(value);
+              void handleSubmit(updateNewsletterMessage)();
+            }}
+            name="heading"
+            label="Heading"
+            disabled={isDisabled}
+            rteMenuConstraints={richTextMenuConstraints}
+          />
+        )}
+      />
+      <Controller
+        name="body"
+        control={control}
+        rules={{
+          required: EMPTY_ERROR_HELPER_TEXT,
+          validate: templateValidator,
+        }}
+        render={({ field }) => (
+          <RichTextEditorSingleLine
+            error={errors.body !== undefined}
+            helperText={errors.body ? (errors.body.message ?? errors.body.type) : ''}
+            copyData={field.value}
+            updateCopy={(value) => {
+              field.onChange(value);
+              void handleSubmit(updateNewsletterMessage)();
+            }}
+            name="body"
+            label="Body"
+            disabled={isDisabled}
+            rteMenuConstraints={richTextMenuConstraints}
+          />
+        )}
+      />
       {requiredFields.map(({ name, label }) => (
         <TextField
           key={name}
@@ -296,15 +370,12 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
           helperText={errors[name]?.message}
           {...register(name, {
             required: EMPTY_ERROR_HELPER_TEXT,
-            validate: name === 'heading' || name === 'body' ? templateValidator : undefined,
           })}
           onBlur={() => void handleSubmit(updateNewsletterMessage)()}
           label={label}
           margin="normal"
           variant="outlined"
           disabled={isDisabled}
-          multiline={name === 'body'}
-          minRows={name === 'body' ? 4 : undefined}
           fullWidth
         />
       ))}
