@@ -112,7 +112,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
   return (
     <Container>
       <Section>
-        <SectionHeader variant="h4">Content</SectionHeader>
+        <SectionHeader variant="h4">Supporter revenue message content</SectionHeader>
         <TextField
           error={errors.heading !== undefined}
           helperText={errors.heading?.message}
@@ -201,13 +201,13 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
   }, [errors.newsletterId, errors.frequency, errors.heading, errors.body, onValidationChange]);
 
   const requiredFields: Array<{
-    name: 'newsletterId' | 'frequency' | 'heading' | 'body';
+    name: 'heading' | 'body' | 'newsletterId' | 'frequency';
     label: string;
   }> = [
-    { name: 'newsletterId', label: 'Newsletter ID' },
-    { name: 'frequency', label: 'Frequency' },
     { name: 'heading', label: 'Heading' },
     { name: 'body', label: 'Body' },
+    { name: 'newsletterId', label: 'Newsletter ID' },
+    { name: 'frequency', label: 'Frequency' },
   ];
 
   const updateNewsletterMessage = ({ imageUrl, ...updatedMessage }: NewsletterMessage): void => {
@@ -220,7 +220,7 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
 
   return (
     <Container>
-      <SectionHeader variant="h4">Newsletter</SectionHeader>
+      <SectionHeader variant="h4">Newsletter signups content</SectionHeader>
       {requiredFields.map(({ name, label }) => (
         <TextField
           key={name}
@@ -260,7 +260,13 @@ const PuzzlesMessageEditor: React.FC<{
     onValidationChange(true);
   }, [onValidationChange]);
 
-  return <Typography>Puzzles cannot be configured from RRCP.</Typography>;
+  return (
+    <Container>
+      <Typography variant="body1" >
+        Puzzle messages cannot be configured from Reader Revenue Control Panel.
+      </Typography>
+    </Container>
+  );
 };
 
 interface Inline1VariantEditorProps {
