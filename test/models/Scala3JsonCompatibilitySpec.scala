@@ -1,7 +1,9 @@
 package models
 
-import io.circe.syntax._
+import io.circe.syntax.*
 import io.circe.parser.parse
+import models.Channel.Inline1
+import models.Status.Live
 import models.promos.ProductCatalog.{BillingPeriod, GuardianWeeklyRatePlans, Pricing, ProductDetails, RatePlan}
 import org.scalatest.EitherValues
 import org.scalatest.flatspec.AnyFlatSpec
@@ -130,5 +132,44 @@ class Scala3JsonCompatibilitySpec extends AnyFlatSpec with Matchers with EitherV
 
     decoded.customerFacingName shouldBe "Weekly support"
     decoded.ratePlans shouldBe weeklyRatePlans
+  }
+
+  "inline1 codecs" should "round trip" in {
+    val test = Inline1Test(
+      name = "test1",
+      nickname = Some("test1"),
+      channel = Some(Inline1),
+      status = Some(Live),
+      priority = Some(1),
+      lockStatus = Some(LockStatus(locked = false, email = None, timestamp = None)),
+      variants = List(
+        Inline1Variant(
+          name = "control",
+          message = Inline1SupportMessage(
+            heading = "heading",
+            body = "body",
+            primaryCta = Cta(
+              text = "Support us",
+              baseUrl = "https://support.theguardian.com"
+            ),
+            image = Some(
+              ResponsiveImage(
+                mobileUrl =
+                  "https://i.guim.co.uk/img/media/630a3735c02e195be89ab06fd1b8192959e282ab/0_0_1172_560/500.png?width=500&quality=75&s=937595b3f471d6591475955335c7c023",
+                tabletUrl =
+                  "https://i.guim.co.uk/img/media/630a3735c02e195be89ab06fd1b8192959e282ab/0_0_1172_560/500.png?width=500&quality=75&s=937595b3f471d6591475955335c7c023",
+                desktopUrl =
+                  "https://i.guim.co.uk/img/media/630a3735c02e195be89ab06fd1b8192959e282ab/0_0_1172_560/500.png?width=500&quality=75&s=937595b3f471d6591475955335c7c023",
+                altText = "altText"
+              )
+            )
+          )
+        )
+      )
+    )
+
+    val encoded = test.asJson
+    val decoded = encoded.as[Inline1Test].value
+    decoded shouldEqual test
   }
 }
