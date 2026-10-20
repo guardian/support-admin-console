@@ -17,11 +17,19 @@ case class ChannelSwitches(
     enableMParticle: Boolean = false,
     enableAuxia: Boolean = false,
     enableAuxiaForBanners: Boolean = false,
+    auxiaBannerRolloutPercentage: Int = 100,
     enableGandalfSignInGate: Boolean = false
 )
 
 object ChannelSwitches {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
-  implicit val decoder: Decoder[ChannelSwitches] = deriveConfiguredDecoder[ChannelSwitches]
+  implicit val decoder: Decoder[ChannelSwitches] =
+    deriveConfiguredDecoder[ChannelSwitches].emap { switches =>
+      if (switches.auxiaBannerRolloutPercentage >= 0 && switches.auxiaBannerRolloutPercentage <= 100) {
+        Right(switches)
+      } else {
+        Left("auxiaBannerRolloutPercentage must be between 0 and 100")
+      }
+    }
   implicit val encoder: Encoder[ChannelSwitches] = deriveConfiguredEncoder[ChannelSwitches]
 }
