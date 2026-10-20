@@ -326,8 +326,10 @@ export interface UserPermissions {
 export interface Inline1EditorConfig {
   // test level settings
   allowMultipleVariants: boolean;
+  platform: TestPlatform;
 }
 
 export const INLINE1_EDITOR_CONFIG: Inline1EditorConfig = {
   allowMultipleVariants: false,
+  platform: 'DOTCOM',
 };
