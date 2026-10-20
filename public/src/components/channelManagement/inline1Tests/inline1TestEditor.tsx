@@ -50,6 +50,9 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
   onTestChange,
   setValidationStatusForField,
 }: ValidatedTestEditorProps<Inline1Test>) => {
+  const selectedMessageType: Inline1MessageType =
+    test.variants[0]?.message.type ?? 'Inline1SupportMessage';
+
   const onCampaignChange = (campaign?: string): void => {
     onTestChange((current) => ({ ...current, campaignName: campaign }));
   };
@@ -89,7 +92,6 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
   const onMessageTypeChange = (messageType: Inline1MessageType): void => {
     onTestChange((current) => ({
       ...current,
-      message: getDefaultMessage(messageType),
       variants: current.variants.map((variant) =>
         variant.message.type === messageType
           ? variant
@@ -105,7 +107,7 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
   const createVariant = (name: string): void => {
     onVariantsChange((current) => [
       ...current,
-      { ...getDefaultVariant(), name, message: getDefaultMessage(test.message.type) },
+      { ...getDefaultVariant(), name, message: getDefaultMessage(selectedMessageType) },
     ]);
   };
 
@@ -142,7 +144,7 @@ const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
         <SectionHeader variant={'h3'}>Inline1Message type</SectionHeader>
         <HorizontalRadioGroup>
           <TypedRadioGroup<Inline1MessageType>
-            selectedValue={test.message.type}
+            selectedValue={selectedMessageType}
             onChange={onMessageTypeChange}
             isDisabled={!userHasTestLocked}
             labels={{

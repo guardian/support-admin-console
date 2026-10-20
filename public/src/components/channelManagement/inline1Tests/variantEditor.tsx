@@ -1,11 +1,13 @@
 import { TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
 import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
+import { Image } from '../helpers/shared';
 import { EMPTY_ERROR_HELPER_TEXT, templateValidatorForPlatform } from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
+import { ImageEditorToggle } from '../imageEditor';
 
 const Container = styled('div')(({ theme }) => ({
   width: '100%',
@@ -29,7 +31,7 @@ const SectionHeader = styled(Typography)(({ theme }) => ({
 
 type SupportMessage = Extract<Inline1Message, { type: 'Inline1SupportMessage' }>;
 type NewsletterMessage = Extract<Inline1Message, { type: 'Inline1NewsletterMessage' }>;
-type SupportFields = Pick<SupportMessage, 'heading' | 'body' | 'imageUrl'>;
+type SupportCopy = Pick<SupportMessage, 'heading' | 'body'>;
 
 interface MessageEditorProps<M extends Inline1Message> {
   message: M;
@@ -52,27 +54,50 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
     reset,
     trigger,
     formState: { errors },
-  } = useForm<SupportFields>({
+  } = useForm<SupportCopy>({
     mode: 'onChange',
-    defaultValues: { heading: message.heading, body: message.body, imageUrl: message.imageUrl },
+    defaultValues: { heading: message.heading, body: message.body },
   });
 
   useEffect(() => {
-    reset({ heading: message.heading, body: message.body, imageUrl: message.imageUrl });
+    reset({ heading: message.heading, body: message.body });
     void trigger();
-  }, [message.heading, message.body, message.imageUrl, reset, trigger]);
+  }, [message.heading, message.body, reset, trigger]);
 
   useEffect(() => {
     setValidationStatusForField('copy', errors.heading === undefined && errors.body === undefined);
   }, [errors.heading, errors.body, setValidationStatusForField]);
 
-  const updateSupportMessage = ({ heading, body, imageUrl }: SupportFields): void => {
-    const normalizedImageUrl = imageUrl?.trim();
+  const onImageValidationChange = useCallback(
+    (isValid: boolean) => setValidationStatusForField('image', isValid),
+    [setValidationStatusForField],
+  );
+
+  const updateCopy = ({ heading, body }: SupportCopy): void => {
+    onChange({ ...message, heading, body });
+  };
+
+  const imageForEditor: Image | undefined = message.image
+    ? {
+        mainUrl:
+          [message.image.desktopUrl, message.image.tabletUrl, message.image.mobileUrl].find(
+            (url) => url.trim() !== '',
+          ) ?? '',
+        altText: message.image.altText,
+      }
+    : undefined;
+
+  const updateImage = (image?: Image): void => {
     onChange({
       ...message,
-      heading,
-      body,
-      imageUrl: normalizedImageUrl === '' ? undefined : normalizedImageUrl,
+      image: image
+        ? {
+            mobileUrl: image.mainUrl,
+            tabletUrl: image.mainUrl,
+            desktopUrl: image.mainUrl,
+            altText: image.altText,
+          }
+        : undefined,
     });
   };
 
@@ -87,7 +112,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
             required: EMPTY_ERROR_HELPER_TEXT,
             validate: templateValidator,
           })}
-          onBlur={() => void handleSubmit(updateSupportMessage)()}
+          onBlur={() => void handleSubmit(updateCopy)()}
           label="Heading"
           margin="normal"
           variant="outlined"
@@ -102,7 +127,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
             required: EMPTY_ERROR_HELPER_TEXT,
             validate: templateValidator,
           })}
-          onBlur={() => void handleSubmit(updateSupportMessage)()}
+          onBlur={() => void handleSubmit(updateCopy)()}
           label="Body"
           margin="normal"
           variant="outlined"
@@ -125,14 +150,13 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
 
       <Section>
         <SectionHeader variant="h4">Image</SectionHeader>
-        <TextField
-          {...register('imageUrl')}
-          onBlur={() => void handleSubmit(updateSupportMessage)()}
-          label="Image URL (optional)"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          fullWidth
+        <ImageEditorToggle
+          image={imageForEditor}
+          updateImage={updateImage}
+          isDisabled={isDisabled}
+          onValidationChange={onImageValidationChange}
+          guidance=""
+          label="Add an optional image"
         />
       </Section>
     </Container>

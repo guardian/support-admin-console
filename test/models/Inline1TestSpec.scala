@@ -17,7 +17,6 @@ class Inline1TestSpec extends AnyFlatSpec with Matchers with EitherValues {
          |  "lockStatus":null,
          |  "priority":null,
          |  "nickname":"Inline test",
-         |  "message":$message,
          |  "variants":[{"name":"CONTROL","message":$message}]
          |}
          |""".stripMargin
@@ -26,7 +25,7 @@ class Inline1TestSpec extends AnyFlatSpec with Matchers with EitherValues {
   "Inline1Test codecs" should "round-trip every message type offered by the editor" in {
     val tests = List(
       decodeTest(
-        """{"type":"Inline1SupportMessage","heading":"Support us","body":"Body","primaryCta":{"text":"Support","baseUrl":"https://support.theguardian.com"},"imageUrl":"https://media.guim.co.uk/example.jpg"}"""
+        """{"type":"Inline1SupportMessage","heading":"Support us","body":"Body","primaryCta":{"text":"Support","baseUrl":"https://support.theguardian.com"},"image":{"mobileUrl":"mobile.jpg","tabletUrl":"tablet.jpg","desktopUrl":"desktop.jpg","altText":"Support"}}"""
       ),
       decodeTest("""{"type":"Inline1PuzzlesMessage"}"""),
       decodeTest(
@@ -39,7 +38,6 @@ class Inline1TestSpec extends AnyFlatSpec with Matchers with EitherValues {
       "Inline1PuzzlesMessage",
       "Inline1NewsletterMessage"
     )
-    tests.map(_.message.getClass.getSimpleName) shouldBe expectedTypes
     tests.map(_.variants.head.message.getClass.getSimpleName) shouldBe expectedTypes
     tests.foreach(test => test.asJson.as[Inline1Test].value shouldBe test)
   }

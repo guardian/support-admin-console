@@ -33,7 +33,6 @@ export const getDefaultTest = (): Inline1Test => ({
   locations: [],
   regionTargeting: DEFAULT_REGION_TARGETING,
   contextTargeting: { tagIds: [], sectionIds: [], excludedTagIds: [], excludedSectionIds: [] },
-  message: getDefaultInline1SupportMessage(),
   variants: [getDefaultVariant()],
   methodologies: [{ name: 'ABTest' }],
   campaignName: '',

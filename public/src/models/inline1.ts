@@ -8,13 +8,14 @@ import {
   UserCohort,
   Variant,
 } from '../components/channelManagement/helpers/shared';
+import { ResponsiveImage } from './shared';
 
 interface Inline1SupportMessage {
   type: 'Inline1SupportMessage';
   heading: string;
   body: string;
   primaryCta: Cta;
-  imageUrl?: string;
+  image?: ResponsiveImage;
 }
 interface Inline1PuzzlesMessage {
   type: 'Inline1PuzzlesMessage';
@@ -46,7 +47,6 @@ export interface Inline1Test extends Test {
   userCohort?: UserCohort;
   contextTargeting: PageContextTargeting;
   mParticleAudience?: number;
-  message: Inline1Message;
   variants: Inline1Variant[];
   controlProportionSettings?: ControlProportionSettings;
 }

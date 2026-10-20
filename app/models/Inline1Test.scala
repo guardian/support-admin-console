@@ -11,7 +11,7 @@ case class Inline1SupportMessage(
     heading: String,
     body: String,
     primaryCta: Cta,
-    imageUrl: Option[String]
+    image: Option[ResponsiveImage]
 ) extends Inline1Message
 
 case class Inline1PuzzlesMessage(
@@ -49,7 +49,6 @@ case class Inline1Test(
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     mParticleAudience: Option[Int] = None,
-    message: Inline1Message,
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     methodologies: List[Methodology] = defaultMethodologies,
     scheduler: Option[Scheduler] = None,
