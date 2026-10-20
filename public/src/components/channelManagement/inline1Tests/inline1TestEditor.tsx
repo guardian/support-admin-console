@@ -106,6 +106,7 @@ export const getInline1TestEditor = (
                   onMessageTypeChange(variant.name, messageType)
                 }
                 isDisabled={!userHasTestLocked}
+                inline1EditorConfig={inline1EditorConfig}
               />
             </div>
           </SectionContainer>

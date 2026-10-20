@@ -1,14 +1,25 @@
 import { TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
 import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
-import { Image } from '../helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT, templateValidatorForPlatform } from '../helpers/validation';
+import { Image, Inline1EditorConfig } from '../helpers/shared';
+import {
+  ARTICLE_COUNT_TEMPLATE,
+  COUNTRY_NAME_TEMPLATE,
+  CURRENCY_TEMPLATE,
+  DATE,
+  DAY_OF_THE_WEEK,
+  EMPTY_ERROR_HELPER_TEXT,
+  noHtmlValidator,
+  templateValidatorForPlatform,
+  VALID_TEMPLATES,
+} from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
 import { ImageEditorToggle } from '../imageEditor';
+import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 
 const Container = styled('div')(({ theme }) => ({
@@ -46,6 +57,7 @@ interface MessageEditorProps<M extends Inline1Message> {
   onChange: (message: M) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
+  inline1EditorConfig?: Inline1EditorConfig;
 }
 
 const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
@@ -53,14 +65,31 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
   onChange,
   onValidationChange,
   isDisabled,
+  inline1EditorConfig,
 }: MessageEditorProps<SupportMessage>) => {
   const setValidationStatusForField = useValidation(onValidationChange);
   const templateValidator = templateValidatorForPlatform('DOTCOM');
+
+  const { platform } = inline1EditorConfig ?? { platform: 'DOTCOM' };
+  const enableHtml = platform === 'DOTCOM';
+  const htmlValidator = enableHtml ? () => undefined : noHtmlValidator;
+  const lineValidator = (text: string | undefined) => {
+    if (text) {
+      return templateValidator(text) ?? htmlValidator(text);
+    }
+  };
+  const enableCurrencyTemplate = VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE);
+  const enableCountryNameTemplate = VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE);
+  const enableArticleCountTemplate = VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE);
+  const enableDateTemplate = VALID_TEMPLATES[platform].includes(DATE);
+  const enableDayTemplate = VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK);
+
   const {
     register,
     handleSubmit,
     reset,
     trigger,
+    control,
     formState: { errors },
   } = useForm<SupportCopy>({
     mode: 'onChange',
@@ -113,19 +142,39 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
     <Container>
       <Section>
         <SectionHeader variant="h4">Supporter revenue message content</SectionHeader>
-        <TextField
-          error={errors.heading !== undefined}
-          helperText={errors.heading?.message}
-          {...register('heading', {
+        <Controller
+          name="heading"
+          control={control}
+          rules={{
             required: EMPTY_ERROR_HELPER_TEXT,
-            validate: templateValidator,
-          })}
-          onBlur={() => void handleSubmit(updateCopy)()}
-          label="Heading"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          fullWidth
+            validate: lineValidator,
+          }}
+          render={({ field }) => (
+            <RichTextEditorSingleLine
+              error={errors.heading !== undefined}
+              helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
+              copyData={field.value}
+              updateCopy={(value) => {
+                field.onChange(value);
+                void handleSubmit(updateCopy)();
+              }}
+              name="heading"
+              label="Heading"
+              disabled={isDisabled}
+              rteMenuConstraints={{
+                enableHtml,
+                enableItalic: true,
+                enableStrikethrough: true,
+                enableCopyTemplates: true,
+                enableLink: true,
+                enableCurrencyTemplate,
+                enableCountryNameTemplate,
+                enableArticleCountTemplate,
+                enableDateTemplate,
+                enableDayTemplate,
+              }}
+            />
+          )}
         />
 
         <TextField
@@ -275,6 +324,7 @@ interface Inline1VariantEditorProps {
   onValidationChange: (isValid: boolean) => void;
   onMessageTypeChange: (messageType: Inline1MessageType) => void;
   isDisabled: boolean;
+  inline1EditorConfig: Inline1EditorConfig;
 }
 
 const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
