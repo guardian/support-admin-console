@@ -85,7 +85,6 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
   const enableDayTemplate = VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK);
 
   const {
-    register,
     handleSubmit,
     reset,
     trigger,
@@ -163,6 +162,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
               disabled={isDisabled}
               rteMenuConstraints={{
                 enableHtml,
+                enableBold: true,
                 enableItalic: true,
                 enableStrikethrough: true,
                 enableCopyTemplates: true,
@@ -177,21 +177,40 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
           )}
         />
 
-        <TextField
-          error={errors.body !== undefined}
-          helperText={errors.body?.message}
-          {...register('body', {
+        <Controller
+          name="body"
+          control={control}
+          rules={{
             required: EMPTY_ERROR_HELPER_TEXT,
-            validate: templateValidator,
-          })}
-          onBlur={() => void handleSubmit(updateCopy)()}
-          label="Body"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          multiline
-          minRows={4}
-          fullWidth
+            validate: lineValidator,
+          }}
+          render={({ field }) => (
+            <RichTextEditorSingleLine
+              error={errors.body !== undefined}
+              helperText={errors.body ? (errors.body.message ?? errors.body.type) : ''}
+              copyData={field.value}
+              updateCopy={(value) => {
+                field.onChange(value);
+                void handleSubmit(updateCopy)();
+              }}
+              name="body"
+              label="Body"
+              disabled={isDisabled}
+              rteMenuConstraints={{
+                enableHtml,
+                enableBold: true,
+                enableItalic: true,
+                enableStrikethrough: true,
+                enableCopyTemplates: true,
+                enableLink: true,
+                enableCurrencyTemplate,
+                enableCountryNameTemplate,
+                enableArticleCountTemplate,
+                enableDateTemplate,
+                enableDayTemplate,
+              }}
+            />
+          )}
         />
       </Section>
 
