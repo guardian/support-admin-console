@@ -1,4 +1,4 @@
-import { TextField, Typography } from '@mui/material';
+import { MenuItem, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -51,6 +51,15 @@ const SectionHeader = styled(Typography)(({ theme }) => ({
 type SupportMessage = Extract<Inline1Message, { type: 'Inline1SupportMessage' }>;
 type NewsletterMessage = Extract<Inline1Message, { type: 'Inline1NewsletterMessage' }>;
 type SupportCopy = Pick<SupportMessage, 'heading' | 'body'>;
+
+const FREQUENCY_OPTIONS = [
+  'Daily',
+  'Weekdays',
+  'Twice weekly',
+  'Weekly',
+  'Fortnightly',
+  'Monthly',
+] as const;
 
 interface MessageEditorProps<M extends Inline1Message> {
   message: M;
@@ -257,14 +266,6 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
     );
   }, [errors.newsletterId, errors.frequency, errors.heading, errors.body, onValidationChange]);
 
-  const requiredFields: Array<{
-    name: 'newsletterId' | 'frequency';
-    label: string;
-  }> = [
-    { name: 'newsletterId', label: 'Newsletter ID' },
-    { name: 'frequency', label: 'Frequency' },
-  ];
-
   const updateNewsletterMessage = ({ imageUrl, ...updatedMessage }: NewsletterMessage): void => {
     const normalizedImageUrl = imageUrl?.trim();
     onChange({
@@ -316,22 +317,40 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
           />
         )}
       />
-      {requiredFields.map(({ name, label }) => (
-        <TextField
-          key={name}
-          error={errors[name] !== undefined}
-          helperText={errors[name]?.message}
-          {...register(name, {
-            required: EMPTY_ERROR_HELPER_TEXT,
-          })}
-          onBlur={() => void handleSubmit(updateNewsletterMessage)()}
-          label={label}
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          fullWidth
-        />
-      ))}
+      <TextField
+        error={errors.newsletterId !== undefined}
+        helperText={errors.newsletterId?.message}
+        {...register('newsletterId', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
+        onBlur={() => void handleSubmit(updateNewsletterMessage)()}
+        label="Newsletter ID"
+        margin="normal"
+        variant="outlined"
+        disabled={isDisabled}
+        fullWidth
+      />
+      <TextField
+        select
+        error={errors.frequency !== undefined}
+        helperText={errors.frequency?.message}
+        {...register('frequency', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
+        onBlur={() => void handleSubmit(updateNewsletterMessage)()}
+        label="Frequency"
+        margin="normal"
+        variant="outlined"
+        disabled={isDisabled}
+        fullWidth
+      >
+        {FREQUENCY_OPTIONS.map((option) => (
+          <MenuItem key={option} value={option}>
+            {option}
+          </MenuItem>
+        ))}
+      </TextField>
+
       <TextField
         {...register('imageUrl')}
         onBlur={() => void handleSubmit(updateNewsletterMessage)()}
