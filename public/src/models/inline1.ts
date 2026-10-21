@@ -1,5 +1,6 @@
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 import {
+  ArticlesViewedSettings,
   Cta,
   DeviceType,
   PageContextTargeting,
@@ -46,6 +47,7 @@ export interface Inline1Test extends Test {
   status: Status;
   regionTargeting: RegionTargeting;
   userCohort?: UserCohort;
+  articlesViewedSettings?: ArticlesViewedSettings;
   deviceType?: DeviceType;
   contextTargeting: PageContextTargeting;
   mParticleAudience?: number;
