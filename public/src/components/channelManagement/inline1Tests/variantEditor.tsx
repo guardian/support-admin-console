@@ -262,7 +262,7 @@ const PuzzlesMessageEditor: React.FC<{
 
   return (
     <Container>
-      <Typography variant="body1" >
+      <Typography variant="body1">
         Puzzle messages cannot be configured from Reader Revenue Control Panel.
       </Typography>
     </Container>
