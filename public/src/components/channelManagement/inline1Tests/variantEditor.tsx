@@ -207,7 +207,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
       <Section>
         <SectionHeader variant="h4">Image</SectionHeader>
         <ResponsiveImageEditor
-          variant={variant}
+          variant={variant ?? { name: 'CONTROL', message }}
           isDisabled={isDisabled}
           onValidationChange={onImageValidationChange}
           onChange={updateImage}
