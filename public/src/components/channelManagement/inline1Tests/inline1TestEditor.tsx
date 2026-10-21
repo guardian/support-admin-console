@@ -3,6 +3,7 @@ import { Inline1Test, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
 import CampaignSelector from '../CampaignSelector';
 import {
+  ArticlesViewedSettings,
   ConsentStatus,
   DeviceType,
   INLINE1_EDITOR_CONFIG,
@@ -14,6 +15,7 @@ import {
 } from '../helpers/shared';
 import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
 import ScheduleEditor from '../scheduleEditor';
+import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestEditorProps } from '../testsForm';
@@ -48,6 +50,11 @@ export const getInline1TestEditor = (
   }: ValidatedTestEditorProps<Inline1Test>) => {
     const variant = test.variants[0];
 
+    const onArticlesViewedSettingsValidationChanged = React.useCallback(
+      (isValid: boolean): void => setValidationStatusForField('articlesViewedSettings', isValid),
+      [setValidationStatusForField],
+    );
+
     const onCampaignChange = (campaign?: string): void => {
       onTestChange((current) => ({ ...current, campaignName: campaign }));
     };
@@ -70,6 +77,15 @@ export const getInline1TestEditor = (
 
     const onMParticleAudienceChange = (mParticleAudience?: number): void =>
       onTestChange((current) => ({ ...current, mParticleAudience }));
+
+    const onArticlesViewedSettingsChange = (
+      updatedArticlesViewedSettings?: ArticlesViewedSettings,
+    ): void => {
+      onTestChange((current) => ({
+        ...current,
+        articlesViewedSettings: updatedArticlesViewedSettings,
+      }));
+    };
 
     const onContextTargetingChange = (contextTargeting: PageContextTargeting): void =>
       onTestChange((current) => ({ ...current, contextTargeting }));
@@ -158,6 +174,17 @@ export const getInline1TestEditor = (
               mParticleAudience: test.mParticleAudience,
               onMParticleAudienceChange,
             }}
+          />
+        </SectionContainer>
+
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>Article count</SectionHeader>
+
+          <TestEditorArticleCountEditor
+            articlesViewedSettings={test.articlesViewedSettings}
+            onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
+            onValidationChange={onArticlesViewedSettingsValidationChanged}
+            isDisabled={!userHasTestLocked}
           />
         </SectionContainer>
 

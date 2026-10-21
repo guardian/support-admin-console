@@ -45,6 +45,7 @@ case class Inline1Test(
     nickname: Option[String],
     regionTargeting: Option[RegionTargeting] = None,
     userCohort: Option[UserCohort] = None,
+    articlesViewedSettings: Option[ArticlesViewedSettings] = None,
     contextTargeting: PageContextTargeting = PageContextTargeting(Nil, Nil, Nil, Nil),
     deviceType: Option[DeviceType] = None,
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
