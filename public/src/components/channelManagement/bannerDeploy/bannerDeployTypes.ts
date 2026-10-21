@@ -26,3 +26,13 @@ export interface DataFromServer {
   version: string;
   email: string;
 }
+
+export interface VariantBannerDeploySchedule {
+  daysOfWeek: number[];
+}
+
+export interface VariantBannerDeployScheduleFromServer {
+  value: VariantBannerDeploySchedule;
+  version: string;
+  email: string;
+}
