@@ -1,7 +1,9 @@
 import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Slider from '@mui/material/Slider';
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
 import React from 'react';
 import withS3Data, { DataFromServer, InnerProps } from '../../hocs/withS3Data';
 import {
@@ -34,7 +36,9 @@ type SwitchName =
   | 'enableAuxiaForBanners'
   | 'enableGandalfSignInGate';
 
-type ChannelSwitches = Record<SwitchName, boolean>;
+type ChannelSwitches = Record<SwitchName, boolean> & {
+  auxiaBannerRolloutPercentage: number;
+};
 
 interface ChannelSwitchProps {
   name: SwitchName;
@@ -157,6 +161,25 @@ const ChannelSwitches: React.FC<InnerProps<ChannelSwitches>> = ({
         enabled={switches.enableAuxiaForBanners}
         setSwitch={onSwitchChange}
       />
+      <div>
+        <Typography id="auxia-banner-rollout-label" variant="body2">
+          growth-auxia-banner consented Variant rollout: {switches.auxiaBannerRolloutPercentage}%
+        </Typography>
+        <Slider
+          aria-labelledby="auxia-banner-rollout-label"
+          min={0}
+          max={100}
+          step={1}
+          value={switches.auxiaBannerRolloutPercentage}
+          valueLabelDisplay="auto"
+          onChange={(_, value): void => {
+            update({
+              ...switches,
+              auxiaBannerRolloutPercentage: value as number,
+            });
+          }}
+        />
+      </div>
       <ChannelSwitch
         name="enableGandalfSignInGate"
         label="Enable Gandalf sign-in gate (New Zealand)"
