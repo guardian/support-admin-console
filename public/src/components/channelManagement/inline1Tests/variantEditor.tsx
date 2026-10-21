@@ -117,7 +117,6 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
 
   const {
     handleSubmit,
-    reset,
     trigger,
     control,
     formState: { errors },
@@ -126,18 +125,14 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
     defaultValues: { heading: message.heading, body: message.body },
   });
 
+  // Validate the initial values once on mount; mode: 'onChange' only validates after a change.
   useEffect(() => {
-    reset({ heading: message.heading, body: message.body });
     void trigger();
-  }, [message.heading, message.body, reset, trigger]);
+  }, [trigger]);
 
   useEffect(() => {
     setValidationStatusForField('copy', errors.heading === undefined && errors.body === undefined);
   }, [errors.heading, errors.body, setValidationStatusForField]);
-
-  useEffect(() => {
-    setHasImage(message.image !== undefined);
-  }, [message.image]);
 
   useEffect(() => {
     if (!hasImage) {
@@ -147,6 +142,12 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
 
   const onImageValidationChange = useCallback(
     (isValid: boolean) => setValidationStatusForField('image', isValid),
+    [setValidationStatusForField],
+  );
+
+  // Stable reference so the CTA editor's validation effect doesn't re-run every render.
+  const onPrimaryCtaValidationChange = useCallback(
+    (isValid: boolean) => setValidationStatusForField('primaryCta', isValid),
     [setValidationStatusForField],
   );
 
@@ -160,7 +161,12 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
 
   const updateHasImage = (checked: boolean): void => {
     setHasImage(checked);
-    if (!checked) {
+    if (checked) {
+      // Ticked but no image yet: block saving until the image editor reports valid.
+      if (message.image === undefined) {
+        setValidationStatusForField('image', false);
+      }
+    } else {
       onChange({ ...message, image: undefined });
     }
   };
@@ -217,7 +223,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
         <VariantCtaFieldsEditor
           cta={message.primaryCta}
           updateCta={(primaryCta) => onChange({ ...message, primaryCta })}
-          onValidationChange={(isValid) => setValidationStatusForField('primaryCta', isValid)}
+          onValidationChange={onPrimaryCtaValidationChange}
           isDisabled={isDisabled}
         />
       </Section>
@@ -258,16 +264,15 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
   const {
     register,
     handleSubmit,
-    reset,
     trigger,
     control,
     formState: { errors },
   } = useForm<NewsletterMessage>({ mode: 'onChange', defaultValues: message });
 
+  // Validate the initial values once on mount; mode: 'onChange' only validates after a change.
   useEffect(() => {
-    reset(message);
     void trigger();
-  }, [message, reset, trigger]);
+  }, [trigger]);
 
   useEffect(() => {
     onValidationChange(
@@ -350,7 +355,7 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
           <TextField
             {...field}
             inputRef={ref}
-            value={field.value ?? ''}
+            value={field.value}
             select
             error={errors.frequency !== undefined}
             helperText={errors.frequency?.message}
