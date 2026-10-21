@@ -1,6 +1,6 @@
-import { MenuItem, TextField, Typography } from '@mui/material';
+import { Checkbox, FormControlLabel, MenuItem, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
@@ -113,6 +113,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
 }: MessageEditorProps<SupportMessage>) => {
   const setValidationStatusForField = useValidation(onValidationChange);
   const { validateCopy, rteMenuConstraints } = buildCopyFieldConfig(inline1EditorConfig);
+  const [hasImage, setHasImage] = useState<boolean>(message.image !== undefined);
 
   const {
     handleSubmit,
@@ -134,6 +135,16 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
     setValidationStatusForField('copy', errors.heading === undefined && errors.body === undefined);
   }, [errors.heading, errors.body, setValidationStatusForField]);
 
+  useEffect(() => {
+    setHasImage(message.image !== undefined);
+  }, [message.image]);
+
+  useEffect(() => {
+    if (!hasImage) {
+      setValidationStatusForField('image', true);
+    }
+  }, [hasImage, setValidationStatusForField]);
+
   const onImageValidationChange = useCallback(
     (isValid: boolean) => setValidationStatusForField('image', isValid),
     [setValidationStatusForField],
@@ -145,6 +156,13 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
 
   const updateImage = (image: ResponsiveImage): void => {
     onChange({ ...message, image });
+  };
+
+  const updateHasImage = (checked: boolean): void => {
+    setHasImage(checked);
+    if (!checked) {
+      onChange({ ...message, image: undefined });
+    }
   };
 
   return (
@@ -206,12 +224,24 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
 
       <Section>
         <SectionHeader variant="h4">Image</SectionHeader>
-        <ResponsiveImageEditor
-          variant={variant ?? { name: 'CONTROL', message }}
-          isDisabled={isDisabled}
-          onValidationChange={onImageValidationChange}
-          onChange={updateImage}
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={hasImage}
+              onChange={(e) => updateHasImage(e.target.checked)}
+              disabled={isDisabled}
+            />
+          }
+          label="Include an image"
         />
+        {hasImage && (
+          <ResponsiveImageEditor
+            variant={variant ?? { name: 'CONTROL', message }}
+            isDisabled={isDisabled}
+            onValidationChange={onImageValidationChange}
+            onChange={updateImage}
+          />
+        )}
       </Section>
     </Container>
   );
