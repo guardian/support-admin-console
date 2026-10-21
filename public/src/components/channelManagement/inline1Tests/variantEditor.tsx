@@ -37,11 +37,12 @@ const Section = styled('div')(({ theme }) => ({
   },
 }));
 
-const HorizontalRadioGroup = styled('div')({
+const HorizontalRadioGroup = styled('div')(({ theme }) => ({
   '& .MuiFormGroup-root': {
     flexDirection: 'row',
+    columnGap: theme.spacing(8),
   },
-});
+}));
 
 const SectionHeader = styled(Typography)(({ theme }) => ({
   fontSize: 16,
