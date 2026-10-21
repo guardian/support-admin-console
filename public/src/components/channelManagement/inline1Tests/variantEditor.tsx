@@ -1,14 +1,26 @@
-import { TextField, Typography } from '@mui/material';
+import { Checkbox, FormControlLabel, MenuItem, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useCallback, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
+import { ResponsiveImage } from '../../../models/shared';
+import { ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
 import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
-import { Image } from '../helpers/shared';
-import { EMPTY_ERROR_HELPER_TEXT, templateValidatorForPlatform } from '../helpers/validation';
+import { Inline1EditorConfig } from '../helpers/shared';
+import {
+  ARTICLE_COUNT_TEMPLATE,
+  COUNTRY_NAME_TEMPLATE,
+  CURRENCY_TEMPLATE,
+  DATE,
+  DAY_OF_THE_WEEK,
+  EMPTY_ERROR_HELPER_TEXT,
+  noHtmlValidator,
+  templateValidatorForPlatform,
+  VALID_TEMPLATES,
+} from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
-import { ImageEditorToggle } from '../imageEditor';
+import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 
 const Container = styled('div')(({ theme }) => ({
@@ -25,11 +37,12 @@ const Section = styled('div')(({ theme }) => ({
   },
 }));
 
-const HorizontalRadioGroup = styled('div')({
+const HorizontalRadioGroup = styled('div')(({ theme }) => ({
   '& .MuiFormGroup-root': {
     flexDirection: 'row',
+    columnGap: theme.spacing(8),
   },
-});
+}));
 
 const SectionHeader = styled(Typography)(({ theme }) => ({
   fontSize: 16,
@@ -41,43 +54,105 @@ type SupportMessage = Extract<Inline1Message, { type: 'Inline1SupportMessage' }>
 type NewsletterMessage = Extract<Inline1Message, { type: 'Inline1NewsletterMessage' }>;
 type SupportCopy = Pick<SupportMessage, 'heading' | 'body'>;
 
+const EMPTY_IMAGE: ResponsiveImage = {
+  mobileUrl: '',
+  tabletUrl: '',
+  desktopUrl: '',
+  altText: '',
+};
+
+const FREQUENCY_OPTIONS = [
+  'Daily',
+  'Weekdays',
+  'Twice weekly',
+  'Weekly',
+  'Fortnightly',
+  'Monthly',
+] as const;
+
 interface MessageEditorProps<M extends Inline1Message> {
   message: M;
   onChange: (message: M) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
+  inline1EditorConfig?: Inline1EditorConfig;
 }
+
+interface CopyFieldConfig {
+  validateCopy: (text: string | undefined) => string | undefined;
+  rteMenuConstraints: RteMenuConstraints;
+}
+
+// Derives the heading/body rich text validation + toolbar config from the editor's platform.
+// Shared by both the support-revenue message and newsletter message editors below.
+const buildCopyFieldConfig = (inline1EditorConfig?: Inline1EditorConfig): CopyFieldConfig => {
+  const templateValidator = templateValidatorForPlatform('DOTCOM');
+  const { platform } = inline1EditorConfig ?? { platform: 'DOTCOM' };
+  const enableHtml = platform === 'DOTCOM';
+  const htmlValidator = enableHtml ? () => undefined : noHtmlValidator;
+
+  return {
+    validateCopy: (text) => (text ? (templateValidator(text) ?? htmlValidator(text)) : undefined),
+    rteMenuConstraints: {
+      enableHtml,
+      enableBold: true,
+      enableItalic: true,
+      enableStrikethrough: true,
+      enableCopyTemplates: true,
+      enableLink: true,
+      enableCurrencyTemplate: VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE),
+      enableCountryNameTemplate: VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE),
+      enableArticleCountTemplate: VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE),
+      enableDateTemplate: VALID_TEMPLATES[platform].includes(DATE),
+      enableDayTemplate: VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK),
+    },
+  };
+};
 
 const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
   message,
   onChange,
   onValidationChange,
   isDisabled,
+  inline1EditorConfig,
 }: MessageEditorProps<SupportMessage>) => {
   const setValidationStatusForField = useValidation(onValidationChange);
-  const templateValidator = templateValidatorForPlatform('DOTCOM');
+  const { validateCopy, rteMenuConstraints } = buildCopyFieldConfig(inline1EditorConfig);
+  const [hasImage, setHasImage] = useState<boolean>(message.image !== undefined);
+
   const {
-    register,
     handleSubmit,
-    reset,
     trigger,
+    control,
     formState: { errors },
   } = useForm<SupportCopy>({
     mode: 'onChange',
     defaultValues: { heading: message.heading, body: message.body },
   });
 
+  // Validate the initial values once on mount; mode: 'onChange' only validates after a change.
   useEffect(() => {
-    reset({ heading: message.heading, body: message.body });
     void trigger();
-  }, [message.heading, message.body, reset, trigger]);
+  }, [trigger]);
 
   useEffect(() => {
     setValidationStatusForField('copy', errors.heading === undefined && errors.body === undefined);
   }, [errors.heading, errors.body, setValidationStatusForField]);
 
+  useEffect(() => {
+    if (!hasImage) {
+      setValidationStatusForField('image', true);
+    }
+  }, [hasImage, setValidationStatusForField]);
+
   const onImageValidationChange = useCallback(
     (isValid: boolean) => setValidationStatusForField('image', isValid),
+    [setValidationStatusForField],
+  );
+
+  // Stable reference so the CTA editor's validation effect doesn't re-run every render.
+  const onPrimaryCtaValidationChange = useCallback(
+    (isValid: boolean) => setValidationStatusForField('primaryCta', isValid),
     [setValidationStatusForField],
   );
 
@@ -85,64 +160,66 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
     onChange({ ...message, heading, body });
   };
 
-  const imageForEditor: Image | undefined = message.image
-    ? {
-        mainUrl:
-          [message.image.desktopUrl, message.image.tabletUrl, message.image.mobileUrl].find(
-            (url) => url.trim() !== '',
-          ) ?? '',
-        altText: message.image.altText,
-      }
-    : undefined;
+  const updateImage = (image: ResponsiveImage): void => {
+    onChange({ ...message, image });
+  };
 
-  const updateImage = (image?: Image): void => {
-    onChange({
-      ...message,
-      image: image
-        ? {
-            mobileUrl: image.mainUrl,
-            tabletUrl: image.mainUrl,
-            desktopUrl: image.mainUrl,
-            altText: image.altText,
-          }
-        : undefined,
-    });
+  const updateHasImage = (checked: boolean): void => {
+    setHasImage(checked);
+    if (checked) {
+      // Ticked but no image yet: block saving until the image editor reports valid.
+      if (message.image === undefined) {
+        setValidationStatusForField('image', false);
+      }
+    } else {
+      onChange({ ...message, image: undefined });
+    }
   };
 
   return (
     <Container>
       <Section>
         <SectionHeader variant="h4">Supporter revenue message content</SectionHeader>
-        <TextField
-          error={errors.heading !== undefined}
-          helperText={errors.heading?.message}
-          {...register('heading', {
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: templateValidator,
-          })}
-          onBlur={() => void handleSubmit(updateCopy)()}
-          label="Heading"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          fullWidth
+        <Controller
+          name="heading"
+          control={control}
+          rules={{ required: EMPTY_ERROR_HELPER_TEXT, validate: validateCopy }}
+          render={({ field }) => (
+            <RichTextEditorSingleLine
+              error={errors.heading !== undefined}
+              helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
+              copyData={field.value}
+              updateCopy={(value) => {
+                field.onChange(value);
+                void handleSubmit(updateCopy)();
+              }}
+              name="heading"
+              label="Heading"
+              disabled={isDisabled}
+              rteMenuConstraints={rteMenuConstraints}
+            />
+          )}
         />
 
-        <TextField
-          error={errors.body !== undefined}
-          helperText={errors.body?.message}
-          {...register('body', {
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: templateValidator,
-          })}
-          onBlur={() => void handleSubmit(updateCopy)()}
-          label="Body"
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          multiline
-          minRows={4}
-          fullWidth
+        <Controller
+          name="body"
+          control={control}
+          rules={{ required: EMPTY_ERROR_HELPER_TEXT, validate: validateCopy }}
+          render={({ field }) => (
+            <RichTextEditorSingleLine
+              error={errors.body !== undefined}
+              helperText={errors.body ? (errors.body.message ?? errors.body.type) : ''}
+              copyData={field.value}
+              updateCopy={(value) => {
+                field.onChange(value);
+                void handleSubmit(updateCopy)();
+              }}
+              name="body"
+              label="Body"
+              disabled={isDisabled}
+              rteMenuConstraints={rteMenuConstraints}
+            />
+          )}
         />
       </Section>
 
@@ -151,21 +228,31 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
         <VariantCtaFieldsEditor
           cta={message.primaryCta}
           updateCta={(primaryCta) => onChange({ ...message, primaryCta })}
-          onValidationChange={(isValid) => setValidationStatusForField('primaryCta', isValid)}
+          onValidationChange={onPrimaryCtaValidationChange}
           isDisabled={isDisabled}
         />
       </Section>
 
       <Section>
         <SectionHeader variant="h4">Image</SectionHeader>
-        <ImageEditorToggle
-          image={imageForEditor}
-          updateImage={updateImage}
-          isDisabled={isDisabled}
-          onValidationChange={onImageValidationChange}
-          guidance=""
-          label="Add an optional image"
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={hasImage}
+              onChange={(e) => updateHasImage(e.target.checked)}
+              disabled={isDisabled}
+            />
+          }
+          label="Include an image"
         />
+        {hasImage && (
+          <ResponsiveImageEditor
+            image={message.image ?? EMPTY_IMAGE}
+            isDisabled={isDisabled}
+            onValidationChange={onImageValidationChange}
+            onChange={updateImage}
+          />
+        )}
       </Section>
     </Container>
   );
@@ -176,20 +263,21 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
   onChange,
   onValidationChange,
   isDisabled,
+  inline1EditorConfig,
 }: MessageEditorProps<NewsletterMessage>) => {
-  const templateValidator = templateValidatorForPlatform('DOTCOM');
+  const { validateCopy, rteMenuConstraints } = buildCopyFieldConfig(inline1EditorConfig);
   const {
     register,
     handleSubmit,
-    reset,
     trigger,
+    control,
     formState: { errors },
   } = useForm<NewsletterMessage>({ mode: 'onChange', defaultValues: message });
 
+  // Validate the initial values once on mount; mode: 'onChange' only validates after a change.
   useEffect(() => {
-    reset(message);
     void trigger();
-  }, [message, reset, trigger]);
+  }, [trigger]);
 
   useEffect(() => {
     onValidationChange(
@@ -199,16 +287,6 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
         errors.body === undefined,
     );
   }, [errors.newsletterId, errors.frequency, errors.heading, errors.body, onValidationChange]);
-
-  const requiredFields: Array<{
-    name: 'heading' | 'body' | 'newsletterId' | 'frequency';
-    label: string;
-  }> = [
-    { name: 'heading', label: 'Heading' },
-    { name: 'body', label: 'Body' },
-    { name: 'newsletterId', label: 'Newsletter ID' },
-    { name: 'frequency', label: 'Frequency' },
-  ];
 
   const updateNewsletterMessage = ({ imageUrl, ...updatedMessage }: NewsletterMessage): void => {
     const normalizedImageUrl = imageUrl?.trim();
@@ -221,25 +299,90 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
   return (
     <Container>
       <SectionHeader variant="h4">Newsletter signups content</SectionHeader>
-      {requiredFields.map(({ name, label }) => (
-        <TextField
-          key={name}
-          error={errors[name] !== undefined}
-          helperText={errors[name]?.message}
-          {...register(name, {
-            required: EMPTY_ERROR_HELPER_TEXT,
-            validate: name === 'heading' || name === 'body' ? templateValidator : undefined,
-          })}
-          onBlur={() => void handleSubmit(updateNewsletterMessage)()}
-          label={label}
-          margin="normal"
-          variant="outlined"
-          disabled={isDisabled}
-          multiline={name === 'body'}
-          minRows={name === 'body' ? 4 : undefined}
-          fullWidth
-        />
-      ))}
+      <Controller
+        name="heading"
+        control={control}
+        rules={{ required: EMPTY_ERROR_HELPER_TEXT, validate: validateCopy }}
+        render={({ field }) => (
+          <RichTextEditorSingleLine
+            error={errors.heading !== undefined}
+            helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
+            copyData={field.value}
+            updateCopy={(value) => {
+              field.onChange(value);
+              void handleSubmit(updateNewsletterMessage)();
+            }}
+            name="heading"
+            label="Heading"
+            disabled={isDisabled}
+            rteMenuConstraints={rteMenuConstraints}
+          />
+        )}
+      />
+      <Controller
+        name="body"
+        control={control}
+        rules={{ required: EMPTY_ERROR_HELPER_TEXT, validate: validateCopy }}
+        render={({ field }) => (
+          <RichTextEditorSingleLine
+            error={errors.body !== undefined}
+            helperText={errors.body ? (errors.body.message ?? errors.body.type) : ''}
+            copyData={field.value}
+            updateCopy={(value) => {
+              field.onChange(value);
+              void handleSubmit(updateNewsletterMessage)();
+            }}
+            name="body"
+            label="Body"
+            disabled={isDisabled}
+            rteMenuConstraints={rteMenuConstraints}
+          />
+        )}
+      />
+      <TextField
+        error={errors.newsletterId !== undefined}
+        helperText={errors.newsletterId?.message}
+        {...register('newsletterId', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
+        onBlur={() => void handleSubmit(updateNewsletterMessage)()}
+        label="Newsletter ID"
+        margin="normal"
+        variant="outlined"
+        disabled={isDisabled}
+        fullWidth
+      />
+      <Controller
+        name="frequency"
+        control={control}
+        rules={{ required: EMPTY_ERROR_HELPER_TEXT }}
+        render={({ field: { ref, ...field } }) => (
+          <TextField
+            {...field}
+            inputRef={ref}
+            value={field.value}
+            select
+            error={errors.frequency !== undefined}
+            helperText={errors.frequency?.message}
+            onBlur={() => {
+              field.onBlur();
+              void handleSubmit(updateNewsletterMessage)();
+            }}
+            label="Frequency"
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
+            fullWidth
+          >
+            {FREQUENCY_OPTIONS.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+        )}
+      />
+
       <TextField
         {...register('imageUrl')}
         onBlur={() => void handleSubmit(updateNewsletterMessage)()}
@@ -275,6 +418,7 @@ interface Inline1VariantEditorProps {
   onValidationChange: (isValid: boolean) => void;
   onMessageTypeChange: (messageType: Inline1MessageType) => void;
   isDisabled: boolean;
+  inline1EditorConfig: Inline1EditorConfig;
 }
 
 const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
@@ -283,6 +427,7 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
   onValidationChange,
   onMessageTypeChange,
   isDisabled,
+  inline1EditorConfig,
 }: Inline1VariantEditorProps) => {
   let messageEditor: React.ReactElement;
 
@@ -294,6 +439,7 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
           onChange={(message) => onChange({ ...variant, message })}
           onValidationChange={onValidationChange}
           isDisabled={isDisabled}
+          inline1EditorConfig={inline1EditorConfig}
         />
       );
       break;
@@ -307,6 +453,7 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
           onChange={(message) => onChange({ ...variant, message })}
           onValidationChange={onValidationChange}
           isDisabled={isDisabled}
+          inline1EditorConfig={inline1EditorConfig}
         />
       );
       break;
