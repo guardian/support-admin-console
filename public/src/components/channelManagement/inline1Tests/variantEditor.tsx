@@ -4,8 +4,10 @@ import React, { useCallback, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
+import { ResponsiveImage } from '../../../models/shared';
+import { ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
 import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
-import { Image, Inline1EditorConfig } from '../helpers/shared';
+import { Inline1EditorConfig } from '../helpers/shared';
 import {
   ARTICLE_COUNT_TEMPLATE,
   COUNTRY_NAME_TEMPLATE,
@@ -18,7 +20,6 @@ import {
   VALID_TEMPLATES,
 } from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
-import { ImageEditorToggle } from '../imageEditor';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 
@@ -62,6 +63,7 @@ const FREQUENCY_OPTIONS = [
 ] as const;
 
 interface MessageEditorProps<M extends Inline1Message> {
+  variant?: Inline1Variant;
   message: M;
   onChange: (message: M) => void;
   onValidationChange: (isValid: boolean) => void;
@@ -101,6 +103,7 @@ const buildCopyFieldConfig = (inline1EditorConfig?: Inline1EditorConfig): CopyFi
 };
 
 const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
+  variant,
   message,
   onChange,
   onValidationChange,
@@ -139,28 +142,8 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
     onChange({ ...message, heading, body });
   };
 
-  const imageForEditor: Image | undefined = message.image
-    ? {
-        mainUrl:
-          [message.image.desktopUrl, message.image.tabletUrl, message.image.mobileUrl].find(
-            (url) => url.trim() !== '',
-          ) ?? '',
-        altText: message.image.altText,
-      }
-    : undefined;
-
-  const updateImage = (image?: Image): void => {
-    onChange({
-      ...message,
-      image: image
-        ? {
-            mobileUrl: image.mainUrl,
-            tabletUrl: image.mainUrl,
-            desktopUrl: image.mainUrl,
-            altText: image.altText,
-          }
-        : undefined,
-    });
+  const updateImage = (image: ResponsiveImage): void => {
+    onChange({ ...message, image });
   };
 
   return (
@@ -222,13 +205,11 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
 
       <Section>
         <SectionHeader variant="h4">Image</SectionHeader>
-        <ImageEditorToggle
-          image={imageForEditor}
-          updateImage={updateImage}
+        <ResponsiveImageEditor
+          variant={variant}
           isDisabled={isDisabled}
           onValidationChange={onImageValidationChange}
-          guidance=""
-          label="Add an optional image"
+          onChange={updateImage}
         />
       </Section>
     </Container>
@@ -403,6 +384,7 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
     case 'Inline1SupportMessage':
       messageEditor = (
         <SupportMessageEditor
+          variant={variant}
           message={variant.message}
           onChange={(message) => onChange({ ...variant, message })}
           onValidationChange={onValidationChange}
