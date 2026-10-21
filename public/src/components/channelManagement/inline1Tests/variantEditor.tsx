@@ -64,7 +64,6 @@ const FREQUENCY_OPTIONS = [
 ] as const;
 
 interface MessageEditorProps<M extends Inline1Message> {
-  variant?: Inline1Variant;
   message: M;
   onChange: (message: M) => void;
   onValidationChange: (isValid: boolean) => void;
@@ -104,7 +103,6 @@ const buildCopyFieldConfig = (inline1EditorConfig?: Inline1EditorConfig): CopyFi
 };
 
 const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
-  variant,
   message,
   onChange,
   onValidationChange,
@@ -242,7 +240,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
         />
         {hasImage && (
           <ResponsiveImageEditor
-            variant={variant ?? { name: 'CONTROL', message }}
+            image={message.image}
             isDisabled={isDisabled}
             onValidationChange={onImageValidationChange}
             onChange={updateImage}
@@ -430,7 +428,6 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
     case 'Inline1SupportMessage':
       messageEditor = (
         <SupportMessageEditor
-          variant={variant}
           message={variant.message}
           onChange={(message) => onChange({ ...variant, message })}
           onValidationChange={onValidationChange}

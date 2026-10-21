@@ -1,9 +1,7 @@
 import { TextField } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Inline1Variant } from '../../models/inline1';
 import { ResponsiveImage } from '../../models/shared';
-import { StudentLandingPageVariant } from '../../models/studentLandingPage';
 
 export interface ImageGuidance {
   mobileUrlGuidance: string;
@@ -11,26 +9,8 @@ export interface ImageGuidance {
   desktopUrlGuidance: string;
 }
 
-const EMPTY_IMAGE: ResponsiveImage = {
-  mobileUrl: '',
-  tabletUrl: '',
-  desktopUrl: '',
-  altText: '',
-};
-
-// Extracts the ResponsiveImage from either a StudentLandingPageVariant (which always has an
-// image) or an Inline1Variant (which only has an optional image on its support message).
-const getVariantImage = (
-  variant: StudentLandingPageVariant | Inline1Variant,
-): ResponsiveImage | undefined =>
-  'message' in variant
-    ? variant.message.type === 'Inline1SupportMessage'
-      ? variant.message.image
-      : undefined
-    : variant.image;
-
 interface ResponsiveImageEditorProps {
-  variant: StudentLandingPageVariant | Inline1Variant;
+  image: ResponsiveImage;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
   onChange: (image: ResponsiveImage) => void;
@@ -38,7 +18,7 @@ interface ResponsiveImageEditorProps {
 }
 
 export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
-  variant,
+  image,
   isDisabled,
   onValidationChange,
   onChange,
@@ -46,22 +26,15 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
 }: ResponsiveImageEditorProps) => {
   const EMPTY_ERROR_HELPER_TEXT = 'Please add a URL for an image in these dimensions';
 
-  const image = getVariantImage(variant) ?? EMPTY_IMAGE;
-
-  const defaultValues: ResponsiveImage = {
-    ...image,
-  };
-
   const {
     register,
     handleSubmit,
     trigger,
     reset,
-
     formState: { errors },
   } = useForm<ResponsiveImage>({
     mode: 'onChange',
-    defaultValues,
+    image,
     shouldFocusError: false,
   });
 
