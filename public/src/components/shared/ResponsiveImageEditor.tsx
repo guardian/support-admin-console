@@ -2,15 +2,15 @@ import { TextField } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ResponsiveImage } from '../../models/shared';
-import { StudentLandingPageVariant } from '../../models/studentLandingPage';
 
 export interface ImageGuidance {
   mobileUrlGuidance: string;
   tabletUrlGuidance: string;
   desktopUrlGuidance: string;
 }
+
 interface ResponsiveImageEditorProps {
-  variant: StudentLandingPageVariant;
+  image: ResponsiveImage;
   isDisabled: boolean;
   onValidationChange: (isValid: boolean) => void;
   onChange: (image: ResponsiveImage) => void;
@@ -18,7 +18,7 @@ interface ResponsiveImageEditorProps {
 }
 
 export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
-  variant,
+  image,
   isDisabled,
   onValidationChange,
   onChange,
@@ -26,48 +26,33 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
 }: ResponsiveImageEditorProps) => {
   const EMPTY_ERROR_HELPER_TEXT = 'Please add a URL for an image in these dimensions';
 
-  const defaultValues: ResponsiveImage = {
-    ...variant.image,
-  };
-
   const {
     register,
     handleSubmit,
     trigger,
     reset,
-
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<ResponsiveImage>({
     mode: 'onChange',
-    defaultValues,
+    defaultValues: image,
     shouldFocusError: false,
   });
 
   useEffect(() => {
-    void trigger();
-  }, [trigger]);
-
-  useEffect(() => {
-    const isValid = Object.keys(errors).length === 0;
     onValidationChange(isValid);
-  }, [
-    errors,
-    errors.desktopUrl,
-    errors.tabletUrl,
-    errors.mobileUrl,
-    errors.altText,
-    onValidationChange,
-  ]);
+  }, [isValid, onValidationChange]);
 
   useEffect(() => {
-    reset(variant.image);
-  }, [variant.image, reset]);
+    reset(image);
+    void trigger();
+  }, [image, reset, trigger]);
 
   return (
     <div>
       <TextField
         {...register('mobileUrl', {
           required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.mobileUrlGuidance}`,
+          validate: (value) => value.trim().length > 0 || EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors.mobileUrl !== undefined}
         helperText={errors.mobileUrl?.message ?? imageGuidance?.mobileUrlGuidance}
@@ -81,6 +66,7 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
       <TextField
         {...register('tabletUrl', {
           required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.tabletUrlGuidance}`,
+          validate: (value) => value.trim().length > 0 || EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors.tabletUrl !== undefined}
         helperText={errors.tabletUrl?.message ?? imageGuidance?.tabletUrlGuidance}
@@ -94,6 +80,7 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
       <TextField
         {...register('desktopUrl', {
           required: `${EMPTY_ERROR_HELPER_TEXT} - ${imageGuidance?.desktopUrlGuidance}`,
+          validate: (value) => value.trim().length > 0 || EMPTY_ERROR_HELPER_TEXT,
         })}
         error={errors.desktopUrl !== undefined}
         helperText={errors.desktopUrl?.message ?? imageGuidance?.desktopUrlGuidance}
@@ -107,6 +94,8 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
       <TextField
         {...register('altText', {
           required: 'Please add some descriptive text for the image',
+          validate: (value) =>
+            value.trim().length > 0 || 'Please add some descriptive text for the image',
         })}
         error={errors.altText !== undefined}
         helperText={errors.altText?.message ?? 'A descriptive message for the user'}
