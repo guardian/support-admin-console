@@ -4,6 +4,7 @@ import type { Inline1MessageType } from '../../../models/inline1';
 import CampaignSelector from '../CampaignSelector';
 import {
   ConsentStatus,
+  DeviceType,
   INLINE1_EDITOR_CONFIG,
   Inline1EditorConfig,
   PageContextTargeting,
@@ -56,6 +57,10 @@ export const getInline1TestEditor = (
 
     const onCohortChange = (userCohort: UserCohort): void =>
       onTestChange((current) => ({ ...current, userCohort }));
+
+    const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
+      onTestChange((current) => ({ ...current, deviceType: updatedDeviceType }));
+    };
 
     const onSignedInStatusChange = (signedInStatus: SignedInStatus): void =>
       onTestChange((current) => ({ ...current, signedInStatus }));
@@ -137,11 +142,11 @@ export const getInline1TestEditor = (
             onRegionTargetingUpdate={onRegionTargetingChange}
             selectedCohort={test.userCohort ?? UserCohort.AllNonSupporters}
             onCohortChange={onCohortChange}
-            selectedDeviceType={'All'}
-            onDeviceTypeChange={() => undefined}
+            selectedDeviceType={test.deviceType ?? 'All'}
+            onDeviceTypeChange={onDeviceTypeChange}
             isDisabled={!userHasTestLocked}
             showSupporterStatusSelector={true}
-            showDeviceTypeSelector={false}
+            showDeviceTypeSelector={true}
             showSignedInStatusSelector={true}
             selectedSignedInStatus={test.signedInStatus}
             onSignedInStatusChange={onSignedInStatusChange}
