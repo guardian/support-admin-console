@@ -1,6 +1,8 @@
 import { ControlProportionSettings } from '../components/channelManagement/helpers/controlProportionSettings';
 import {
+  ArticlesViewedSettings,
   Cta,
+  DeviceType,
   PageContextTargeting,
   RegionTargeting,
   Status,
@@ -30,7 +32,10 @@ interface Inline1NewsletterMessage {
   imageUrl?: string;
 }
 
-type Inline1Message = Inline1SupportMessage | Inline1PuzzlesMessage | Inline1NewsletterMessage;
+export type Inline1Message =
+  Inline1SupportMessage | Inline1PuzzlesMessage | Inline1NewsletterMessage;
+
+export type Inline1MessageType = Inline1Message['type'];
 
 export interface Inline1Variant extends Variant {
   message: Inline1Message;
@@ -42,6 +47,8 @@ export interface Inline1Test extends Test {
   status: Status;
   regionTargeting: RegionTargeting;
   userCohort?: UserCohort;
+  articlesViewedSettings?: ArticlesViewedSettings;
+  deviceType?: DeviceType;
   contextTargeting: PageContextTargeting;
   mParticleAudience?: number;
   variants: Inline1Variant[];

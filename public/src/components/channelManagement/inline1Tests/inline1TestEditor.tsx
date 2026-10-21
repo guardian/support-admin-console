@@ -1,13 +1,13 @@
-import { Typography } from '@mui/material';
 import React from 'react';
 import { Inline1Test, Inline1Variant } from '../../../models/inline1';
-import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
-import VariantsEditor from '../../tests/variants/variantsEditor';
-import VariantSummary from '../../tests/variants/variantSummary';
+import type { Inline1MessageType } from '../../../models/inline1';
 import CampaignSelector from '../CampaignSelector';
-import { ControlProportionSettings } from '../helpers/controlProportionSettings';
 import {
+  ArticlesViewedSettings,
   ConsentStatus,
+  DeviceType,
+  INLINE1_EDITOR_CONFIG,
+  Inline1EditorConfig,
   PageContextTargeting,
   RegionTargeting,
   SignedInStatus,
@@ -15,167 +15,193 @@ import {
 } from '../helpers/shared';
 import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
 import ScheduleEditor from '../scheduleEditor';
+import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
-import { ValidatedTestEditorProps } from '../validatedTestEditor';
-import { getDefaultVariant } from './utils/defaults';
+import { TestEditorProps } from '../testsForm';
+import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
+import {
+  getDefaultInline1NewsletterMessage,
+  getDefaultInline1SupportMessage,
+} from './utils/defaults';
+import Inline1VariantEditor from './variantEditor';
 
-const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
-  test,
-  userHasTestLocked,
-  onTestChange,
-  setValidationStatusForField,
-}: ValidatedTestEditorProps<Inline1Test>) => {
-  const onCampaignChange = (campaign?: string): void => {
-    onTestChange((current) => ({ ...current, campaignName: campaign }));
-  };
+const getDefaultMessage = (messageType: Inline1MessageType): Inline1Variant['message'] => {
+  switch (messageType) {
+    case 'Inline1SupportMessage':
+      return getDefaultInline1SupportMessage();
+    case 'Inline1PuzzlesMessage':
+      return { type: 'Inline1PuzzlesMessage' };
+    case 'Inline1NewsletterMessage':
+      return getDefaultInline1NewsletterMessage();
+    default:
+      return getDefaultInline1SupportMessage();
+  }
+};
 
-  const onControlProportionSettingsChange = (
-    controlProportionSettings?: ControlProportionSettings,
-  ): void => onTestChange((current) => ({ ...current, controlProportionSettings }));
+export const getInline1TestEditor = (
+  inline1EditorConfig: Inline1EditorConfig,
+): React.FC<TestEditorProps<Inline1Test>> => {
+  const Inline1TestEditor: React.FC<ValidatedTestEditorProps<Inline1Test>> = ({
+    test,
+    userHasTestLocked,
+    onTestChange,
+    setValidationStatusForField,
+  }: ValidatedTestEditorProps<Inline1Test>) => {
+    const variant = test.variants[0];
 
-  const onRegionTargetingChange = (regionTargeting: RegionTargeting): void =>
-    onTestChange((current) => ({ ...current, regionTargeting }));
+    const onArticlesViewedSettingsValidationChanged = React.useCallback(
+      (isValid: boolean): void => setValidationStatusForField('articlesViewedSettings', isValid),
+      [setValidationStatusForField],
+    );
 
-  const onCohortChange = (userCohort: UserCohort): void =>
-    onTestChange((current) => ({ ...current, userCohort }));
+    const onCampaignChange = (campaign?: string): void => {
+      onTestChange((current) => ({ ...current, campaignName: campaign }));
+    };
 
-  const onSignedInStatusChange = (signedInStatus: SignedInStatus): void =>
-    onTestChange((current) => ({ ...current, signedInStatus }));
+    const onRegionTargetingChange = (regionTargeting: RegionTargeting): void =>
+      onTestChange((current) => ({ ...current, regionTargeting }));
 
-  const onConsentStatusChange = (consentStatus: ConsentStatus): void =>
-    onTestChange((current) => ({ ...current, consentStatus }));
+    const onCohortChange = (userCohort: UserCohort): void =>
+      onTestChange((current) => ({ ...current, userCohort }));
 
-  const onMParticleAudienceChange = (mParticleAudience?: number): void =>
-    onTestChange((current) => ({ ...current, mParticleAudience }));
+    const onDeviceTypeChange = (updatedDeviceType: DeviceType): void => {
+      onTestChange((current) => ({ ...current, deviceType: updatedDeviceType }));
+    };
 
-  const onContextTargetingChange = (contextTargeting: PageContextTargeting): void =>
-    onTestChange((current) => ({ ...current, contextTargeting }));
+    const onSignedInStatusChange = (signedInStatus: SignedInStatus): void =>
+      onTestChange((current) => ({ ...current, signedInStatus }));
 
-  const onVariantsChange = (update: (current: Inline1Variant[]) => Inline1Variant[]): void => {
-    onTestChange((current) => ({ ...current, variants: update(current.variants) }));
-  };
+    const onConsentStatusChange = (consentStatus: ConsentStatus): void =>
+      onTestChange((current) => ({ ...current, consentStatus }));
 
-  const onVariantDelete = (deletedVariantName: string): void => {
-    onVariantsChange((current) => current.filter((variant) => variant.name !== deletedVariantName));
-  };
+    const onMParticleAudienceChange = (mParticleAudience?: number): void =>
+      onTestChange((current) => ({ ...current, mParticleAudience }));
 
-  const createVariant = (name: string): void => {
-    onVariantsChange((current) => [...current, { ...getDefaultVariant(), name }]);
-  };
+    const onArticlesViewedSettingsChange = (
+      updatedArticlesViewedSettings?: ArticlesViewedSettings,
+    ): void => {
+      onTestChange((current) => ({
+        ...current,
+        articlesViewedSettings: updatedArticlesViewedSettings,
+      }));
+    };
 
-  const onVariantClone = (originalVariant: Inline1Variant, clonedVariantName: string): void => {
-    onVariantsChange((current) => [...current, { ...originalVariant, name: clonedVariantName }]);
-  };
+    const onContextTargetingChange = (contextTargeting: PageContextTargeting): void =>
+      onTestChange((current) => ({ ...current, contextTargeting }));
 
-  const renderVariantEditor = (variant: Inline1Variant): React.ReactElement => (
-    <Typography key={`inline1-${test.name}-${variant.name}`}>
-      No editable content yet for variant {variant.name}.
-    </Typography>
-  );
+    const onVariantsChange = (update: (current: Inline1Variant[]) => Inline1Variant[]): void => {
+      onTestChange((current) => ({ ...current, variants: update(current.variants) }));
+    };
 
-  const renderVariantSummary = (variant: Inline1Variant): React.ReactElement => (
-    <VariantSummary
-      name={variant.name}
-      testName={test.name}
-      testType="INLINE1"
-      isInEditMode={userHasTestLocked}
-      platform="DOTCOM"
-      articleType="Standard"
-    />
-  );
+    const onVariantChange = (variantName: string, updatedVariant: Inline1Variant): void => {
+      onVariantsChange((current) =>
+        current.map((variant) => (variant.name === variantName ? updatedVariant : variant)),
+      );
+    };
 
-  return (
-    <Container>
-      <SectionContainer>
-        <SectionHeader variant={'h3'}>Variants</SectionHeader>
-        <div>
-          <VariantsEditor<Inline1Variant>
-            variants={test.variants}
-            testName={test.name}
-            editMode={userHasTestLocked}
-            createVariant={createVariant}
-            renderVariantEditor={renderVariantEditor}
-            renderVariantSummary={renderVariantSummary}
-            onVariantDelete={onVariantDelete}
-            onVariantClone={onVariantClone}
-          />
-        </div>
-      </SectionContainer>
+    const onMessageTypeChange = (variantName: string, messageType: Inline1MessageType): void => {
+      onVariantsChange((current) =>
+        current.map((variant) =>
+          variant.name !== variantName || variant.message.type === messageType
+            ? variant
+            : { ...variant, message: getDefaultMessage(messageType) },
+        ),
+      );
+    };
 
-      {test.variants.length > 1 && (
+    return (
+      <Container>
+        {!inline1EditorConfig.allowMultipleVariants && (
+          <SectionContainer>
+            <SectionHeader variant={'h3'}>Message Type</SectionHeader>
+            <div>
+              <Inline1VariantEditor
+                key={`inline1-${test.name}-${variant.name}`}
+                variant={variant}
+                onChange={(updatedVariant) => onVariantChange(variant.name, updatedVariant)}
+                onValidationChange={(isValid) =>
+                  setValidationStatusForField(`variant-${variant.name}`, isValid)
+                }
+                onMessageTypeChange={(messageType) =>
+                  onMessageTypeChange(variant.name, messageType)
+                }
+                isDisabled={!userHasTestLocked}
+                inline1EditorConfig={inline1EditorConfig}
+              />
+            </div>
+          </SectionContainer>
+        )}
         <SectionContainer>
-          <SectionHeader variant={'h3'}>Variants split (applies to AB tests only)</SectionHeader>
+          <SectionHeader variant={'h3'}>Campaign</SectionHeader>
           <div>
-            <TestVariantsSplitEditor
-              variants={test.variants}
-              controlProportionSettings={test.controlProportionSettings}
-              onControlProportionSettingsChange={onControlProportionSettingsChange}
-              onValidationChange={(isValid: boolean): void =>
-                setValidationStatusForField('variantsSplitSettings', isValid)
-              }
-              isDisabled={!userHasTestLocked}
+            <CampaignSelector
+              test={test}
+              onCampaignChange={onCampaignChange}
+              disabled={!userHasTestLocked}
             />
           </div>
         </SectionContainer>
-      )}
 
-      <SectionContainer>
-        <SectionHeader variant={'h3'}>Campaign</SectionHeader>
-        <div>
-          <CampaignSelector
-            test={test}
-            onCampaignChange={onCampaignChange}
-            disabled={!userHasTestLocked}
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>Target content</SectionHeader>
+          <TestEditorContextTargeting
+            contextTargeting={test.contextTargeting}
+            editMode={userHasTestLocked}
+            updateContextTargeting={onContextTargetingChange}
           />
-        </div>
-      </SectionContainer>
+        </SectionContainer>
 
-      <SectionContainer>
-        <SectionHeader variant={'h3'}>Target content</SectionHeader>
-        <TestEditorContextTargeting
-          contextTargeting={test.contextTargeting}
-          editMode={userHasTestLocked}
-          updateContextTargeting={onContextTargetingChange}
-        />
-      </SectionContainer>
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>Target audience</SectionHeader>
+          <TestEditorTargetAudienceSelector
+            regionTargeting={test.regionTargeting}
+            onRegionTargetingUpdate={onRegionTargetingChange}
+            selectedCohort={test.userCohort ?? UserCohort.AllNonSupporters}
+            onCohortChange={onCohortChange}
+            selectedDeviceType={test.deviceType ?? 'All'}
+            onDeviceTypeChange={onDeviceTypeChange}
+            isDisabled={!userHasTestLocked}
+            showSupporterStatusSelector={true}
+            showDeviceTypeSelector={true}
+            showSignedInStatusSelector={true}
+            selectedSignedInStatus={test.signedInStatus}
+            onSignedInStatusChange={onSignedInStatusChange}
+            selectedConsentStatus={test.consentStatus}
+            onConsentStatusChange={onConsentStatusChange}
+            showConsentStatusSelector={true}
+            mParticleAudienceEditor={{
+              mParticleAudience: test.mParticleAudience,
+              onMParticleAudienceChange,
+            }}
+          />
+        </SectionContainer>
 
-      <SectionContainer>
-        <SectionHeader variant={'h3'}>Target audience</SectionHeader>
-        <TestEditorTargetAudienceSelector
-          regionTargeting={test.regionTargeting}
-          onRegionTargetingUpdate={onRegionTargetingChange}
-          selectedCohort={test.userCohort ?? UserCohort.AllNonSupporters}
-          onCohortChange={onCohortChange}
-          selectedDeviceType={'All'}
-          onDeviceTypeChange={() => undefined}
-          isDisabled={!userHasTestLocked}
-          showSupporterStatusSelector={true}
-          showDeviceTypeSelector={false}
-          showSignedInStatusSelector={true}
-          selectedSignedInStatus={test.signedInStatus}
-          onSignedInStatusChange={onSignedInStatusChange}
-          selectedConsentStatus={test.consentStatus}
-          onConsentStatusChange={onConsentStatusChange}
-          showConsentStatusSelector={true}
-          mParticleAudienceEditor={{
-            mParticleAudience: test.mParticleAudience,
-            onMParticleAudienceChange,
-          }}
-        />
-      </SectionContainer>
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>Article count</SectionHeader>
 
-      <SectionContainer>
-        <SectionHeader variant={'h3'}>Schedule</SectionHeader>
-        <ScheduleEditor
-          scheduler={test.scheduler}
-          disabled={!userHasTestLocked}
-          onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
-          onValidationChange={(isValid) => setValidationStatusForField('schedule', isValid)}
-        />
-      </SectionContainer>
-    </Container>
-  );
+          <TestEditorArticleCountEditor
+            articlesViewedSettings={test.articlesViewedSettings}
+            onArticlesViewedSettingsChanged={onArticlesViewedSettingsChange}
+            onValidationChange={onArticlesViewedSettingsValidationChanged}
+            isDisabled={!userHasTestLocked}
+          />
+        </SectionContainer>
+
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>Schedule</SectionHeader>
+          <ScheduleEditor
+            scheduler={test.scheduler}
+            disabled={!userHasTestLocked}
+            onChange={(scheduler) => onTestChange((current) => ({ ...current, scheduler }))}
+            onValidationChange={(isValid) => setValidationStatusForField('schedule', isValid)}
+          />
+        </SectionContainer>
+      </Container>
+    );
+  };
+
+  return ValidatedTestEditor(Inline1TestEditor);
 };
 
-export default Inline1TestEditor;
+export default getInline1TestEditor(INLINE1_EDITOR_CONFIG);

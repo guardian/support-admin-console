@@ -24,6 +24,7 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
       |  "enableMParticle": false,
       |  "enableAuxia": true,
       |  "enableAuxiaForBanners": true,
+      |  "auxiaBannerRolloutPercentage": 50,
       |  "enableGandalfSignInGate": true
       |}
       |""".stripMargin
@@ -43,6 +44,7 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
     val decoded = decode[ChannelSwitches](fullJson).toOption.get
 
     decoded.enableGandalfSignInGate shouldBe true
+    decoded.auxiaBannerRolloutPercentage shouldBe 50
   }
 
   it should "default the Gandalf switch to off when absent, for backward compatibility with existing S3 documents" in {
@@ -50,6 +52,29 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
 
     decoded.enableGandalfSignInGate shouldBe false
     decoded.enableAuxia shouldBe false
+    decoded.auxiaBannerRolloutPercentage shouldBe 100
+  }
+
+  it should "accept rollout percentages from 0 through 100" in {
+    List(0, 10, 50, 100).foreach { percentage =>
+      val json = fullJson.replace(
+        "\"auxiaBannerRolloutPercentage\": 50",
+        s"\"auxiaBannerRolloutPercentage\": $percentage"
+      )
+
+      decode[ChannelSwitches](json).toOption.get.auxiaBannerRolloutPercentage shouldBe percentage
+    }
+  }
+
+  it should "reject rollout percentages outside 0 through 100" in {
+    List(-1, 101).foreach { percentage =>
+      val json = fullJson.replace(
+        "\"auxiaBannerRolloutPercentage\": 50",
+        s"\"auxiaBannerRolloutPercentage\": $percentage"
+      )
+
+      decode[ChannelSwitches](json).isLeft shouldBe true
+    }
   }
 
   it should "round-trip the Gandalf switch through the encoder" in {
@@ -59,6 +84,7 @@ class ChannelSwitchesSpec extends AnyFlatSpec with Matchers with EitherValues {
 
     redecoded shouldBe decoded
     redecoded.enableGandalfSignInGate shouldBe true
+    redecoded.auxiaBannerRolloutPercentage shouldBe 50
   }
 
   it should "default the Inline1 switch to off when absent, for backward compatibility with existing S3 documents" in {

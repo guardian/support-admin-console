@@ -246,7 +246,7 @@ export const VariantEditor: React.FC<StudentLandingPageVariantEditorProps> = ({
           </Typography>
           <Typography>Please set 3 images which will be used at the 3 breakpoints</Typography>
           <ResponsiveImageEditor
-            variant={variant}
+            image={variant.image}
             isDisabled={!editMode}
             onValidationChange={(isValid) =>
               setSectionValidity((current) => {
