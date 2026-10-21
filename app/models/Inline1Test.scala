@@ -46,6 +46,7 @@ case class Inline1Test(
     regionTargeting: Option[RegionTargeting] = None,
     userCohort: Option[UserCohort] = None,
     contextTargeting: PageContextTargeting = PageContextTargeting(Nil, Nil, Nil, Nil),
+    deviceType: Option[DeviceType] = None,
     signedInStatus: Option[SignedInStatus] = Some(SignedInStatus.All),
     consentStatus: Option[ConsentStatus] = Some(ConsentStatus.All),
     mParticleAudience: Option[Int] = None,
