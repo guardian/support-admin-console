@@ -36,6 +36,7 @@ test.describe('Admin and Access Management', () => {
     );
     let storedDays = [0, 1, 2, 3, 4, 5, 6];
     const savedDays: number[][] = [];
+    const savedVersions: string[] = [];
 
     await page.route('**/isValid', (route) => route.fulfill({ status: 200 }));
     await page.route('**/frontend/banner-deploy', (route) =>
@@ -52,6 +53,7 @@ test.describe('Admin and Access Management', () => {
         };
         storedDays = requestBody.value.daysOfWeek;
         savedDays.push(storedDays);
+        savedVersions.push(requestBody.version);
         await route.fulfill({ status: 200, body: 'updated' });
       } else {
         await route.fulfill({
@@ -89,6 +91,7 @@ test.describe('Admin and Access Management', () => {
     await page.getByRole('button', { name: 'Save variant schedule' }).click();
     await selectedSave;
     expect(savedDays[savedDays.length - 1]).toEqual([1, 2, 4, 5, 6]);
+    expect(savedVersions[savedVersions.length - 1]).toBe('schedule-v1');
 
     for (const day of ['Monday', 'Tuesday', 'Thursday', 'Friday', 'Saturday']) {
       await page.getByRole('checkbox', { name: day }).uncheck();
@@ -103,5 +106,6 @@ test.describe('Admin and Access Management', () => {
     await page.getByRole('button', { name: 'Save variant schedule' }).click();
     await emptySave;
     expect(savedDays[savedDays.length - 1]).toEqual([]);
+    expect(savedVersions[savedVersions.length - 1]).toBe('schedule-v1');
   });
 });
