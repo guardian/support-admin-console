@@ -30,7 +30,10 @@ interface Inline1NewsletterMessage {
   imageUrl?: string;
 }
 
-type Inline1Message = Inline1SupportMessage | Inline1PuzzlesMessage | Inline1NewsletterMessage;
+export type Inline1Message =
+  Inline1SupportMessage | Inline1PuzzlesMessage | Inline1NewsletterMessage;
+
+export type Inline1MessageType = Inline1Message['type'];
 
 export interface Inline1Variant extends Variant {
   message: Inline1Message;
