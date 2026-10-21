@@ -54,6 +54,13 @@ type SupportMessage = Extract<Inline1Message, { type: 'Inline1SupportMessage' }>
 type NewsletterMessage = Extract<Inline1Message, { type: 'Inline1NewsletterMessage' }>;
 type SupportCopy = Pick<SupportMessage, 'heading' | 'body'>;
 
+const EMPTY_IMAGE: ResponsiveImage = {
+  mobileUrl: '',
+  tabletUrl: '',
+  desktopUrl: '',
+  altText: '',
+};
+
 const FREQUENCY_OPTIONS = [
   'Daily',
   'Weekdays',
@@ -240,7 +247,7 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
         />
         {hasImage && (
           <ResponsiveImageEditor
-            image={message.image}
+            image={message.image ?? EMPTY_IMAGE}
             isDisabled={isDisabled}
             onValidationChange={onImageValidationChange}
             onChange={updateImage}
