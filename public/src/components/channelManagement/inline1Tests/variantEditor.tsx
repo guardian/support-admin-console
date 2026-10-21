@@ -342,26 +342,36 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
         disabled={isDisabled}
         fullWidth
       />
-      <TextField
-        select
-        error={errors.frequency !== undefined}
-        helperText={errors.frequency?.message}
-        {...register('frequency', {
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
-        onBlur={() => void handleSubmit(updateNewsletterMessage)()}
-        label="Frequency"
-        margin="normal"
-        variant="outlined"
-        disabled={isDisabled}
-        fullWidth
-      >
-        {FREQUENCY_OPTIONS.map((option) => (
-          <MenuItem key={option} value={option}>
-            {option}
-          </MenuItem>
-        ))}
-      </TextField>
+      <Controller
+        name="frequency"
+        control={control}
+        rules={{ required: EMPTY_ERROR_HELPER_TEXT }}
+        render={({ field: { ref, ...field } }) => (
+          <TextField
+            {...field}
+            inputRef={ref}
+            value={field.value ?? ''}
+            select
+            error={errors.frequency !== undefined}
+            helperText={errors.frequency?.message}
+            onBlur={() => {
+              field.onBlur();
+              void handleSubmit(updateNewsletterMessage)();
+            }}
+            label="Frequency"
+            margin="normal"
+            variant="outlined"
+            disabled={isDisabled}
+            fullWidth
+          >
+            {FREQUENCY_OPTIONS.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+        )}
+      />
 
       <TextField
         {...register('imageUrl')}
