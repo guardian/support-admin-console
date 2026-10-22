@@ -14,7 +14,8 @@ const Container = styled('div')({
   '& > * + *': { marginTop: '5px' },
 });
 
-type SwitchName = 'enabled' | 'excludeBreakingNews' | 'requireApiKey';
+type SwitchName =
+  'enabled' | 'excludeBreakingNews' | 'requireApiKey' | 'mandatoryZeroDaySignInGate';
 
 type AppsMeteringSwitches = Record<SwitchName, boolean>;
 
@@ -77,6 +78,12 @@ const AppsMeteringSwitches: React.FC<InnerProps<AppsMeteringSwitches>> = ({
         name="requireApiKey"
         label="Require clients to provide an API key"
         enabled={switches.requireApiKey}
+        setSwitch={onSwitchChange}
+      />
+      <AppsMeteringSwitch
+        name="mandatoryZeroDaySignInGate"
+        label="Enable mandatory sign-in gate to access content"
+        enabled={switches.mandatoryZeroDaySignInGate}
         setSwitch={onSwitchChange}
       />
 
