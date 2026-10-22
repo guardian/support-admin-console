@@ -46,7 +46,7 @@
     "react-qr-code": "2.2.0",
     "react-router-dom": "7.18.4",
     "recharts": "3.10.1",
-    "uuid": "14.0.2"
+    "uuid": "14.0.3"
   },
   "scripts": {
     "build": "webpack --config webpack.prod.js",
