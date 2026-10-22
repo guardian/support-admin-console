@@ -84,7 +84,11 @@ const VariantScheduleEditor: React.FC = () => {
       </Toolbar>
       <ScheduleContent>
         <Typography>
-          Reset dismissed banners for Banner 1 and Banner 2 at 9am on selected days.
+          Reset dismissed Banner 1 for consented Variant users at 9am on selected days.
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          For an additional reset during the day, select regions under Banner 1 and use its Redeploy
+          button. Manual redeploy also affects Control and unconsented users in those regions.
         </Typography>
         <FormControl component="fieldset" disabled={!dataFromServer || isSaving}>
           <FormLabel component="legend">Reset days</FormLabel>

@@ -68,6 +68,16 @@ test.describe('Admin and Access Management', () => {
 
     await page.goto('/banner-deploy');
     await expect(page.getByRole('heading', { name: 'Variant schedule' })).toBeVisible();
+    await expect(
+      page.getByText(
+        'Reset dismissed Banner 1 for consented Variant users at 9am on selected days.',
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        /Manual redeploy also affects Control and unconsented users in those regions\./,
+      ),
+    ).toBeVisible();
 
     for (const day of [
       'Sunday',
