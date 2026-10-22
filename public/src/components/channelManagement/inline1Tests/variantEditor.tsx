@@ -54,6 +54,17 @@ type SupportMessage = Extract<Inline1Message, { type: 'Inline1SupportMessage' }>
 type NewsletterMessage = Extract<Inline1Message, { type: 'Inline1NewsletterMessage' }>;
 type SupportCopy = Pick<SupportMessage, 'heading' | 'body'>;
 
+const getSupportCopyHelperText = (
+  value: string | undefined,
+  maxCharacters: number,
+  errorMessage?: string,
+): string => {
+  const { body } = new DOMParser().parseFromString(value ?? '', 'text/html');
+  const characterCount = [...body.textContent].length;
+  const countText = `Recommended max ${maxCharacters} characters, including spaces and punctuation, currently ${characterCount}/${maxCharacters}`;
+  return errorMessage ? `${errorMessage} — ${countText}` : countText;
+};
+
 const EMPTY_IMAGE: ResponsiveImage = {
   mobileUrl: '',
   tabletUrl: '',
@@ -187,7 +198,11 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
           render={({ field }) => (
             <RichTextEditorSingleLine
               error={errors.heading !== undefined}
-              helperText={errors.heading ? (errors.heading.message ?? errors.heading.type) : ''}
+              helperText={getSupportCopyHelperText(
+                field.value,
+                48,
+                errors.heading?.message ?? errors.heading?.type,
+              )}
               copyData={field.value}
               updateCopy={(value) => {
                 field.onChange(value);
@@ -208,7 +223,11 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
           render={({ field }) => (
             <RichTextEditorSingleLine
               error={errors.body !== undefined}
-              helperText={errors.body ? (errors.body.message ?? errors.body.type) : ''}
+              helperText={getSupportCopyHelperText(
+                field.value,
+                136,
+                errors.body?.message ?? errors.body?.type,
+              )}
               copyData={field.value}
               updateCopy={(value) => {
                 field.onChange(value);
