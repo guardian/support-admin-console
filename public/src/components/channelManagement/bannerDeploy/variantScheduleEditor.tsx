@@ -171,6 +171,14 @@ const VariantScheduleEditor: React.FC = () => {
         {selectedDays.length === 0 && (
           <Alert severity="info">Automatic Variant resets are disabled.</Alert>
         )}
+        <Button
+          onClick={saveSchedule}
+          color="primary"
+          variant="contained"
+          disabled={!dataFromServer || isSaving}
+        >
+          Save variant schedule
+        </Button>
         <Typography variant="subtitle1" component="h3">
           Redeploy regions
         </Typography>
@@ -181,14 +189,6 @@ const VariantScheduleEditor: React.FC = () => {
           onSelectAll={onAllRegionsChange}
           onSelectRegion={onRegionChange}
         />
-        <Button
-          onClick={saveSchedule}
-          color="primary"
-          variant="contained"
-          disabled={!dataFromServer || isSaving}
-        >
-          Save variant schedule
-        </Button>
         <Button
           onClick={redeployVariantBanner}
           color="primary"
