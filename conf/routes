@@ -190,6 +190,10 @@ POST  /frontend/banner-deploy/update                   controllers.banner.Banner
 GET   /frontend/banner-deploy2                         controllers.banner.BannerDeployController2.get
 POST  /frontend/banner-deploy2/update                  controllers.banner.BannerDeployController2.set
 
+# ----- variant banner deploy schedule ----- #
+GET   /frontend/banner-deploy-schedule                 controllers.banner.VariantBannerDeployScheduleController.get
+POST  /frontend/banner-deploy-schedule/update          controllers.banner.VariantBannerDeployScheduleController.set
+
 # ----- Gutter channel tests ----- #
 GET   /frontend/gutter-liveblog-tests                            controllers.gutter.GutterLiveblogTestsController.get
 # gutter list endpoints

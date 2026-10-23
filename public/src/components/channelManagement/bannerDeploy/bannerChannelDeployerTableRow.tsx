@@ -3,8 +3,8 @@ import React from 'react';
 
 type BannerChannelDeployerTableRowProps = {
   region: string;
-  timestamp: number;
-  email: string;
+  timestamp?: number;
+  email?: string;
   shouldRedeploy: boolean;
   onRedeployClick: (shouldRedeploy: boolean) => void;
 };
@@ -65,8 +65,8 @@ const BannerChannelDeployerTableRow: React.FC<BannerChannelDeployerTableRowProps
         />
       </TableCell>
       <TableCell>{prettifiedRegion(region)}</TableCell>
-      <TableCell>{prettifiedTimestamp(timestamp)}</TableCell>
-      <TableCell>{prettifiedUser(email)}</TableCell>
+      <TableCell>{timestamp && timestamp > 0 ? prettifiedTimestamp(timestamp) : 'Never'}</TableCell>
+      <TableCell>{email ? prettifiedUser(email) : '—'}</TableCell>
     </TableRow>
   );
 };
