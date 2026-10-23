@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   fetchFrontendSettings,
   FrontendSettingsType,
@@ -45,16 +45,22 @@ const VariantScheduleEditor: React.FC = () => {
   const [selectedDays, setSelectedDays] = useState<number[]>(defaultDaysOfWeek);
   const [isSaving, setIsSaving] = useState(false);
 
-  const fetchDataFromServer = (): void => {
-    fetchFrontendSettings<VariantBannerDeployScheduleFromServer>(settingsType)
-      .then((data) => {
-        setDataFromServer(data);
-        setSelectedDays(data.value.daysOfWeek);
-      })
-      .catch((err) => alert(String(err)));
-  };
+  const fetchDataFromServer = useCallback(
+    (preserveSelectedDays = false): Promise<void> =>
+      fetchFrontendSettings<VariantBannerDeployScheduleFromServer>(settingsType)
+        .then((data) => {
+          setDataFromServer(data);
+          if (!preserveSelectedDays) {
+            setSelectedDays(data.value.daysOfWeek);
+          }
+        })
+        .catch((err) => alert(String(err))),
+    [settingsType],
+  );
 
-  useEffect(fetchDataFromServer, [settingsType]);
+  useEffect(() => {
+    void fetchDataFromServer();
+  }, [fetchDataFromServer]);
 
   const onWeekdayChange = (day: number, isSelected: boolean): void => {
     setSelectedDays((currentDays) => toggleWeekday(currentDays, day, isSelected));
@@ -67,10 +73,28 @@ const VariantScheduleEditor: React.FC = () => {
 
     setIsSaving(true);
     saveFrontendSettings(settingsType, {
-      value: { daysOfWeek: selectedDays },
+      value: { ...dataFromServer.value, daysOfWeek: selectedDays },
       version: dataFromServer.version,
     })
-      .then(fetchDataFromServer)
+      .then(() => fetchDataFromServer())
+      .catch((err) => alert(String(err)))
+      .finally(() => setIsSaving(false));
+  };
+
+  const redeployVariantBanner = (): void => {
+    if (!dataFromServer || isSaving) {
+      return;
+    }
+
+    setIsSaving(true);
+    saveFrontendSettings(settingsType, {
+      value: {
+        ...dataFromServer.value,
+        lastManualRedeployTimestamp: Date.now(),
+      },
+      version: dataFromServer.version,
+    })
+      .then(() => fetchDataFromServer(true))
       .catch((err) => alert(String(err)))
       .finally(() => setIsSaving(false));
   };
@@ -87,8 +111,10 @@ const VariantScheduleEditor: React.FC = () => {
           Reset dismissed Banner 1 for consented Variant users at 9am on selected days.
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          For an additional reset during the day, select regions under Banner 1 and use its Redeploy
-          button. Manual redeploy also affects Control and unconsented users in those regions.
+          Use this to make dismissed Banner 1 eligible for consented Variant users across all
+          regions. The banner service applies the reset within five minutes, and Auxia still decides
+          whether to show the banner. The channel 1 Redeploy button remains for Control and
+          unconsented users.
         </Typography>
         <FormControl component="fieldset" disabled={!dataFromServer || isSaving}>
           <FormLabel component="legend">Reset days</FormLabel>
@@ -117,6 +143,14 @@ const VariantScheduleEditor: React.FC = () => {
           disabled={!dataFromServer || isSaving}
         >
           Save variant schedule
+        </Button>
+        <Button
+          onClick={redeployVariantBanner}
+          color="primary"
+          variant="outlined"
+          disabled={!dataFromServer || isSaving}
+        >
+          Redeploy Variant Banner 1 in all regions
         </Button>
       </ScheduleContent>
     </ScheduleCard>

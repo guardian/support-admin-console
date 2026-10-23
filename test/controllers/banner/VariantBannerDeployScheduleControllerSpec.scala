@@ -8,6 +8,7 @@ class VariantBannerDeployScheduleControllerSpec extends AnyFlatSpec with Matcher
     val result = VariantBannerDeployScheduleController.defaultSettings
 
     result.value.daysOfWeek shouldBe (0 to 6).toList
+    result.value.lastManualRedeployTimestamp shouldBe None
     result.version shouldBe ""
   }
 }

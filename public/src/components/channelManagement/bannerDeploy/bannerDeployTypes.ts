@@ -29,6 +29,7 @@ export interface DataFromServer {
 
 export interface VariantBannerDeploySchedule {
   daysOfWeek: number[];
+  lastManualRedeployTimestamp?: number;
 }
 
 export interface VariantBannerDeployScheduleFromServer {
