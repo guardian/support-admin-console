@@ -19,9 +19,18 @@ import {
   saveFrontendSettings,
 } from '../../../utils/requests';
 import type { VariantBannerDeployScheduleFromServer } from './bannerDeployTypes';
+import type { BannerDeployRegionName, BannersToRedeploy } from './bannerDeployTypes';
+import VariantRedeployRegionsTable from './variantRedeployRegionsTable';
 import { toggleWeekday, weekdays } from './variantScheduleUtils';
 
 const defaultDaysOfWeek = weekdays.map(({ day }) => day);
+const noRegionsSelected: BannersToRedeploy = {
+  Australia: false,
+  EuropeanUnion: false,
+  RestOfWorld: false,
+  UnitedStates: false,
+  UnitedKingdom: false,
+};
 
 const ScheduleCard = styled(Paper)(({ theme }) => ({
   height: '100%',
@@ -43,6 +52,7 @@ const VariantScheduleEditor: React.FC = () => {
   const [dataFromServer, setDataFromServer] =
     useState<VariantBannerDeployScheduleFromServer | null>(null);
   const [selectedDays, setSelectedDays] = useState<number[]>(defaultDaysOfWeek);
+  const [selectedRegions, setSelectedRegions] = useState<BannersToRedeploy>(noRegionsSelected);
   const [isSaving, setIsSaving] = useState(false);
 
   const fetchDataFromServer = useCallback(
@@ -66,6 +76,20 @@ const VariantScheduleEditor: React.FC = () => {
     setSelectedDays((currentDays) => toggleWeekday(currentDays, day, isSelected));
   };
 
+  const onRegionChange = (region: BannerDeployRegionName, isSelected: boolean): void => {
+    setSelectedRegions((currentRegions) => ({ ...currentRegions, [region]: isSelected }));
+  };
+
+  const onAllRegionsChange = (shouldRedeploy: boolean): void => {
+    setSelectedRegions({
+      Australia: shouldRedeploy,
+      EuropeanUnion: shouldRedeploy,
+      RestOfWorld: shouldRedeploy,
+      UnitedStates: shouldRedeploy,
+      UnitedKingdom: shouldRedeploy,
+    });
+  };
+
   const saveSchedule = (): void => {
     if (!dataFromServer) {
       return;
@@ -82,19 +106,31 @@ const VariantScheduleEditor: React.FC = () => {
   };
 
   const redeployVariantBanner = (): void => {
-    if (!dataFromServer || isSaving) {
+    if (!dataFromServer || isSaving || !Object.values(selectedRegions).some(Boolean)) {
       return;
     }
 
     setIsSaving(true);
+    const timestamp = Date.now();
+    const manualRedeploysByRegion = { ...dataFromServer.value.manualRedeploysByRegion };
+    Object.entries(selectedRegions).forEach(([region, shouldRedeploy]) => {
+      if (shouldRedeploy) {
+        manualRedeploysByRegion[region as BannerDeployRegionName] = {
+          timestamp,
+          email: dataFromServer.email,
+        };
+      }
+    });
+
     saveFrontendSettings(settingsType, {
       value: {
         ...dataFromServer.value,
-        lastManualRedeployTimestamp: Date.now(),
+        manualRedeploysByRegion,
       },
       version: dataFromServer.version,
     })
       .then(() => fetchDataFromServer(true))
+      .then(() => setSelectedRegions(noRegionsSelected))
       .catch((err) => alert(String(err)))
       .finally(() => setIsSaving(false));
   };
@@ -111,14 +147,13 @@ const VariantScheduleEditor: React.FC = () => {
           Reset dismissed Banner 1 for consented Variant users at 9am on selected days.
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Use this to make dismissed Banner 1 eligible for consented Variant users across all
-          regions. The banner service applies the reset within five minutes, and Auxia still decides
-          whether to show the banner. The channel 1 Redeploy button remains for Control and
-          unconsented users.
+          A redeploy makes dismissed Banner 1 eligible for consented Variant users in the selected
+          regions within five minutes. Auxia still decides whether to show the banner. The channel 1
+          Redeploy button remains for Control and unconsented users.
         </Typography>
         <FormControl component="fieldset" disabled={!dataFromServer || isSaving}>
           <FormLabel component="legend">Reset days</FormLabel>
-          <FormGroup>
+          <FormGroup row sx={{ flexWrap: 'wrap' }}>
             {weekdays.map(({ day, label }) => (
               <FormControlLabel
                 key={day}
@@ -136,6 +171,16 @@ const VariantScheduleEditor: React.FC = () => {
         {selectedDays.length === 0 && (
           <Alert severity="info">Automatic Variant resets are disabled.</Alert>
         )}
+        <Typography variant="subtitle1" component="h3">
+          Redeploy regions
+        </Typography>
+        <VariantRedeployRegionsTable
+          selectedRegions={selectedRegions}
+          manualRedeploysByRegion={dataFromServer?.value.manualRedeploysByRegion}
+          lastManualRedeployTimestamp={dataFromServer?.value.lastManualRedeployTimestamp}
+          onSelectAll={onAllRegionsChange}
+          onSelectRegion={onRegionChange}
+        />
         <Button
           onClick={saveSchedule}
           color="primary"
@@ -148,9 +193,9 @@ const VariantScheduleEditor: React.FC = () => {
           onClick={redeployVariantBanner}
           color="primary"
           variant="outlined"
-          disabled={!dataFromServer || isSaving}
+          disabled={!dataFromServer || isSaving || !Object.values(selectedRegions).some(Boolean)}
         >
-          Redeploy Variant Banner 1 in all regions
+          Redeploy Variant Banner 1 in selected regions
         </Button>
       </ScheduleContent>
     </ScheduleCard>

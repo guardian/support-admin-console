@@ -13,6 +13,16 @@ export interface BannerDeploys {
   UnitedKingdom: BannerDeployRegion;
 }
 
+export type BannerDeployRegionName = keyof BannerDeploys;
+
+export const bannerDeployRegionNames: BannerDeployRegionName[] = [
+  'Australia',
+  'EuropeanUnion',
+  'RestOfWorld',
+  'UnitedKingdom',
+  'UnitedStates',
+];
+
 export interface BannersToRedeploy {
   Australia: boolean;
   EuropeanUnion: boolean;
@@ -30,6 +40,7 @@ export interface DataFromServer {
 export interface VariantBannerDeploySchedule {
   daysOfWeek: number[];
   lastManualRedeployTimestamp?: number;
+  manualRedeploysByRegion?: Partial<Record<BannerDeployRegionName, BannerDeployRegion>>;
 }
 
 export interface VariantBannerDeployScheduleFromServer {

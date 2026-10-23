@@ -26,11 +26,28 @@ class VariantBannerDeployScheduleSpec extends AnyFlatSpec with Matchers {
       .noSpaces shouldBe "{\"daysOfWeek\":[0,1]}"
   }
 
+  it should "round-trip regional redeploy timestamps and users" in {
+    val schedule = VariantBannerDeploySchedule(
+      List(0, 1),
+      None,
+      Map("UnitedKingdom" -> BannerDeployRegion(1_800_000_000_000L, "operator@example.com"))
+    )
+    val encoded = Encoder[VariantBannerDeploySchedule].apply(schedule)
+
+    decode[VariantBannerDeploySchedule](encoded.noSpaces) shouldBe Right(schedule)
+  }
+
   it should "reject out-of-range and duplicate weekday indices" in {
     decode[VariantBannerDeploySchedule]("{\"daysOfWeek\":[7]}").isLeft shouldBe true
     decode[VariantBannerDeploySchedule]("{\"daysOfWeek\":[1,1]}").isLeft shouldBe true
     decode[VariantBannerDeploySchedule](
       "{\"daysOfWeek\":[],\"lastManualRedeployTimestamp\":-1}"
+    ).isLeft shouldBe true
+    decode[VariantBannerDeploySchedule](
+      "{\"daysOfWeek\":[],\"manualRedeploysByRegion\":{\"Unknown\":{\"timestamp\":1,\"email\":\"operator@example.com\"}}}"
+    ).isLeft shouldBe true
+    decode[VariantBannerDeploySchedule](
+      "{\"daysOfWeek\":[],\"manualRedeploysByRegion\":{\"UnitedKingdom\":{\"timestamp\":-1,\"email\":\"operator@example.com\"}}}"
     ).isLeft shouldBe true
   }
 

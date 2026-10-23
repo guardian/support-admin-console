@@ -29,7 +29,7 @@ const ChannelTableContainer = styled(Box)({
 });
 
 const VariantScheduleContainer = styled(Box)({
-  alignSelf: 'start',
+  gridColumn: '1 / -1',
 });
 
 const BannerDeployDashboard: React.FC = () => {

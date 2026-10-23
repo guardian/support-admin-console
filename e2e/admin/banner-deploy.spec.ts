@@ -35,10 +35,10 @@ test.describe('Admin and Access Management', () => {
       ),
     );
     let storedDays = [0, 1, 2, 3, 4, 5, 6];
-    let storedRedeployTimestamp: number | undefined;
+    let storedManualRedeploysByRegion: Record<string, { timestamp: number; email: string }> = {};
     const savedDays: number[][] = [];
     const savedVersions: string[] = [];
-    const redeployTimestamps: number[] = [];
+    const savedManualRedeploys: Array<Record<string, { timestamp: number; email: string }>> = [];
 
     await page.route('**/isValid', (route) => route.fulfill({ status: 200 }));
     await page.route('**/frontend/banner-deploy', (route) =>
@@ -50,25 +50,26 @@ test.describe('Admin and Access Management', () => {
     await page.route('**/frontend/banner-deploy-schedule**', async (route) => {
       if (route.request().method() === 'POST') {
         const requestBody = route.request().postDataJSON() as {
-          value: { daysOfWeek: number[]; lastManualRedeployTimestamp?: number };
+          value: {
+            daysOfWeek: number[];
+            manualRedeploysByRegion?: Record<string, { timestamp: number; email: string }>;
+          };
           version: string;
         };
         storedDays = requestBody.value.daysOfWeek;
-        storedRedeployTimestamp = requestBody.value.lastManualRedeployTimestamp;
+        storedManualRedeploysByRegion = requestBody.value.manualRedeploysByRegion ?? {};
         savedDays.push(storedDays);
         savedVersions.push(requestBody.version);
-        if (storedRedeployTimestamp !== undefined) {
-          redeployTimestamps.push(storedRedeployTimestamp);
-        }
+        savedManualRedeploys.push(storedManualRedeploysByRegion);
         await route.fulfill({ status: 200, body: 'updated' });
       } else {
         await route.fulfill({
           json: {
             value: {
               daysOfWeek: storedDays,
-              ...(storedRedeployTimestamp === undefined
+              ...(Object.keys(storedManualRedeploysByRegion).length === 0
                 ? {}
-                : { lastManualRedeployTimestamp: storedRedeployTimestamp }),
+                : { manualRedeploysByRegion: storedManualRedeploysByRegion }),
             },
             version: 'schedule-v1',
             email: 'operator@example.com',
@@ -89,7 +90,10 @@ test.describe('Admin and Access Management', () => {
     ).toBeVisible();
     await expect(page.getByText(/Auxia still decides whether to show the banner\./)).toBeVisible();
     await expect(
-      page.getByRole('button', { name: 'Redeploy Variant Banner 1 in all regions' }),
+      page.getByRole('button', { name: 'Redeploy Variant Banner 1 in selected regions' }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('columnheader', { name: 'Last Manual Deploy (UTC)' }).last(),
     ).toBeVisible();
 
     for (const day of [
@@ -131,15 +135,31 @@ test.describe('Admin and Access Management', () => {
     expect(savedDays[savedDays.length - 1]).toEqual([]);
     expect(savedVersions[savedVersions.length - 1]).toBe('schedule-v1');
 
+    await page
+      .getByRole('table', { name: 'Variant Banner 1 redeploy regions' })
+      .getByRole('row', { name: /Australia/ })
+      .getByRole('checkbox')
+      .check();
     const variantRedeploy = page.waitForRequest(
       (request) =>
         request.url().endsWith('/frontend/banner-deploy-schedule/update') &&
         request.method() === 'POST',
     );
-    await page.getByRole('button', { name: 'Redeploy Variant Banner 1 in all regions' }).click();
-    await variantRedeploy;
+    await page
+      .getByRole('button', { name: 'Redeploy Variant Banner 1 in selected regions' })
+      .click();
+    const redeployRequest = await variantRedeploy;
+    const redeployBody = redeployRequest.postDataJSON() as {
+      value: {
+        manualRedeploysByRegion: Record<string, { timestamp: number; email: string }>;
+      };
+    };
     expect(savedDays[savedDays.length - 1]).toEqual([]);
-    expect(redeployTimestamps[redeployTimestamps.length - 1]).toEqual(expect.any(Number));
+    expect(Object.keys(redeployBody.value.manualRedeploysByRegion)).toEqual(['Australia']);
+    expect(redeployBody.value.manualRedeploysByRegion.Australia.timestamp).toEqual(
+      expect.any(Number),
+    );
+    expect(redeployBody.value.manualRedeploysByRegion.Australia.email).toBe('operator@example.com');
 
     const savedAfterRedeploy = page.waitForRequest(
       (request) =>
@@ -148,7 +168,8 @@ test.describe('Admin and Access Management', () => {
     );
     await page.getByRole('button', { name: 'Save variant schedule' }).click();
     await savedAfterRedeploy;
-    expect(redeployTimestamps).toHaveLength(2);
-    expect(redeployTimestamps[1]).toBe(redeployTimestamps[0]);
+    expect(savedManualRedeploys[savedManualRedeploys.length - 1]).toEqual(
+      redeployBody.value.manualRedeploysByRegion,
+    );
   });
 });
