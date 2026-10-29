@@ -1,4 +1,7 @@
-import { getChoiceCardsValidationError } from './choiceCardsValidation';
+import {
+  getChoiceCardsValidationError,
+  getNoDefaultChoiceCardWarning,
+} from './choiceCardsValidation';
 
 describe('getChoiceCardsValidationError', () => {
   it('allows custom choice cards with no default', () => {
@@ -15,5 +18,16 @@ describe('getChoiceCardsValidationError', () => {
 
   it('rejects an empty custom choice card configuration', () => {
     expect(getChoiceCardsValidationError(0, 0)).toBe('At least one choice card must be configured');
+  });
+
+  it('warns when custom choice cards have no default', () => {
+    expect(getNoDefaultChoiceCardWarning(2, 0)).toBe(
+      'No choice card will be selected by default for users.',
+    );
+  });
+
+  it('does not warn for an empty or defaulted choice card configuration', () => {
+    expect(getNoDefaultChoiceCardWarning(0, 0)).toBeUndefined();
+    expect(getNoDefaultChoiceCardWarning(2, 1)).toBeUndefined();
   });
 });

@@ -12,7 +12,10 @@ import { DefaultChoiceCardsSettings } from '../../../models/defaultChoiceCards';
 import { ChannelKey, countDefaultCards } from '../../../utils/defaultChoiceCards';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../../utils/requests';
 import { ChoiceCardEditor } from './ChoiceCardEditor';
-import { getChoiceCardsValidationError } from './choiceCardsValidation';
+import {
+  getChoiceCardsValidationError,
+  getNoDefaultChoiceCardWarning,
+} from './choiceCardsValidation';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -109,6 +112,10 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
     choiceCards.length,
     defaultCardCount,
   );
+  const noDefaultChoiceCardWarning = getNoDefaultChoiceCardWarning(
+    choiceCards.length,
+    defaultCardCount,
+  );
 
   React.useEffect(() => {
     void fetchDefaultChoiceCardsSettings().then((settings) =>
@@ -193,6 +200,11 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
         <>
           {formMethods.formState.errors.hasOneDefault && (
             <Alert severity="error">{formMethods.formState.errors.hasOneDefault.message}</Alert>
+          )}
+          {noDefaultChoiceCardWarning && (
+            <Alert severity="warning" variant="filled">
+              <strong>Warning: no default choice card.</strong> {noDefaultChoiceCardWarning}
+            </Alert>
           )}
           {fields.map((choiceCard, idx) => (
             <ChoiceCardContainer key={choiceCard.id}>
