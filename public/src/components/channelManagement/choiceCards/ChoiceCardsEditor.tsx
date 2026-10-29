@@ -13,8 +13,8 @@ import { ChannelKey, countDefaultCards } from '../../../utils/defaultChoiceCards
 import { fetchFrontendSettings, FrontendSettingsType } from '../../../utils/requests';
 import { ChoiceCardEditor } from './ChoiceCardEditor';
 import {
-  getChoiceCardsValidationError,
   getNoDefaultChoiceCardWarning,
+  reportChoiceCardsValidation,
 } from './choiceCardsValidation';
 
 const Container = styled(Box)(({ theme }) => ({
@@ -108,10 +108,6 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
 
   const choiceCardsSelection = getChoiceCardsSelection(showChoiceCards, choiceCardsSettings);
   const defaultCardCount = countDefaultCards(choiceCards);
-  const defaultCardValidationError = getChoiceCardsValidationError(
-    choiceCards.length,
-    defaultCardCount,
-  );
   const noDefaultChoiceCardWarning = getNoDefaultChoiceCardWarning(
     choiceCards.length,
     defaultCardCount,
@@ -125,20 +121,31 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
 
   React.useEffect(() => {
     if (choiceCardsSelection === 'CustomChoiceCards') {
+      const defaultCardValidationError = reportChoiceCardsValidation(
+        choiceCards.length,
+        defaultCardCount,
+        onValidationChange,
+      );
+
       if (defaultCardValidationError) {
         formMethods.setError('hasOneDefault', {
           type: 'custom',
           message: defaultCardValidationError,
         });
-        onValidationChange(false);
       } else {
         formMethods.clearErrors('hasOneDefault');
-        onValidationChange(true);
       }
     } else {
       onValidationChange(true);
     }
-  }, [fields, choiceCardsSelection, formMethods, defaultCardValidationError, onValidationChange]);
+  }, [
+    fields,
+    choiceCards.length,
+    choiceCardsSelection,
+    defaultCardCount,
+    formMethods,
+    onValidationChange,
+  ]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'DefaultChoiceCards') {

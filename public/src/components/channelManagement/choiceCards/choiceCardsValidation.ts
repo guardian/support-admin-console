@@ -9,6 +9,16 @@ export const getChoiceCardsValidationError = (
   return defaultCardCount > 1 ? 'Only one card can be set as the default' : undefined;
 };
 
+export const reportChoiceCardsValidation = (
+  choiceCardCount: number,
+  defaultCardCount: number,
+  onValidationChange: (isValid: boolean) => void,
+): string | undefined => {
+  const validationError = getChoiceCardsValidationError(choiceCardCount, defaultCardCount);
+  onValidationChange(validationError === undefined);
+  return validationError;
+};
+
 export const getNoDefaultChoiceCardWarning = (
   choiceCardCount: number,
   defaultCardCount: number,

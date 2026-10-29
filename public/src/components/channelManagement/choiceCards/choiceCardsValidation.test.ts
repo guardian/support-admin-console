@@ -1,6 +1,7 @@
 import {
   getChoiceCardsValidationError,
   getNoDefaultChoiceCardWarning,
+  reportChoiceCardsValidation,
 } from './choiceCardsValidation';
 
 describe('getChoiceCardsValidationError', () => {
@@ -8,8 +9,22 @@ describe('getChoiceCardsValidationError', () => {
     expect(getChoiceCardsValidationError(2, 0)).toBeUndefined();
   });
 
+  it('reports a no-default configuration as valid to its parent', () => {
+    const onValidationChange = jest.fn();
+
+    expect(reportChoiceCardsValidation(2, 0, onValidationChange)).toBeUndefined();
+    expect(onValidationChange).toHaveBeenCalledWith(true);
+  });
+
   it('allows one custom choice card default', () => {
     expect(getChoiceCardsValidationError(2, 1)).toBeUndefined();
+  });
+
+  it('reports a one-default configuration as valid to its parent', () => {
+    const onValidationChange = jest.fn();
+
+    expect(reportChoiceCardsValidation(2, 1, onValidationChange)).toBeUndefined();
+    expect(onValidationChange).toHaveBeenCalledWith(true);
   });
 
   it('rejects multiple custom choice card defaults with the existing error', () => {
