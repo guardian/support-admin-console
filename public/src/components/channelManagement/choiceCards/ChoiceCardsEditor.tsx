@@ -7,11 +7,12 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import { DataFromServer } from '../../../hocs/withS3Data';
-import { ChoiceCard, ChoiceCardsSettings } from '../../../models/choiceCards';
+import { ChoiceCardsSettings } from '../../../models/choiceCards';
 import { DefaultChoiceCardsSettings } from '../../../models/defaultChoiceCards';
-import { ChannelKey } from '../../../utils/defaultChoiceCards';
+import { ChannelKey, countDefaultCards } from '../../../utils/defaultChoiceCards';
 import { fetchFrontendSettings, FrontendSettingsType } from '../../../utils/requests';
 import { ChoiceCardEditor } from './ChoiceCardEditor';
+import { getChoiceCardsValidationError } from './choiceCardsValidation';
 
 const Container = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -47,9 +48,6 @@ const getChoiceCardsSelection = (
     return 'NoChoiceCards';
   }
 };
-
-const countDefaultCards = (choiceCards: ChoiceCard[]): number =>
-  choiceCards.filter((card) => card.isDefault).length;
 
 let defaultChoiceCardsSettingsRequest: Promise<DefaultChoiceCardsSettings> | undefined;
 
@@ -99,7 +97,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
     name: 'choiceCards',
   });
 
-  // Watch the choiceCards array for updates in order to update the hasOneDefault field
+  // Watch the choiceCards array so default-card validation stays in sync with edits.
   const choiceCards = useWatch({
     control: formMethods.control,
     name: 'choiceCards',
@@ -107,6 +105,10 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
 
   const choiceCardsSelection = getChoiceCardsSelection(showChoiceCards, choiceCardsSettings);
   const defaultCardCount = countDefaultCards(choiceCards);
+  const defaultCardValidationError = getChoiceCardsValidationError(
+    choiceCards.length,
+    defaultCardCount,
+  );
 
   React.useEffect(() => {
     void fetchDefaultChoiceCardsSettings().then((settings) =>
@@ -116,13 +118,10 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
 
   React.useEffect(() => {
     if (choiceCardsSelection === 'CustomChoiceCards') {
-      if (defaultCardCount !== 1) {
+      if (defaultCardValidationError) {
         formMethods.setError('hasOneDefault', {
           type: 'custom',
-          message:
-            defaultCardCount === 0
-              ? 'One card must be set as the default'
-              : 'Only one card can be set as the default',
+          message: defaultCardValidationError,
         });
         onValidationChange(false);
       } else {
@@ -132,7 +131,7 @@ const ChoiceCardsEditor: React.FC<ChoiceCardsEditorProps> = ({
     } else {
       onValidationChange(true);
     }
-  }, [fields, choiceCardsSelection, formMethods, defaultCardCount, onValidationChange]);
+  }, [fields, choiceCardsSelection, formMethods, defaultCardValidationError, onValidationChange]);
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'DefaultChoiceCards') {
