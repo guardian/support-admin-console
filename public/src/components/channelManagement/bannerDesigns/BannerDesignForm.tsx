@@ -10,6 +10,7 @@ import {
   FontSize,
 } from '../../../models/bannerDesign';
 import { stringToHexColour } from '../../../utils/bannerDesigns';
+import type { ThemeColours } from './utils/colourThemes';
 import { BannerDesignUsage } from './BannerDesignUsage';
 import { BannerVisualEditor } from './BannerVisualEditor';
 import { HeaderImageEditor } from './HeaderImageEditor';
@@ -21,6 +22,30 @@ type Props = {
   setValidationStatus: (scope: string, isValid: boolean) => void;
   isDisabled: boolean;
   onChange: (design: BannerDesign) => void;
+};
+
+export const applyChoiceCardPalette = (
+  visual: BannerDesignVisual | undefined,
+  colours: ThemeColours['choiceCards'],
+): BannerDesignVisual | undefined => {
+  if (visual?.kind !== 'ChoiceCards') {
+    return visual;
+  }
+
+  return {
+    ...visual,
+    buttonColour: stringToHexColour(colours.buttonColour),
+    buttonOpacity: colours.buttonOpacity,
+    buttonTextColour: stringToHexColour(colours.buttonTextColour),
+    buttonBorderColour: stringToHexColour(colours.buttonBorderColour),
+    buttonSelectColour: stringToHexColour(colours.buttonSelectColour),
+    buttonSelectOpacity: colours.buttonSelectOpacity,
+    buttonSelectTextColour: stringToHexColour(colours.buttonSelectTextColour),
+    buttonSelectBorderColour: stringToHexColour(colours.buttonSelectBorderColour),
+    buttonSelectMarkerColour: stringToHexColour(colours.buttonSelectMarkerColour),
+    pillTextColour: stringToHexColour(colours.pillTextColour),
+    pillBackgroundColour: stringToHexColour(colours.pillBackgroundColour),
+  };
 };
 
 const Container = styled('div')(({ theme }) => ({
@@ -156,32 +181,7 @@ const BannerDesignForm: React.FC<Props> = ({
       },
     };
 
-    if (updated.visual?.kind === 'ChoiceCards') {
-      updated.visual = {
-        ...updated.visual,
-        buttonColour: stringToHexColour(selectedPalette.colours.choiceCards.buttonColour),
-        buttonTextColour: stringToHexColour(selectedPalette.colours.choiceCards.buttonTextColour),
-        buttonBorderColour: stringToHexColour(
-          selectedPalette.colours.choiceCards.buttonBorderColour,
-        ),
-        buttonSelectColour: stringToHexColour(
-          selectedPalette.colours.choiceCards.buttonSelectColour,
-        ),
-        buttonSelectTextColour: stringToHexColour(
-          selectedPalette.colours.choiceCards.buttonSelectTextColour,
-        ),
-        buttonSelectBorderColour: stringToHexColour(
-          selectedPalette.colours.choiceCards.buttonSelectBorderColour,
-        ),
-        buttonSelectMarkerColour: stringToHexColour(
-          selectedPalette.colours.choiceCards.buttonSelectMarkerColour,
-        ),
-        pillTextColour: stringToHexColour(selectedPalette.colours.choiceCards.pillTextColour),
-        pillBackgroundColour: stringToHexColour(
-          selectedPalette.colours.choiceCards.pillBackgroundColour,
-        ),
-      };
-    }
+    updated.visual = applyChoiceCardPalette(updated.visual, selectedPalette.colours.choiceCards);
 
     setValidationStatus('colourTheme', true);
     onChange(updated);
