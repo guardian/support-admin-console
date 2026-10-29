@@ -162,8 +162,7 @@ const ChoiceCard = styled('div')(({ theme }) => ({
   position: 'relative',
   backgroundColor: 'var(--choice-card-background)',
   '&:hover': {
-    backgroundColor:
-      'var(--choice-card-hover-background, var(--choice-card-background))',
+    backgroundColor: 'var(--choice-card-hover-background, var(--choice-card-background))',
   },
 }));
 
@@ -348,9 +347,7 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
           </LeftCol>
           {visualKind === 'ChoiceCards' && colours.choiceCards && (
             <RightCol>
-              <ChoiceCard
-                style={getChoiceCardPreviewStyle(colours.choiceCards, true)}
-              >
+              <ChoiceCard style={getChoiceCardPreviewStyle(colours.choiceCards, true)}>
                 <RecommendedBadge
                   style={{
                     background: colours.choiceCards.pillBackgroundColour,
@@ -408,9 +405,7 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
                   </ChoiceItem>
                 </ChoiceList>
               </ChoiceCard>
-              <ChoiceCard
-                style={getChoiceCardPreviewStyle(colours.choiceCards, false)}
-              >
+              <ChoiceCard style={getChoiceCardPreviewStyle(colours.choiceCards, false)}>
                 <ChoiceOption>
                   <Radio
                     style={{ border: `1px solid ${colours.choiceCards.buttonBorderColour}` }}

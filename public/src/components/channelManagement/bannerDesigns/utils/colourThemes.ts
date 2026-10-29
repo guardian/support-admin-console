@@ -362,7 +362,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             choiceCards: {
               buttonColour: '#FFFFFF',
               buttonOpacity: 0.8,
-            buttonTextColour: '#000000',
+              buttonTextColour: '#000000',
               buttonBorderColour: '#121212',
               buttonSelectColour: '#FFFFFF',
               buttonSelectOpacity: 0.95,
@@ -508,7 +508,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             choiceCards: {
               buttonColour: '#FFFFFF',
               buttonOpacity: 0.8,
-            buttonTextColour: '#000000',
+              buttonTextColour: '#000000',
               buttonBorderColour: '#121212',
               buttonSelectColour: '#FFFFFF',
               buttonSelectOpacity: 0.95,
@@ -1022,7 +1022,7 @@ export const colourThemes: { styles: ThemeStyle[] } = {
             choiceCards: {
               buttonColour: '#FFFFFF',
               buttonOpacity: 0.8,
-            buttonTextColour: '#000000',
+              buttonTextColour: '#000000',
               buttonBorderColour: '#121212',
               buttonSelectColour: '#FFFFFF',
               buttonSelectOpacity: 0.95,

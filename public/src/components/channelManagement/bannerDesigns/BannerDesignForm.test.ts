@@ -1,6 +1,6 @@
-import { colourThemes } from './utils/colourThemes';
-import { applyChoiceCardPalette } from './BannerDesignForm';
 import type { BannerDesignVisual } from '../../../models/bannerDesign';
+import { applyChoiceCardPalette } from './BannerDesignForm';
+import { colourThemes } from './utils/colourThemes';
 
 const firstTheme = colourThemes.styles[0].themes[0];
 if (firstTheme.kind !== 'ChoiceCards') {

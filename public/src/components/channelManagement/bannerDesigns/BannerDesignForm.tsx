@@ -10,12 +10,12 @@ import {
   FontSize,
 } from '../../../models/bannerDesign';
 import { stringToHexColour } from '../../../utils/bannerDesigns';
-import type { ThemeColours } from './utils/colourThemes';
 import { BannerDesignUsage } from './BannerDesignUsage';
 import { BannerVisualEditor } from './BannerVisualEditor';
 import { HeaderImageEditor } from './HeaderImageEditor';
 import { HeadlineSizeEditor } from './HeadlineSizeEditor';
 import PaletteSelector, { SelectedPalette } from './PaletteSelector';
+import type { ThemeColours } from './utils/colourThemes';
 
 type Props = {
   design: BannerDesign;
