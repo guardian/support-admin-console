@@ -20,6 +20,7 @@ export enum FrontendSettingsType {
   BannerTests2 = 'banner-tests2',
   BannerDeploy = 'banner-deploy',
   BannerDeploy2 = 'banner-deploy2',
+  BannerDeploySchedule = 'banner-deploy-schedule',
   GutterLiveblogTests = 'gutter-liveblog-tests',
   ChannelSwitches = 'channel-switches',
   Campaigns = 'campaigns',
