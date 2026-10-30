@@ -214,6 +214,7 @@ class AppComponents(context: Context, stage: String)
     ),
     new BannerDeployController(authAction, controllerComponents, stage, runtime),
     new BannerDeployController2(authAction, controllerComponents, stage, runtime),
+    new VariantBannerDeployScheduleController(authAction, controllerComponents, stage, runtime),
     new GutterLiveblogTestsController(
       authAction,
       controllerComponents,
