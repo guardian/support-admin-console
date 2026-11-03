@@ -12,20 +12,24 @@ interface Inline1VariantPreviewButtonProps {
 const Inline1VariantPreviewButton: React.FC<Inline1VariantPreviewButtonProps> = ({
   variant,
   isDisabled,
-}: Inline1VariantPreviewButtonProps) => (
-  <Button
-    startIcon={<VisibilityIcon />}
-    size="small"
-    onClick={(event): void => event.stopPropagation()}
-    onFocus={(event): void => event.stopPropagation()}
-    href={buildInline1PreviewUrl(variant)}
-    target="_blank"
-    rel="noopener noreferrer"
-    disabled={isDisabled}
-  >
-    COMPONENT PREVIEW
-  </Button>
-);
+}: Inline1VariantPreviewButtonProps) => {
+  const previewUrl = buildInline1PreviewUrl(variant);
+
+  return (
+    <Button
+      component="a"
+      startIcon={<VisibilityIcon />}
+      size="small"
+      onClick={(event): void => event.stopPropagation()}
+      onFocus={(event): void => event.stopPropagation()}
+      href={previewUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      disabled={isDisabled || !previewUrl}
+    >
+      {previewUrl ? 'COMPONENT PREVIEW' : 'Will be added soon'}
+    </Button>
+  );
+};
 
 export default Inline1VariantPreviewButton;
-

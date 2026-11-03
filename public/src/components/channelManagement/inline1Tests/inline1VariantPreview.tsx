@@ -1,21 +1,39 @@
+import { Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Inline1Variant } from '../../../models/inline1';
-import type { Inline1MessageType } from '../../../models/inline1';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
 
 interface Inline1Props {
   variant: Inline1Variant;
 }
 
-const STORY_NAMES: Record<Inline1MessageType, string> = {
-  Inline1SupportMessage: 'components-marketing-supporterrevenue--default',
-  Inline1NewsletterMessage: 'components-marketing-newslettersignup--default', //TODO: update this to the correct story once it is created
-  Inline1PuzzlesMessage: 'components-marketing-puzzles--default',//TODO: update this to the correct story once it is created
+type SupportMessage = Extract<Inline1Variant['message'], { type: 'Inline1SupportMessage' }>;
+
+type SupporterRevenueProps = SupportMessage & {
+  variant: Inline1Variant;
+  message: SupportMessage;
 };
 
-export const buildInline1PreviewUrl = (variant: Inline1Variant): string =>
-  buildStorybookUrl(STORY_NAMES[variant.message.type], { variant } satisfies Inline1Props);
+const SUPPORTER_REVENUE_STORY = 'components-marketing-supporterrevenue--default';
+
+const buildProps = (variant: Inline1Variant): Inline1Props | SupporterRevenueProps => {
+  if (variant.message.type === 'Inline1SupportMessage') {
+    return {
+      variant,
+    };
+  }
+
+  return { variant } satisfies Inline1Props;
+};
+
+export const buildInline1PreviewUrl = (variant: Inline1Variant): string | undefined => {
+  if (variant.message.type !== 'Inline1SupportMessage') {
+    return undefined;
+  }
+
+  return buildStorybookUrl(SUPPORTER_REVENUE_STORY, buildProps(variant));
+};
 
 const Iframe = styled('iframe')({
   width: '620px',
@@ -34,6 +52,10 @@ const Inline1VariantPreview: React.FC<Inline1VariantPreviewProps> = ({
   variant,
 }: Inline1VariantPreviewProps) => {
   const storybookUrl = buildInline1PreviewUrl(variant);
+
+  if (!storybookUrl) {
+    return <Typography>Will be added soon</Typography>;
+  }
 
   return (
     <div>
