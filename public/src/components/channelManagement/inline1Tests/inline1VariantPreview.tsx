@@ -1,16 +1,21 @@
 import { styled } from '@mui/material/styles';
 import React from 'react';
 import { Inline1Variant } from '../../../models/inline1';
+import type { Inline1MessageType } from '../../../models/inline1';
 import { buildStorybookUrl } from '../helpers/dcrStorybook';
 
 interface Inline1Props {
   variant: Inline1Variant;
 }
 
-const STORY_NAME = 'components-marketing-supporterrevenue--default';
+const STORY_NAMES: Record<Inline1MessageType, string> = {
+  Inline1SupportMessage: 'components-marketing-supporterrevenue--default',
+  Inline1NewsletterMessage: 'components-marketing-newslettersignup--default', //TODO: update this to the correct story once it is created
+  Inline1PuzzlesMessage: 'components-marketing-puzzles--default',//TODO: update this to the correct story once it is created
+};
 
 export const buildInline1PreviewUrl = (variant: Inline1Variant): string =>
-  buildStorybookUrl(STORY_NAME, { variant } satisfies Inline1Props);
+  buildStorybookUrl(STORY_NAMES[variant.message.type], { variant } satisfies Inline1Props);
 
 const Iframe = styled('iframe')({
   width: '620px',
