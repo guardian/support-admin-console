@@ -9,15 +9,9 @@ import { ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
 import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
 import { Inline1EditorConfig } from '../helpers/shared';
 import {
-  ARTICLE_COUNT_TEMPLATE,
-  COUNTRY_NAME_TEMPLATE,
-  CURRENCY_TEMPLATE,
-  DATE,
-  DAY_OF_THE_WEEK,
   EMPTY_ERROR_HELPER_TEXT,
   noHtmlValidator,
   templateValidatorForPlatform,
-  VALID_TEMPLATES,
 } from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
@@ -109,13 +103,7 @@ const buildCopyFieldConfig = (inline1EditorConfig?: Inline1EditorConfig): CopyFi
       enableBold: true,
       enableItalic: true,
       enableStrikethrough: true,
-      enableCopyTemplates: true,
       enableLink: true,
-      enableCurrencyTemplate: VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE),
-      enableCountryNameTemplate: VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE),
-      enableArticleCountTemplate: VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE),
-      enableDateTemplate: VALID_TEMPLATES[platform].includes(DATE),
-      enableDayTemplate: VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK),
     },
   };
 };
