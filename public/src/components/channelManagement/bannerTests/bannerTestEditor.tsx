@@ -27,7 +27,7 @@ import {
   UserCohort,
 } from '../helpers/shared';
 import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
-import { ARTICLE_COUNT_TEMPLATE } from '../helpers/validation';
+import { ARTICLE_COUNT_TEMPLATE, getArticleCountTemplateError } from '../helpers/validation';
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
@@ -61,6 +61,15 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
   onTestChange,
   setValidationStatusForField,
 }: ValidatedTestEditorProps<BannerTest>) => {
+  const articleCountTemplateError = getArticleCountTemplateError(
+    testCopyHasTemplate(test, ARTICLE_COUNT_TEMPLATE),
+    test.articlesViewedSettings,
+  );
+
+  useEffect(() => {
+    setValidationStatusForField('articleCountTemplate', articleCountTemplateError === undefined);
+  }, [articleCountTemplateError, setValidationStatusForField]);
+
   const [designs, setDesigns] = useState<BannerDesign[]>([]);
 
   const fetchBannerDesigns = (): void => {
