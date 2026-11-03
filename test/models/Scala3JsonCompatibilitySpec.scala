@@ -18,6 +18,29 @@ class Scala3JsonCompatibilitySpec extends AnyFlatSpec with Matchers with EitherV
     visual.asJson shouldBe expected
   }
 
+  "configured choice card codecs" should "round-trip opacity values" in {
+    val expected = parse(
+      """{"kind":"ChoiceCards","buttonOpacity":0.8,"buttonSelectOpacity":0.95}"""
+    ).value
+
+    val visual = expected.as[BannerDesignVisual].value
+    val encoded = visual.asJson
+
+    encoded.hcursor.get[Double]("buttonOpacity").value shouldBe 0.8
+    encoded.hcursor.get[Double]("buttonSelectOpacity").value shouldBe 0.95
+  }
+
+  it should "decode legacy visuals without opacity fields" in {
+    val expected = parse("""{"kind":"ChoiceCards"}""").value
+
+    expected.as[BannerDesignVisual].value match {
+      case choiceCards: BannerDesignVisual.ChoiceCards =>
+        choiceCards.buttonOpacity shouldBe None
+        choiceCards.buttonSelectOpacity shouldBe None
+      case _ => fail("Expected a ChoiceCards visual")
+    }
+  }
+
   "banner design codecs" should "round-trip nested colours and enum values" in {
     val colour = HexColour("1", "2", "3", "rgb")
     val cta = CtaDesign(CtaStateDesign(colour, colour, None))
