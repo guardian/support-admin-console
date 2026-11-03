@@ -402,6 +402,8 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
       <SectionContainer>
         <SectionHeader variant={'h3'}>Article count</SectionHeader>
 
+        {articleCountTemplateError && <Alert severity="error">{articleCountTemplateError}</Alert>}
+
         {test.mParticleAudience !== undefined && test.signedInStatus !== 'SignedIn' && (
           <Alert severity="info" style={{ marginBottom: '16px' }}>
             mParticle audience targeting of signed-out users requires minimum article count ≥ 5.
