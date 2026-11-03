@@ -5,15 +5,17 @@ import { Inline1Variant } from '../../../models/inline1';
 import { buildInline1PreviewUrl } from './inline1VariantPreview';
 
 interface Inline1VariantPreviewButtonProps {
+  testName: string;
   variant: Inline1Variant;
   isDisabled: boolean;
 }
 
 const Inline1VariantPreviewButton: React.FC<Inline1VariantPreviewButtonProps> = ({
+  testName,
   variant,
   isDisabled,
 }: Inline1VariantPreviewButtonProps) => {
-  const previewUrl = buildInline1PreviewUrl(variant);
+  const previewUrl = buildInline1PreviewUrl(testName, variant);
 
   return (
     <Button
@@ -25,9 +27,9 @@ const Inline1VariantPreviewButton: React.FC<Inline1VariantPreviewButtonProps> = 
       href={previewUrl}
       target="_blank"
       rel="noopener noreferrer"
-      disabled={isDisabled || !previewUrl}
+      disabled={isDisabled}
     >
-      {previewUrl ? 'COMPONENT PREVIEW' : 'Will be added soon'}
+      WEB PREVIEW
     </Button>
   );
 };

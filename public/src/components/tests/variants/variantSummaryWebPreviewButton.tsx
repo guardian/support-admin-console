@@ -12,14 +12,8 @@ const ArticlePaths: Record<ArticleType, string> = {
   Liveblog: 'world/live/2022/oct/07/nobel-peace-prize-2022-live-winners',
 };
 
-const Inline1PreviewUrl =
-  'https://www.theguardian.com/business/2026/oct/30/poundland-peril-rampant-inflation-price-wars';
-
-const getInline1PreviewUrl = (): string => {
-  return (getStage() === 'CODE' ||  getStage() === 'PROD')
-    ? `http://localhost:3030/Article/${Inline1PreviewUrl}`
-    : Inline1PreviewUrl;
-};
+const Inline1ArticlePath =
+  'business/2026/oct/30/poundland-peril-rampant-inflation-price-wars';
 
 const getHostName = (stage: Stage): string => {
   if (stage === 'PROD') {
@@ -39,7 +33,7 @@ const getChannelName = (testType: TestType, articleType: ArticleType): string =>
   }
 };
 
-const getPreviewUrl = (
+export const getPreviewUrl = (
   testName: string,
   variantName: string,
   testType: TestType,
@@ -50,7 +44,7 @@ const getPreviewUrl = (
   const queryString = `preview-${channelName}=${testName}:${variantName}`;
 
   if (testType === 'INLINE1') {
-    return `${getInline1PreviewUrl()}?simulate-inline1=true&${queryString}&ab-commercial-next-best-action=enable`;
+    return `https://${getHostName(stage)}/${Inline1ArticlePath}?simulate-inline1=true&${queryString}&ab-commercial-next-best-action=enable`;
   } else if (testType === 'LANDING_PAGE') {
     // link to the support site landing page
     return `https://support.${

@@ -27,7 +27,6 @@ import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestEditorProps } from '../testsForm';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
-import Inline1VariantPreviewButton from './inline1VariantPreviewButton';
 import {
   getDefaultInline1NewsletterMessage,
   getDefaultInline1SupportMessage,
@@ -125,10 +124,6 @@ export const getInline1TestEditor = (
             <VariantsHeaderContainer>
               <SectionHeader variant={'h3'}>Message Type</SectionHeader>
               <VariantsHeaderButtonsContainer>
-                <Inline1VariantPreviewButton
-                  variant={variant}
-                  isDisabled={userHasTestLocked}
-                />
                 <VariantSummaryWebPreviewButton
                   name={variant.name}
                   testName={test.name}
