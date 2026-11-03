@@ -18,6 +18,7 @@ import {
   Container,
   SectionContainer,
   SectionHeader,
+  VariantsHeaderButtonsContainer,
   VariantsHeaderContainer,
 } from '../helpers/testEditorStyles';
 import ScheduleEditor from '../scheduleEditor';
@@ -26,6 +27,7 @@ import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestEditorProps } from '../testsForm';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
+import Inline1VariantPreviewButton from './inline1VariantPreviewButton';
 import {
   getDefaultInline1NewsletterMessage,
   getDefaultInline1SupportMessage,
@@ -122,14 +124,20 @@ export const getInline1TestEditor = (
           <SectionContainer>
             <VariantsHeaderContainer>
               <SectionHeader variant={'h3'}>Message Type</SectionHeader>
-              <VariantSummaryWebPreviewButton
-                name={variant.name}
-                testName={test.name}
-                testType="INLINE1"
-                platform={inline1EditorConfig.platform}
-                isDisabled={userHasTestLocked}
-                articleType="Standard"
-              />
+              <VariantsHeaderButtonsContainer>
+                <Inline1VariantPreviewButton
+                  variant={variant}
+                  isDisabled={userHasTestLocked}
+                />
+                <VariantSummaryWebPreviewButton
+                  name={variant.name}
+                  testName={test.name}
+                  testType="INLINE1"
+                  platform={inline1EditorConfig.platform}
+                  isDisabled={userHasTestLocked}
+                  articleType="Standard"
+                />
+              </VariantsHeaderButtonsContainer>
             </VariantsHeaderContainer>
             <div>
               <Inline1VariantEditor
