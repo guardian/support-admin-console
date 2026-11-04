@@ -294,7 +294,14 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
         errors.heading === undefined &&
         errors.body === undefined,
     );
-  }, [errors.newsletterId, errors.newsletterName, errors.frequency, errors.heading, errors.body, onValidationChange]);
+  }, [
+    errors.newsletterId,
+    errors.newsletterName,
+    errors.frequency,
+    errors.heading,
+    errors.body,
+    onValidationChange,
+  ]);
 
   const updateNewsletterMessage = ({ imageUrl, ...updatedMessage }: NewsletterMessage): void => {
     const normalizedImageUrl = imageUrl?.trim();
