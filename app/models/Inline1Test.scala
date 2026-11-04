@@ -21,6 +21,7 @@ case class Inline1PuzzlesMessage(
 case class Inline1NewsletterMessage(
     `type`: String = "Inline1NewsletterMessage",
     newsletterId: String,
+    newsletterName: String,
     frequency: String,
     heading: String,
     body: String,

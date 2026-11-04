@@ -289,11 +289,12 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
   useEffect(() => {
     onValidationChange(
       errors.newsletterId === undefined &&
+        errors.newsletterName === undefined &&
         errors.frequency === undefined &&
         errors.heading === undefined &&
         errors.body === undefined,
     );
-  }, [errors.newsletterId, errors.frequency, errors.heading, errors.body, onValidationChange]);
+  }, [errors.newsletterId, errors.newsletterName, errors.frequency, errors.heading, errors.body, onValidationChange]);
 
   const updateNewsletterMessage = ({ imageUrl, ...updatedMessage }: NewsletterMessage): void => {
     const normalizedImageUrl = imageUrl?.trim();
@@ -354,6 +355,19 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
         })}
         onBlur={() => void handleSubmit(updateNewsletterMessage)()}
         label="Newsletter ID"
+        margin="normal"
+        variant="outlined"
+        disabled={isDisabled}
+        fullWidth
+      />
+      <TextField
+        error={errors.newsletterName !== undefined}
+        helperText={errors.newsletterName?.message}
+        {...register('newsletterName', {
+          required: EMPTY_ERROR_HELPER_TEXT,
+        })}
+        onBlur={() => void handleSubmit(updateNewsletterMessage)()}
+        label="Newsletter Name"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}

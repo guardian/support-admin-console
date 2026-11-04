@@ -26,6 +26,7 @@ interface Inline1PuzzlesMessage {
 interface Inline1NewsletterMessage {
   type: 'Inline1NewsletterMessage';
   newsletterId: string;
+  newsletterName: string;
   frequency: string; // e.g. "Weekly"
   heading: string;
   body: string;
