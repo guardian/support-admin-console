@@ -44,7 +44,7 @@ export const getPreviewUrl = (
   const queryString = `preview-${channelName}=${testName}:${variantName}`;
 
   if (testType === 'INLINE1') {
-    return `http://localhost:3030/Article/https://${getHostName('PROD')}/${Inline1ArticlePath}?simulate-inline1=true&${queryString}&ab-commercial-next-best-action=enable`;
+    return `http://localhost:3030/Article/https://${getHostName('PROD')}/${Inline1ArticlePath}?${queryString}&ab-commercial-next-best-action=enable`;
   } else if (testType === 'LANDING_PAGE') {
     // link to the support site landing page
     return `https://support.${
