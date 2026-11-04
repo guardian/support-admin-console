@@ -13,7 +13,7 @@ describe('ChoiceCards colour themes', () => {
       buttonBorderColour: '#121212',
       buttonSelectColour: '#FFFFFF',
       buttonSelectOpacity: 0.95,
-      buttonSelectTextColour: '#606060',
+      buttonSelectTextColour: '#121212',
       buttonSelectBorderColour: '#121212',
     });
   });
