@@ -12,8 +12,7 @@ const ArticlePaths: Record<ArticleType, string> = {
   Liveblog: 'world/live/2022/oct/07/nobel-peace-prize-2022-live-winners',
 };
 
-const Inline1ArticlePath =
-  'business/2026/oct/30/poundland-peril-rampant-inflation-price-wars';
+const Inline1ArticlePath = 'business/2026/oct/30/poundland-peril-rampant-inflation-price-wars';
 
 const getHostName = (stage: Stage): string => {
   if (stage === 'PROD') {
