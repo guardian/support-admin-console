@@ -12,6 +12,8 @@ const ArticlePaths: Record<ArticleType, string> = {
   Liveblog: 'world/live/2022/oct/07/nobel-peace-prize-2022-live-winners',
 };
 
+const Inline1ArticlePath = 'business/2026/oct/30/poundland-peril-rampant-inflation-price-wars';
+
 const getHostName = (stage: Stage): string => {
   if (stage === 'PROD') {
     return 'theguardian.com';
@@ -30,7 +32,7 @@ const getChannelName = (testType: TestType, articleType: ArticleType): string =>
   }
 };
 
-const getPreviewUrl = (
+export const getPreviewUrl = (
   testName: string,
   variantName: string,
   testType: TestType,
@@ -38,15 +40,17 @@ const getPreviewUrl = (
 ): string => {
   const stage = getStage();
   const channelName = getChannelName(testType, articleType);
-  const queryString = `?preview-${channelName}=${testName}:${variantName}`;
+  const queryString = `preview-${channelName}=${testName}:${variantName}`;
 
-  if (testType === 'LANDING_PAGE') {
+  if (testType === 'INLINE1') {
+    return `http://localhost:3030/Article/https://${getHostName('PROD')}/${Inline1ArticlePath}?${queryString}&ab-commercial-next-best-action=enable`;
+  } else if (testType === 'LANDING_PAGE') {
     // link to the support site landing page
     return `https://support.${
       stage !== 'PROD' ? 'code.dev-' : ''
-    }theguardian.com/contribute${queryString}`;
+    }theguardian.com/contribute?${queryString}`;
   } else {
-    return `https://${getHostName(stage)}/${ArticlePaths[articleType]}${queryString}`;
+    return `https://${getHostName(stage)}/${ArticlePaths[articleType]}?${queryString}`;
   }
 };
 
