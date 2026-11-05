@@ -1,4 +1,4 @@
-import type { TestPlatform } from './shared';
+import type { ArticlesViewedSettings, TestPlatform } from './shared';
 
 export type ValidationStatus = Record<string, boolean>;
 
@@ -47,6 +47,14 @@ export const createDuplicateValidator = (
 export const CURRENCY_TEMPLATE = '%%CURRENCY_SYMBOL%%';
 export const COUNTRY_NAME_TEMPLATE = '%%COUNTRY_NAME%%';
 export const ARTICLE_COUNT_TEMPLATE = '%%ARTICLE_COUNT%%';
+export const getArticleCountTemplateError = (
+  hasArticleCountTemplate: boolean,
+  articlesViewedSettings?: ArticlesViewedSettings,
+): string | undefined =>
+  hasArticleCountTemplate && !articlesViewedSettings
+    ? `Copy contains ${ARTICLE_COUNT_TEMPLATE}. Enable article count targeting or remove the template before saving.`
+    : undefined;
+
 export const PRICE_DIGISUB_MONTHLY = '%%PRICE_DIGISUB_MONTHLY%%';
 export const PRICE_DIGISUB_ANNUAL = '%%PRICE_DIGISUB_ANNUAL%%';
 export const PRICE_GUARDIANWEEKLY_MONTHLY = '%%PRICE_GUARDIANWEEKLY_MONTHLY%%';

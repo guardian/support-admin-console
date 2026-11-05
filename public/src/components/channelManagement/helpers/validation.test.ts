@@ -1,8 +1,35 @@
 import {
   EMPTY_ERROR_HELPER_TEXT,
+  getArticleCountTemplateError,
   getEmptyParagraphsError,
   templateValidatorForPlatform,
 } from './validation';
+
+describe('getArticleCountTemplateError', () => {
+  const articlesViewedSettings = {
+    minViews: 5,
+    maxViews: null,
+    periodInWeeks: 52,
+    tagIds: [],
+  };
+
+  it('rejects article count templates without article count targeting', () => {
+    expect(getArticleCountTemplateError(true, undefined)).toBe(
+      'Copy contains %%ARTICLE_COUNT%%. Enable article count targeting or remove the template before saving.',
+    );
+  });
+
+  it('allows article count templates with article count targeting', () => {
+    expect(getArticleCountTemplateError(true, articlesViewedSettings)).toBeUndefined();
+  });
+
+  it.each([undefined, articlesViewedSettings])(
+    'allows copy without article count templates with targeting %p',
+    (settings) => {
+      expect(getArticleCountTemplateError(false, settings)).toBeUndefined();
+    },
+  );
+});
 
 describe('getEmptyParagraphsError', () => {
   it('should return an error when paragraphs contain only empty html', () => {
