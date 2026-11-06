@@ -9,7 +9,7 @@ describe('ChoiceCards colour themes', () => {
     expect(theme.colours.choiceCards).toMatchObject({
       buttonColour: '#FFFFFF',
       buttonOpacity: 0.8,
-      buttonTextColour: '#000000',
+      buttonTextColour: '#121212',
       buttonBorderColour: '#121212',
       buttonSelectColour: '#FFFFFF',
       buttonSelectOpacity: 0.95,
