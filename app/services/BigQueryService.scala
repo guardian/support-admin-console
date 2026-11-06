@@ -9,6 +9,7 @@ import com.google.cloud.bigquery.{
   FieldValueList,
   JobInfo,
   QueryJobConfiguration,
+  QueryParameterValue,
   TableResult
 }
 import com.typesafe.scalalogging.LazyLogging
@@ -22,32 +23,12 @@ import zio.ZIO.attemptBlocking
 case class BigQueryError(message: String) extends Throwable
 
 class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
-  def buildQuery(testName: String, channel: String, stage: String): String = {
-
-    val channelInQuery = channel match {
-      case "Epic"    => "ACQUISITIONS_EPIC"
-      case "Banner1" => "ACQUISITIONS_ENGAGEMENT_BANNER"
-      case "Banner2" => "ACQUISITIONS_SUBSCRIPTIONS_BANNER"
-    }
-
-    s"""SELECT
-      ab.name AS test_name,
-      ab.variant AS variant_name,
-      component_type,
-      SUM(acquisition_ltv_3_year) AS ltv3,
-    FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition`
-    CROSS JOIN UNNEST(ab_tests) AS ab
-    WHERE  ab.name= '$testName'
-    AND component_type ='$channelInQuery'
-    GROUP BY 1,2,3
-    """
-  }
-
-  def runQuery(queryString: String): ZIO[Any, BigQueryError, TableResult] =
+  def runQuery(queryString: String, testName: String): ZIO[Any, BigQueryError, TableResult] =
     attemptBlocking {
       val queryConfig = QueryJobConfiguration
         .newBuilder(queryString)
         .setUseLegacySql(false)
+        .addNamedParameter("testName", QueryParameterValue.string(testName))
         .build()
 
       var queryJob = bigQuery.create(JobInfo.of(queryConfig))
@@ -88,13 +69,34 @@ class BigQueryService(bigQuery: BigQuery) extends LazyLogging {
 
   def getLTV3Data(testName: String, channel: String, stage: String): ZIO[Any, BigQueryError, List[BigQueryResult]] = {
 
-    val query = buildQuery(testName, channel, stage)
-    logger.info(s"Query: $query");
-    runQuery(query).map(result => getBigQueryResult(result))
+    ZIO.fromEither(BigQueryService.buildQuery(channel)).flatMap { query =>
+      logger.info(s"Running LTV3 query for test '$testName' on channel '$channel'")
+      runQuery(query, testName).map(result => getBigQueryResult(result))
+    }
   }
 }
 
 object BigQueryService {
+  def buildQuery(channel: String): Either[BigQueryError, String] =
+    channel match {
+      case "Epic"    => Right(querySql("ACQUISITIONS_EPIC"))
+      case "Banner1" => Right(querySql("ACQUISITIONS_ENGAGEMENT_BANNER"))
+      case "Banner2" => Right(querySql("ACQUISITIONS_SUBSCRIPTIONS_BANNER"))
+      case other     => Left(BigQueryError(s"Unsupported channel: $other"))
+    }
+
+  private def querySql(channelInQuery: String): String =
+    s"""SELECT
+      ab.name AS test_name,
+      ab.variant AS variant_name,
+      component_type,
+      SUM(acquisition_ltv_3_year) AS ltv3,
+    FROM `datatech-platform-prod.reader_revenue.fact_holding_acquisition`
+    CROSS JOIN UNNEST(ab_tests) AS ab
+    WHERE  ab.name = @testName
+    AND component_type ='$channelInQuery'
+    GROUP BY 1,2,3
+    """
 
   def apply(stage: String, jsonCredentials: String): BigQueryService = {
     val wifCredentialsConfig = GoogleCredentials.fromStream(
