@@ -26,7 +26,9 @@ interface Inline1PuzzlesMessage {
 interface Inline1NewsletterMessage {
   type: 'Inline1NewsletterMessage';
   newsletterId: string;
-  frequency: string; // e.g. "Weekly"
+  newsletterListId?: string; // optional fields set in SDC
+  newsletterName?: string;
+  frequency?: string;
   heading: string;
   body: string;
   imageUrl?: string;
