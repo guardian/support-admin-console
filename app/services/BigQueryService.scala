@@ -85,7 +85,6 @@ object BigQueryService {
       case other     => Left(BigQueryError(s"Unsupported channel: $other"))
     }
 
-  // channelInQuery is always one of the fixed values above; testName is supplied as a named query parameter
   private def querySql(channelInQuery: String): String =
     s"""SELECT
       ab.name AS test_name,
