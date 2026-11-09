@@ -20,9 +20,11 @@ export interface PreviewColours {
   };
   choiceCards?: {
     buttonColour: string;
+    buttonOpacity?: number;
     buttonTextColour: string;
     buttonBorderColour: string;
     buttonSelectColour: string;
+    buttonSelectOpacity?: number;
     buttonSelectTextColour: string;
     buttonSelectBorderColour: string;
     buttonSelectMarkerColour: string;
@@ -158,6 +160,10 @@ const ChoiceCard = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   gap: theme.spacing(1),
   position: 'relative',
+  backgroundColor: 'var(--choice-card-background)',
+  '&:hover': {
+    backgroundColor: 'var(--choice-card-hover-background, var(--choice-card-background))',
+  },
 }));
 
 const ChoiceHeader = styled('div')(({ theme }) => ({
@@ -245,6 +251,49 @@ type Props = {
   visualKind?: 'Image' | 'ChoiceCards' | 'None';
 };
 
+type ChoiceCardPreviewColours = NonNullable<PreviewColours['choiceCards']>;
+
+type ChoiceCardPreviewStyle = React.CSSProperties & {
+  '--choice-card-background': string;
+  '--choice-card-hover-background'?: string;
+};
+
+const withOpacity = (colour: string, opacity?: number): string => {
+  if (opacity === undefined) {
+    return colour;
+  }
+
+  const match = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(colour);
+  if (!match) {
+    return colour;
+  }
+
+  const [red, green, blue] = match.slice(1).map((channel) => parseInt(channel, 16));
+  return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
+};
+
+export const getChoiceCardPreviewStyle = (
+  colours: ChoiceCardPreviewColours,
+  selected: boolean,
+): ChoiceCardPreviewStyle => {
+  const background = selected
+    ? withOpacity(colours.buttonSelectColour, colours.buttonSelectOpacity)
+    : withOpacity(colours.buttonColour, colours.buttonOpacity);
+  const hoverBackground =
+    !selected && colours.buttonSelectOpacity !== undefined
+      ? withOpacity(colours.buttonSelectColour, colours.buttonSelectOpacity)
+      : undefined;
+
+  return {
+    '--choice-card-background': background,
+    ...(hoverBackground ? { '--choice-card-hover-background': hoverBackground } : {}),
+    border: `${selected ? 2 : 1}px solid ${
+      selected ? colours.buttonSelectBorderColour : colours.buttonBorderColour
+    }`,
+    color: selected ? colours.buttonSelectTextColour : colours.buttonTextColour,
+  };
+};
+
 const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
   return (
     <Container>
@@ -298,13 +347,7 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
           </LeftCol>
           {visualKind === 'ChoiceCards' && colours.choiceCards && (
             <RightCol>
-              <ChoiceCard
-                style={{
-                  background: colours.choiceCards.buttonSelectColour,
-                  border: `2px solid ${colours.choiceCards.buttonSelectBorderColour}`,
-                  color: colours.choiceCards.buttonSelectTextColour,
-                }}
-              >
+              <ChoiceCard style={getChoiceCardPreviewStyle(colours.choiceCards, true)}>
                 <RecommendedBadge
                   style={{
                     background: colours.choiceCards.pillBackgroundColour,
@@ -362,13 +405,7 @@ const PalettePreview: React.FC<Props> = ({ colours, visualKind = 'Image' }) => {
                   </ChoiceItem>
                 </ChoiceList>
               </ChoiceCard>
-              <ChoiceCard
-                style={{
-                  background: colours.choiceCards.buttonColour,
-                  border: `1px solid ${colours.choiceCards.buttonBorderColour}`,
-                  color: colours.choiceCards.buttonTextColour,
-                }}
-              >
+              <ChoiceCard style={getChoiceCardPreviewStyle(colours.choiceCards, false)}>
                 <ChoiceOption>
                   <Radio
                     style={{ border: `1px solid ${colours.choiceCards.buttonBorderColour}` }}
