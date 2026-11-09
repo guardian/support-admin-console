@@ -29,8 +29,6 @@ import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import type { Policy } from 'aws-cdk-lib/aws-iam';
 import { AccountPrincipal, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { Bucket } from 'aws-cdk-lib/aws-s3';
-import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { MultiDynamoTableReadPolicy, MultiDynamoTableWritePolicy } from './dynamo-managed-policy';
 
@@ -289,29 +287,37 @@ export class AdminConsole extends GuStack {
 
     const app = 'admin-console';
 
-    if (this.stage === 'CODE') {
+    if (this.stage === 'CODE' || this.stage === 'PROD') {
       const parameterName = `/${app}/${this.stage}/play.http.secret.key`;
-      const failures = new Queue(this, 'PlaySecretRotationFailures', {
-        retentionPeriod: Duration.days(14),
-      });
       const rotator = new Function(this, 'PlaySecretRotation', {
-        runtime: Runtime.JAVA_21,
-        handler: 'com.gu.play.secretrotation.aws.parameterstore.Lambda::lambdaHandler',
-        memorySize: 512,
+        runtime: Runtime.NODEJS_24_X,
+        handler: 'index.handler',
         timeout: Duration.seconds(30),
         reservedConcurrentExecutions: 1,
         retryAttempts: 0,
         maxEventAge: Duration.hours(1),
-        deadLetterQueue: failures,
         environment: { PARAMETER_NAME: parameterName },
-        code: Code.fromBucket(
-          Bucket.fromBucketName(this, 'PlaySecretRotationArtifacts', 'membership-dist'),
-          `${this.stack}/${this.stage}/${app}/play-secret-rotation/21.0.1/aws-parameterstore-lambda.jar`,
-        ),
+        code: Code.fromInline(`
+          const { randomBytes } = require('node:crypto');
+          const { SSMClient, PutParameterCommand } = require('@aws-sdk/client-ssm');
+
+          const client = new SSMClient({ maxAttempts: 1 });
+
+          exports.handler = async () => {
+            const parameterName = process.env.PARAMETER_NAME;
+            if (!parameterName) {
+              throw new Error('PARAMETER_NAME is required');
+            }
+            await client.send(new PutParameterCommand({
+              Name: parameterName,
+              Value: randomBytes(32).toString('hex'),
+              Type: 'SecureString',
+              KeyId: 'alias/aws/ssm',
+              Overwrite: true,
+            }));
+          };
+        `),
       });
-      rotator.addToRolePolicy(
-        new PolicyStatement({ actions: ['ssm:DescribeParameters'], resources: ['*'] }),
-      );
       rotator.addToRolePolicy(
         new PolicyStatement({
           actions: ['ssm:PutParameter'],
@@ -324,24 +330,9 @@ export class AdminConsole extends GuStack {
           new LambdaFunction(rotator, {
             retryAttempts: 0,
             maxEventAge: Duration.hours(1),
-            deadLetterQueue: failures,
           }),
         ],
       });
-      rotator.metricErrors().createAlarm(this, 'PlaySecretRotationErrors', {
-        threshold: 1,
-        evaluationPeriods: 1,
-        alarmDescription:
-          'CODE Play secret rotation failed; inspect Lambda logs and the failure queue.',
-      });
-      failures
-        .metricApproximateNumberOfMessagesVisible()
-        .createAlarm(this, 'PlaySecretRotationUndelivered', {
-          threshold: 1,
-          evaluationPeriods: 1,
-          alarmDescription:
-            'CODE Play secret rotation failure queue contains an event; investigate before replaying.',
-        });
     }
 
     const channelTestsDynamoTable = this.buildTestsTable();

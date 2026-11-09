@@ -634,6 +634,65 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "DailyPlaySecretRotationAllowEventRuleAdminConsolePlaySecretRotation5E122429091F04D3": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "PlaySecretRotationECDCF02B",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "DailyPlaySecretRotationC5AFC4C9",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "DailyPlaySecretRotationC5AFC4C9": {
+      "Properties": {
+        "ScheduleExpression": "rate(1 day)",
+        "State": "ENABLED",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "PlaySecretRotationECDCF02B",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+            "RetryPolicy": {
+              "MaximumEventAgeInSeconds": 3600,
+              "MaximumRetryAttempts": 0,
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
     "DescribeEC2PolicyFF5F9295": {
       "Properties": {
         "PolicyDocument": {
@@ -1848,6 +1907,162 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
         "Roles": [
           {
             "Ref": "InstanceRoleAdminconsole347DA627",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PlaySecretRotationECDCF02B": {
+      "DependsOn": [
+        "PlaySecretRotationServiceRoleDefaultPolicyF062F6C8",
+        "PlaySecretRotationServiceRole8A49BEB8",
+      ],
+      "Properties": {
+        "Code": {
+          "ZipFile": "
+          const { randomBytes } = require('node:crypto');
+          const { SSMClient, PutParameterCommand } = require('@aws-sdk/client-ssm');
+
+          const client = new SSMClient({ maxAttempts: 1 });
+
+          exports.handler = async () => {
+            const parameterName = process.env.PARAMETER_NAME;
+            if (!parameterName) {
+              throw new Error('PARAMETER_NAME is required');
+            }
+            await client.send(new PutParameterCommand({
+              Name: parameterName,
+              Value: randomBytes(32).toString('hex'),
+              Type: 'SecureString',
+              KeyId: 'alias/aws/ssm',
+              Overwrite: true,
+            }));
+          };
+        ",
+        },
+        "Environment": {
+          "Variables": {
+            "PARAMETER_NAME": "/admin-console/PROD/play.http.secret.key",
+          },
+        },
+        "Handler": "index.handler",
+        "ReservedConcurrentExecutions": 1,
+        "Role": {
+          "Fn::GetAtt": [
+            "PlaySecretRotationServiceRole8A49BEB8",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs24.x",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "PlaySecretRotationEventInvokeConfigB5567178": {
+      "Properties": {
+        "FunctionName": {
+          "Ref": "PlaySecretRotationECDCF02B",
+        },
+        "MaximumEventAgeInSeconds": 3600,
+        "MaximumRetryAttempts": 0,
+        "Qualifier": "$LATEST",
+      },
+      "Type": "AWS::Lambda::EventInvokeConfig",
+    },
+    "PlaySecretRotationServiceRole8A49BEB8": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PlaySecretRotationServiceRoleDefaultPolicyF062F6C8": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ssm:PutParameter",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:eu-west-1:",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/admin-console/PROD/play.http.secret.key",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PlaySecretRotationServiceRoleDefaultPolicyF062F6C8",
+        "Roles": [
+          {
+            "Ref": "PlaySecretRotationServiceRole8A49BEB8",
           },
         ],
       },
