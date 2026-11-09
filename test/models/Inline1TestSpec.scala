@@ -29,7 +29,7 @@ class Inline1TestSpec extends AnyFlatSpec with Matchers with EitherValues {
       ),
       decodeTest("""{"type":"Inline1PuzzlesMessage"}"""),
       decodeTest(
-        """{"type":"Inline1NewsletterMessage","newsletterId":"example","frequency":"Weekly","heading":"Newsletter","body":"Body","imageUrl":null}"""
+        """{"type":"Inline1NewsletterMessage","newsletterId":"example","newsletterListId":null,"newsletterName":null,"frequency":null,"heading":"Newsletter","body":"Body","imageUrl":null}"""
       )
     )
 

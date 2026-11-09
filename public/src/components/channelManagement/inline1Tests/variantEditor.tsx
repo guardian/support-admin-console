@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel, MenuItem, TextField, Typography } from '@mui/material';
+import { Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -9,15 +9,9 @@ import { ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
 import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
 import { Inline1EditorConfig } from '../helpers/shared';
 import {
-  ARTICLE_COUNT_TEMPLATE,
-  COUNTRY_NAME_TEMPLATE,
-  CURRENCY_TEMPLATE,
-  DATE,
-  DAY_OF_THE_WEEK,
   EMPTY_ERROR_HELPER_TEXT,
   noHtmlValidator,
   templateValidatorForPlatform,
-  VALID_TEMPLATES,
 } from '../helpers/validation';
 import useValidation from '../hooks/useValidation';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
@@ -72,15 +66,6 @@ const EMPTY_IMAGE: ResponsiveImage = {
   altText: '',
 };
 
-const FREQUENCY_OPTIONS = [
-  'Daily',
-  'Weekdays',
-  'Twice weekly',
-  'Weekly',
-  'Fortnightly',
-  'Monthly',
-] as const;
-
 interface MessageEditorProps<M extends Inline1Message> {
   message: M;
   onChange: (message: M) => void;
@@ -109,13 +94,7 @@ const buildCopyFieldConfig = (inline1EditorConfig?: Inline1EditorConfig): CopyFi
       enableBold: true,
       enableItalic: true,
       enableStrikethrough: true,
-      enableCopyTemplates: true,
       enableLink: true,
-      enableCurrencyTemplate: VALID_TEMPLATES[platform].includes(CURRENCY_TEMPLATE),
-      enableCountryNameTemplate: VALID_TEMPLATES[platform].includes(COUNTRY_NAME_TEMPLATE),
-      enableArticleCountTemplate: VALID_TEMPLATES[platform].includes(ARTICLE_COUNT_TEMPLATE),
-      enableDateTemplate: VALID_TEMPLATES[platform].includes(DATE),
-      enableDayTemplate: VALID_TEMPLATES[platform].includes(DAY_OF_THE_WEEK),
     },
   };
 };
@@ -301,19 +280,10 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
   useEffect(() => {
     onValidationChange(
       errors.newsletterId === undefined &&
-        errors.frequency === undefined &&
         errors.heading === undefined &&
         errors.body === undefined,
     );
-  }, [errors.newsletterId, errors.frequency, errors.heading, errors.body, onValidationChange]);
-
-  const updateNewsletterMessage = ({ imageUrl, ...updatedMessage }: NewsletterMessage): void => {
-    const normalizedImageUrl = imageUrl?.trim();
-    onChange({
-      ...updatedMessage,
-      imageUrl: normalizedImageUrl === '' ? undefined : normalizedImageUrl,
-    });
-  };
+  }, [errors.newsletterId, errors.heading, errors.body, onValidationChange]);
 
   return (
     <Container>
@@ -329,7 +299,7 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
             copyData={field.value}
             updateCopy={(value) => {
               field.onChange(value);
-              void handleSubmit(updateNewsletterMessage)();
+              void handleSubmit(onChange)();
             }}
             name="heading"
             label="Heading"
@@ -349,7 +319,7 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
             copyData={field.value}
             updateCopy={(value) => {
               field.onChange(value);
-              void handleSubmit(updateNewsletterMessage)();
+              void handleSubmit(onChange)();
             }}
             name="body"
             label="Body"
@@ -364,48 +334,8 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
         {...register('newsletterId', {
           required: EMPTY_ERROR_HELPER_TEXT,
         })}
-        onBlur={() => void handleSubmit(updateNewsletterMessage)()}
+        onBlur={() => void handleSubmit(onChange)()}
         label="Newsletter ID"
-        margin="normal"
-        variant="outlined"
-        disabled={isDisabled}
-        fullWidth
-      />
-      <Controller
-        name="frequency"
-        control={control}
-        rules={{ required: EMPTY_ERROR_HELPER_TEXT }}
-        render={({ field: { ref, ...field } }) => (
-          <TextField
-            {...field}
-            inputRef={ref}
-            value={field.value}
-            select
-            error={errors.frequency !== undefined}
-            helperText={errors.frequency?.message}
-            onBlur={() => {
-              field.onBlur();
-              void handleSubmit(updateNewsletterMessage)();
-            }}
-            label="Frequency"
-            margin="normal"
-            variant="outlined"
-            disabled={isDisabled}
-            fullWidth
-          >
-            {FREQUENCY_OPTIONS.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </TextField>
-        )}
-      />
-
-      <TextField
-        {...register('imageUrl')}
-        onBlur={() => void handleSubmit(updateNewsletterMessage)()}
-        label="Image URL (optional)"
         margin="normal"
         variant="outlined"
         disabled={isDisabled}
