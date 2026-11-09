@@ -12,6 +12,7 @@ describe('The AdminConsole stack', () => {
     template.resourceCountIs('AWS::SQS::Queue', 0);
     template.resourceCountIs('AWS::Lambda::Function', 1);
     template.hasResourceProperties('AWS::Lambda::Function', {
+      FunctionName: `admin-console-${stage}-play-secret-rotation`,
       Handler: 'index.handler',
       Runtime: 'nodejs24.x',
       Code: {

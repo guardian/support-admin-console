@@ -1945,6 +1945,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
             "PARAMETER_NAME": "/admin-console/PROD/play.http.secret.key",
           },
         },
+        "FunctionName": "admin-console-PROD-play-secret-rotation",
         "Handler": "index.handler",
         "ReservedConcurrentExecutions": 1,
         "Role": {

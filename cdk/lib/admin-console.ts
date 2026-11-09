@@ -290,6 +290,7 @@ export class AdminConsole extends GuStack {
     if (this.stage === 'CODE' || this.stage === 'PROD') {
       const parameterName = `/${app}/${this.stage}/play.http.secret.key`;
       const rotator = new Function(this, 'PlaySecretRotation', {
+        functionName: `${app}-${this.stage}-play-secret-rotation`,
         runtime: Runtime.NODEJS_24_X,
         handler: 'index.handler',
         timeout: Duration.seconds(30),
