@@ -42,26 +42,13 @@ The app is configured with a 3-minute usage delay and a 2-hour overlap. After a 
 
 To roll back, retrieve the known-good value from Parameter Store history and save it as a new version of the same parameter. The app will transition back using the same delay and overlap.
 
-#### Automatic rotation in CODE
+#### Automatic rotation in CODE and PROD
 
-The CDK stack creates a CODE-only Java 21 Lambda triggered daily by EventBridge, using Guardian's published `aws-parameterstore-lambda_2.13` JAR pinned to `21.0.1`. Regular app builds and Riff-Raff deployments do not download, bundle, or upload this JAR. CloudFormation references the existing artifact at `s3://membership-dist/support/CODE/admin-console/play-secret-rotation/21.0.1/aws-parameterstore-lambda.jar`.
+The CDK stack creates a Node.js 24 Lambda in both CODE and PROD, triggered daily by EventBridge. Its handler is defined inline in the CDK stack and deployed directly through CloudFormation, using Node's cryptographic random generator and the AWS SDK bundled with the Lambda runtime. No third-party rotation JAR or S3 artifact upload is required. The daily schedule is enabled by default on deployment.
 
-The selected `21.0.1` artifact has reported vulnerabilities. Do not upload it for deployment or deploy this automation until a patched release is available or its use has been approved through security review. Manual Parameter Store rotation remains available while automation is pending. The current CDK configuration enables the daily schedule by default on deployment.
+The handler is `index.handler`. It generates a fresh 64-character hexadecimal secret and overwrites `/admin-console/{stage}/play.http.secret.key` as a new SecureString version using `alias/aws/ssm`, matching the existing parameter configuration. Each stage's Lambda can update only that stage's parameter. Deploy the rotation-enabled Play app to each stage before deploying its automation; a Lambda test invocation performs a real rotation.
 
-Once the artifact is approved, upload it manually before deploying the CODE stack:
-
-1. Download the approved `aws-parameterstore-lambda_2.13` JAR from [Maven Central](https://central.sonatype.com/artifact/com.gu.play-secret-rotation/aws-parameterstore-lambda_2.13), checking the exact release version and its security findings.
-2. Using existing AWS credentials with `s3:PutObject` permission for the artifact path, open S3 in `eu-west-1` and select `membership-dist`.
-3. Upload the JAR to `support/CODE/admin-console/play-secret-rotation/<approved-version>/aws-parameterstore-lambda.jar`, renaming the downloaded file to `aws-parameterstore-lambda.jar` and keeping it private. Do not overwrite an existing release object.
-4. Ensure the versioned S3 key in the CDK stack and its test matches the uploaded version before deploying. If using a patched release instead of `21.0.1`, update those references and this documentation first.
-
-No new GitHub Actions role or repository secret is required for manual upload, provided the existing AWS role has the necessary S3 permission. Uploading the JAR alone does not deploy or invoke the Lambda. Repeat the upload process only when upgrading to another approved release, before deploying the corresponding CDK change.
-
-The handler is `com.gu.play.secretrotation.aws.parameterstore.Lambda::lambdaHandler`. It generates a new secret and overwrites `/admin-console/CODE/play.http.secret.key`, preserving its SecureString type and KMS key. PROD has no rotation Lambda or schedule. Deploy the rotation-enabled Play app before deploying this automation; a Lambda test invocation performs a real rotation.
-
-The published handler has no cooldown or duplicate-event protection and uses the AWS SDK's default retry behavior. Concurrent invocations are limited to one, and automatic retries are disabled in EventBridge and Lambda. Avoid additional rotations within 2 hours 3 minutes of an update: another version can remove a still-needed secret from the latest two versions. Pause the schedule before a manual rotation or replay. Only the target parameter can be updated; `ssm:DescribeParameters` requires account-wide resource scope.
-
-Failures are sent to an SQS failure queue retained for 14 days. CloudWatch alarms cover Lambda errors and visible messages in that queue; notification subscriptions are not configured by this stack. Inspect logs and parameter version metadata before manually replaying a failed event. Disable the `DailyPlaySecretRotation` EventBridge rule in CODE before rolling back to an app without rotation support or pausing scheduled updates. Re-enable it after the rotation-enabled app is healthy.
+The inline handler has no cooldown or duplicate-event protection. Concurrent invocations are limited to one, and automatic retries are disabled in the AWS SDK, EventBridge, and Lambda. Avoid additional rotations within 2 hours 3 minutes of an update: another version can remove a still-needed secret from the latest two versions. Pause the schedule before a manual rotation or replay. Only the target parameter can be updated; no account-wide `ssm:DescribeParameters` permission is needed.
 
 ### Running Playwright E2E tests (awailable only locally)
 
