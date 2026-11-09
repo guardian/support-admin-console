@@ -51,7 +51,9 @@ object BannerDesignVisual {
       buttonSelectBorderColour: Option[HexColour],
       buttonSelectMarkerColour: Option[HexColour],
       pillTextColour: Option[HexColour],
-      pillBackgroundColour: Option[HexColour]
+      pillBackgroundColour: Option[HexColour],
+      buttonOpacity: Option[Double] = None,
+      buttonSelectOpacity: Option[Double] = None
   ) extends BannerDesignVisual
 
   given Configuration = Configuration.default.withDiscriminator("kind")

@@ -1,4 +1,4 @@
-import { FormControlLabel, Switch } from '@mui/material';
+import { Alert, FormControlLabel, Switch } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 import { EpicTest, EpicVariant, MaxEpicViews } from '../../../models/epic';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
@@ -28,7 +28,11 @@ import {
   VariantsHeaderButtonsContainer,
   VariantsHeaderContainer,
 } from '../helpers/testEditorStyles';
-import { ARTICLE_COUNT_TEMPLATE, COUNTRY_NAME_TEMPLATE } from '../helpers/validation';
+import {
+  ARTICLE_COUNT_TEMPLATE,
+  COUNTRY_NAME_TEMPLATE,
+  getArticleCountTemplateError,
+} from '../helpers/validation';
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
@@ -62,6 +66,15 @@ export const getEpicTestEditor = (
     onTestChange,
     setValidationStatusForField,
   }: ValidatedTestEditorProps<EpicTest>) => {
+    const articleCountTemplateError = getArticleCountTemplateError(
+      copyHasTemplate(test, ARTICLE_COUNT_TEMPLATE),
+      test.articlesViewedSettings,
+    );
+
+    useEffect(() => {
+      setValidationStatusForField('articleCountTemplate', articleCountTemplateError === undefined);
+    }, [articleCountTemplateError, setValidationStatusForField]);
+
     const [userExplicitlyDisabledArticleCount, setUserExplicitlyDisabledArticleCount] =
       React.useState(test.articlesViewedSettings === undefined);
 
@@ -464,6 +477,10 @@ export const getEpicTestEditor = (
         {epicEditorConfig.allowArticleCount && (
           <SectionContainer>
             <SectionHeader variant={'h3'}>Article count</SectionHeader>
+
+            {articleCountTemplateError && (
+              <Alert severity="error">{articleCountTemplateError}</Alert>
+            )}
 
             <TestEditorArticleCountEditor
               articlesViewedSettings={test.articlesViewedSettings}

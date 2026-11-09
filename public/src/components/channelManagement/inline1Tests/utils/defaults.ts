@@ -15,7 +15,6 @@ export const getDefaultInline1SupportMessage = (): Inline1Variant['message'] => 
 export const getDefaultInline1NewsletterMessage = (): Inline1Variant['message'] => ({
   type: 'Inline1NewsletterMessage',
   newsletterId: '',
-  frequency: '',
   heading: '',
   body: '',
 });
