@@ -19,6 +19,7 @@ import services.{
   Aws,
   BigQueryService,
   CapiService,
+  NewslettersService,
   GoogleChatService,
   DynamoArchivedBannerDesigns,
   DynamoArchivedChannelTests,
@@ -120,6 +121,8 @@ class AppComponents(context: Context, stage: String)
   private val runtime = zio.Runtime.default
 
   val capiService = new CapiService(configuration.get[String]("capi.apiKey"), wsClient)
+
+  val newslettersService = new NewslettersService(wsClient)
 
   val chatService = new GoogleChatService(configuration.get[String]("chat.webhookUrl"), wsClient)
 
@@ -251,6 +254,7 @@ class AppComponents(context: Context, stage: String)
       chatService
     ),
     new CapiController(authAction, capiService),
+    new NewslettersController(authAction, newslettersService),
     new AppsMeteringSwitchesController(authAction, controllerComponents, stage, runtime),
     new DefaultPromosController(authAction, controllerComponents, stage, runtime),
     new SuperModeController(authAction, controllerComponents, stage, runtime, dynamoSuperModeService),
