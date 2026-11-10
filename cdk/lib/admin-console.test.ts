@@ -45,7 +45,7 @@ describe('The AdminConsole stack', () => {
       PolicyDocument: {
         Statement: Match.arrayWith([
           Match.objectLike({
-            Action: 'ssm:PutParameter',
+            Action: Match.arrayWith(['ssm:GetParameter', 'ssm:PutParameter']),
             Resource: {
               'Fn::Join': ['', ['arn:aws:ssm:eu-west-1:', { Ref: 'AWS::AccountId' }, `:parameter/admin-console/${stage}/play.http.secret.key`]],
             },
@@ -88,54 +88,110 @@ describe('The AdminConsole stack', () => {
     };
     const source = rotationFunction.Properties.Code.ZipFile;
 
-    const loadHandler = (send: jest.Mock, environment: Record<string, string>) => {
+    const loadHandler = (
+      send: jest.Mock,
+      environment: Record<string, string>,
+      now: () => number = Date.now,
+    ) => {
       const clientConstructor = jest.fn().mockImplementation(() => ({ send }));
+      const getParameterCommandConstructor = jest.fn((input: {
+        Name: string;
+        WithDecryption: boolean;
+      }) => ({ operation: 'get', input }));
       const commandConstructor = jest.fn((input: {
         Name: string;
         Value: string;
         Type: string;
         KeyId: string;
         Overwrite: boolean;
-      }) => ({ input }));
-      const exports = { handler: async (): Promise<void> => {} };
+      }) => ({ operation: 'put', input }));
+      const exports = {
+        handler: (_event?: { id: string }): Promise<void> => {
+          void _event;
+          return Promise.resolve();
+        },
+      };
       runInNewContext(source, {
         exports,
+        Date: { now },
+        console: { info: jest.fn() },
         process: { env: environment },
         require: (moduleName: string) => {
           if (moduleName === 'node:crypto') {
             return { randomBytes };
           }
           if (moduleName === '@aws-sdk/client-ssm') {
-            return { SSMClient: clientConstructor, PutParameterCommand: commandConstructor };
+            return {
+              SSMClient: clientConstructor,
+              GetParameterCommand: getParameterCommandConstructor,
+              PutParameterCommand: commandConstructor,
+            };
           }
           throw new Error(`Unexpected module: ${moduleName}`);
         },
       });
-      return { handler: exports.handler, clientConstructor, commandConstructor };
+      return {
+        handler: exports.handler,
+        clientConstructor,
+        getParameterCommandConstructor,
+        commandConstructor,
+      };
     };
 
-    it('writes fresh random secrets as SecureString versions without SDK retries', async () => {
-      const send = jest.fn().mockResolvedValue({});
-      const { handler, clientConstructor, commandConstructor } = loadHandler(send, {
+    it('writes a fresh random SecureString when the last update is outside the cooldown', async () => {
+      const lastModifiedDate = new Date(Date.now() - 123 * 60 * 1000 - 1);
+      const send = jest.fn((command: { operation: string }) =>
+        Promise.resolve(
+          command.operation === 'get' ? { Parameter: { LastModifiedDate: lastModifiedDate } } : {},
+        ),
+      );
+      const { handler, clientConstructor, getParameterCommandConstructor, commandConstructor } = loadHandler(send, {
         PARAMETER_NAME: parameterName,
       });
 
       await handler();
-      await handler();
 
       expect(clientConstructor).toHaveBeenCalledWith({ maxAttempts: 1 });
-      const firstParameter = commandConstructor.mock.calls[0][0];
-      const secondParameter = commandConstructor.mock.calls[1][0];
-      expect(firstParameter).toMatchObject({
+      expect(getParameterCommandConstructor).toHaveBeenCalledWith({
+        Name: parameterName,
+        WithDecryption: false,
+      });
+      const parameter = commandConstructor.mock.calls[0][0];
+      expect(parameter).toMatchObject({
         Name: parameterName,
         Type: 'SecureString',
         KeyId: 'alias/aws/ssm',
         Overwrite: true,
       });
-      expect(firstParameter.Value).toMatch(/^[a-f0-9]{64}$/);
-      expect(secondParameter.Value).toMatch(/^[a-f0-9]{64}$/);
-      expect(firstParameter.Value).not.toBe(secondParameter.Value);
+      expect(parameter.Value).toMatch(/^[a-f0-9]{64}$/);
       expect(send).toHaveBeenCalledTimes(2);
+    });
+
+    it('skips sequential duplicate delivery of the same event while the parameter is in cooldown', async () => {
+      let now = Date.now();
+      let lastModifiedDate = new Date(now - 123 * 60 * 1000 - 1);
+      const send = jest.fn((command: { operation: string }) => {
+        if (command.operation === 'get') {
+          return Promise.resolve({ Parameter: { LastModifiedDate: lastModifiedDate } });
+        }
+        lastModifiedDate = new Date(now);
+        return Promise.resolve({});
+      });
+      const event = { id: 'same-event' };
+      const environment = { PARAMETER_NAME: parameterName };
+      const firstInvocation = loadHandler(send, environment, () => now);
+      const duplicateInvocation = loadHandler(send, environment, () => now);
+
+      await firstInvocation.handler(event);
+      now += 1000;
+      await duplicateInvocation.handler(event);
+
+      expect(send).toHaveBeenCalledTimes(3);
+      expect(send.mock.calls.map(([command]) => command.operation)).toEqual([
+        'get',
+        'put',
+        'get',
+      ]);
     });
 
     it('fails without writing when the parameter name is missing', async () => {

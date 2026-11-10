@@ -308,7 +308,7 @@ export class AdminConsole extends GuStack {
         environment: { PARAMETER_NAME: parameterName },
         code: Code.fromInline(`
           const { randomBytes } = require('node:crypto');
-          const { SSMClient, PutParameterCommand } = require('@aws-sdk/client-ssm');
+          const { SSMClient, GetParameterCommand, PutParameterCommand } = require('@aws-sdk/client-ssm');
 
           const client = new SSMClient({ maxAttempts: 1 });
 
@@ -316,6 +316,18 @@ export class AdminConsole extends GuStack {
             const parameterName = process.env.PARAMETER_NAME;
             if (!parameterName) {
               throw new Error('PARAMETER_NAME is required');
+            }
+            const parameter = await client.send(new GetParameterCommand({
+              Name: parameterName,
+              WithDecryption: false,
+            }));
+            const lastModifiedDate = parameter.Parameter?.LastModifiedDate;
+            if (!lastModifiedDate) {
+              throw new Error('SSM parameter LastModifiedDate is missing');
+            }
+            if (Date.now() - lastModifiedDate.getTime() < 123 * 60 * 1000) {
+              console.info('Skipping Play secret rotation: parameter was updated within 2 hours 3 minutes.');
+              return;
             }
             await client.send(new PutParameterCommand({
               Name: parameterName,
@@ -329,7 +341,7 @@ export class AdminConsole extends GuStack {
       });
       rotator.addToRolePolicy(
         new PolicyStatement({
-          actions: ['ssm:PutParameter'],
+          actions: ['ssm:GetParameter', 'ssm:PutParameter'],
           resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter${parameterName}`],
         }),
       );
