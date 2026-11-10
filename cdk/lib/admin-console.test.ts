@@ -9,7 +9,13 @@ describe('The AdminConsole stack', () => {
   it.each(['CODE', 'PROD'])('schedules daily rotation in %s with scoped write access and no automatic retries', (stage) => {
     const stack = new AdminConsole(new App(), 'AdminConsole', { ...prodProps, stage });
     const template = Template.fromStack(stack);
-    template.resourceCountIs('AWS::SQS::Queue', 0);
+    template.resourceCountIs('AWS::SQS::Queue', 1);
+    template.hasResourceProperties('AWS::SQS::Queue', {
+      QueueName: `admin-console-${stage}-play-secret-rotation-failures`,
+      MessageRetentionPeriod: 14 * 24 * 60 * 60,
+    });
+    const queueId = Object.keys(template.findResources('AWS::SQS::Queue'))[0];
+    const deadLetterConfig = { TargetArn: { 'Fn::GetAtt': [queueId, 'Arn'] } };
     template.resourceCountIs('AWS::Lambda::Function', 1);
     template.hasResourceProperties('AWS::Lambda::Function', {
       FunctionName: `admin-console-${stage}-play-secret-rotation`,
@@ -20,7 +26,7 @@ describe('The AdminConsole stack', () => {
       },
       ReservedConcurrentExecutions: 1,
       Environment: { Variables: { PARAMETER_NAME: `/admin-console/${stage}/play.http.secret.key` } },
-      DeadLetterConfig: Match.absent(),
+      DeadLetterConfig: deadLetterConfig,
     });
     template.hasResourceProperties('AWS::Lambda::EventInvokeConfig', {
       MaximumRetryAttempts: 0,
@@ -31,7 +37,7 @@ describe('The AdminConsole stack', () => {
       Targets: Match.arrayWith([
         Match.objectLike({
           RetryPolicy: { MaximumRetryAttempts: 0, MaximumEventAgeInSeconds: 3600 },
-          DeadLetterConfig: Match.absent(),
+          DeadLetterConfig: { Arn: deadLetterConfig.TargetArn },
         }),
       ]),
     });
@@ -47,7 +53,28 @@ describe('The AdminConsole stack', () => {
         ]),
       },
     });
-    template.resourceCountIs('AWS::CloudWatch::Alarm', stage === 'PROD' ? 2 : 0);
+    template.resourceCountIs('AWS::CloudWatch::Alarm', stage === 'PROD' ? 4 : 0);
+    if (stage === 'PROD') {
+      const alarmActions = [
+        stack.resolve(stack.formatArn({ service: 'sns', resource: 'alarms-handler-topic-PROD' })),
+      ];
+      template.hasResourceProperties('AWS::CloudWatch::Alarm', {
+        AlarmDescription: `${stage} Play secret rotation failed; inspect Lambda logs and the failure queue.`,
+        AlarmActions: alarmActions,
+        Namespace: 'AWS/Lambda',
+        MetricName: 'Errors',
+        Threshold: 1,
+        EvaluationPeriods: 1,
+      });
+      template.hasResourceProperties('AWS::CloudWatch::Alarm', {
+        AlarmDescription: `${stage} Play secret rotation failure queue contains an event; investigate before replaying.`,
+        AlarmActions: alarmActions,
+        Namespace: 'AWS/SQS',
+        MetricName: 'ApproximateNumberOfMessagesVisible',
+        Threshold: 1,
+        EvaluationPeriods: 1,
+      });
+    }
   });
 
   describe('the inline rotation handler', () => {
