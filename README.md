@@ -48,7 +48,7 @@ CDK deploys an inline Node.js 24 Lambda in CODE and PROD, scheduled daily by Eve
 
 The handler generates a cryptographically random 64-character hexadecimal secret and writes a new SecureString version to `/admin-console/{stage}/play.http.secret.key` using `alias/aws/ssm`. Write access is restricted to that stage's parameter.
 
-Concurrency is limited to one and retries are disabled, but there is no cooldown or duplicate-event protection. Keep rotations at least **2 hours 3 minutes apart** to preserve still-needed secret versions. Pause the schedule before manual rotation or replay; Lambda console Test invocations perform real rotations.
+Before rotating, the Lambda reads the parameter's `LastModifiedDate` without decrypting its value and skips the rotation if the parameter changed within the last **2 hours 3 minutes**. This protects sequential duplicate deliveries and recent manual parameter updates. Concurrency is limited to one and retries are disabled. Direct SSM edits do not use this guard. Lambda console Test invocations perform real rotations when the cooldown has expired.
 
 Lambda execution and EventBridge delivery failures go to `admin-console-{stage}-play-secret-rotation-failures` (SQS, 14-day retention). PROD-only CloudWatch alarms monitor Lambda errors and queued messages, notifying existing subscribers through `alarms-handler-topic-PROD`. CODE retains logs and the failure queue, without alarms.
 

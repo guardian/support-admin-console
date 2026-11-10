@@ -1929,7 +1929,7 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
         "Code": {
           "ZipFile": "
           const { randomBytes } = require('node:crypto');
-          const { SSMClient, PutParameterCommand } = require('@aws-sdk/client-ssm');
+          const { SSMClient, GetParameterCommand, PutParameterCommand } = require('@aws-sdk/client-ssm');
 
           const client = new SSMClient({ maxAttempts: 1 });
 
@@ -1937,6 +1937,18 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
             const parameterName = process.env.PARAMETER_NAME;
             if (!parameterName) {
               throw new Error('PARAMETER_NAME is required');
+            }
+            const parameter = await client.send(new GetParameterCommand({
+              Name: parameterName,
+              WithDecryption: false,
+            }));
+            const lastModifiedDate = parameter.Parameter?.LastModifiedDate;
+            if (!lastModifiedDate) {
+              throw new Error('SSM parameter LastModifiedDate is missing');
+            }
+            if (Date.now() - lastModifiedDate.getTime() < 123 * 60 * 1000) {
+              console.info('Skipping Play secret rotation: parameter was updated within 2 hours 3 minutes.');
+              return;
             }
             await client.send(new PutParameterCommand({
               Name: parameterName,
@@ -2191,7 +2203,10 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
               },
             },
             {
-              "Action": "ssm:PutParameter",
+              "Action": [
+                "ssm:GetParameter",
+                "ssm:PutParameter",
+              ],
               "Effect": "Allow",
               "Resource": {
                 "Fn::Join": [
