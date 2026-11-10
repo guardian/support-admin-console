@@ -1,6 +1,6 @@
-import { Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
+import { Autocomplete, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { JSX, useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
@@ -265,7 +265,6 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
 }: MessageEditorProps<NewsletterMessage>) => {
   const { validateCopy, rteMenuConstraints } = buildCopyFieldConfig(inline1EditorConfig);
   const {
-    register,
     handleSubmit,
     trigger,
     control,
@@ -284,6 +283,30 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
         errors.body === undefined,
     );
   }, [errors.newsletterId, errors.heading, errors.body, onValidationChange]);
+
+  const [newsletterOptions, setNewsletterOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch(`/newsletters`)
+      .then((response) => response.json())
+      .then((data: { data: Array<{ identityName: string; status: string }> }) => {
+        const newsletters = data.data.map((newsletter) => ({
+          id: newsletter.identityName,
+          status: newsletter.status,
+        }));
+
+        const filteredNewsletters = newsletters
+          .filter((newsletter) => newsletter.status !== 'cancelled')
+          .sort((a: { id: string }, b: { id: string }) => {
+            if (a.id > b.id) {
+              return 1;
+            }
+            return -1;
+          });
+        setNewsletterOptions(filteredNewsletters.map((newsletter) => newsletter.id));
+      })
+      .catch((error) => alert(`Error fetching newsletters data: ${error}`));
+  }, []);
 
   return (
     <Container>
@@ -328,18 +351,32 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
           />
         )}
       />
-      <TextField
-        error={errors.newsletterId !== undefined}
-        helperText={errors.newsletterId?.message}
-        {...register('newsletterId', {
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
-        onBlur={() => void handleSubmit(onChange)()}
-        label="Newsletter ID"
-        margin="normal"
-        variant="outlined"
-        disabled={isDisabled}
-        fullWidth
+      <Controller
+        name="newsletterId"
+        control={control}
+        rules={{ required: 'Please select a newsletter' }}
+        render={({ field }) => (
+          <Autocomplete
+            disabled={isDisabled}
+            options={newsletterOptions}
+            autoComplete
+            value={newsletterOptions.find((option) => option === field.value) ?? null}
+            renderInput={(params): JSX.Element => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Newsletter ID"
+                error={errors.newsletterId !== undefined}
+                inputRef={field.ref}
+                helperText={errors.newsletterId?.message}
+              />
+            )}
+            onChange={(_, option): void => {
+              field.onChange(option ?? '');
+              void handleSubmit(onChange)();
+            }}
+          />
+        )}
       />
     </Container>
   );
