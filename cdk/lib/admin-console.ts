@@ -11,6 +11,7 @@ import {
 } from '@guardian/cdk/lib/constructs/iam';
 import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy, Tags } from 'aws-cdk-lib';
+import { SnsAction } from 'aws-cdk-lib/aws-cloudwatch-actions';
 import {
   AttributeType,
   BillingMode,
@@ -29,6 +30,8 @@ import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import type { Policy } from 'aws-cdk-lib/aws-iam';
 import { AccountPrincipal, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { MultiDynamoTableReadPolicy, MultiDynamoTableWritePolicy } from './dynamo-managed-policy';
 
@@ -289,6 +292,10 @@ export class AdminConsole extends GuStack {
 
     if (this.stage === 'CODE' || this.stage === 'PROD') {
       const parameterName = `/${app}/${this.stage}/play.http.secret.key`;
+      const failures = new Queue(this, 'PlaySecretRotationFailures', {
+        queueName: `${app}-${this.stage}-play-secret-rotation-failures`,
+        retentionPeriod: Duration.days(14),
+      });
       const rotator = new Function(this, 'PlaySecretRotation', {
         functionName: `${app}-${this.stage}-play-secret-rotation`,
         runtime: Runtime.NODEJS_24_X,
@@ -297,6 +304,7 @@ export class AdminConsole extends GuStack {
         reservedConcurrentExecutions: 1,
         retryAttempts: 0,
         maxEventAge: Duration.hours(1),
+        deadLetterQueue: failures,
         environment: { PARAMETER_NAME: parameterName },
         code: Code.fromInline(`
           const { randomBytes } = require('node:crypto');
@@ -331,9 +339,32 @@ export class AdminConsole extends GuStack {
           new LambdaFunction(rotator, {
             retryAttempts: 0,
             maxEventAge: Duration.hours(1),
+            deadLetterQueue: failures,
           }),
         ],
       });
+      if (this.stage === 'PROD') {
+        const rotationErrors = rotator.metricErrors().createAlarm(this, 'PlaySecretRotationErrors', {
+          threshold: 1,
+          evaluationPeriods: 1,
+          alarmDescription: `${this.stage} Play secret rotation failed; inspect Lambda logs and the failure queue.`,
+        });
+        const undeliveredRotations = failures
+          .metricApproximateNumberOfMessagesVisible()
+          .createAlarm(this, 'PlaySecretRotationUndelivered', {
+            threshold: 1,
+            evaluationPeriods: 1,
+            alarmDescription: `${this.stage} Play secret rotation failure queue contains an event; investigate before replaying.`,
+          });
+        const alarmTopic = Topic.fromTopicArn(
+          this,
+          'PlaySecretRotationAlarmTopic',
+          this.formatArn({ service: 'sns', resource: 'alarms-handler-topic-PROD' }),
+        );
+        const notificationAction = new SnsAction(alarmTopic);
+        rotationErrors.addAlarmAction(notificationAction);
+        undeliveredRotations.addAlarmAction(notificationAction);
+      }
     }
 
     const channelTestsDynamoTable = this.buildTestsTable();

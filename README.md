@@ -44,11 +44,15 @@ To roll back, retrieve the known-good value from Parameter Store history and sav
 
 #### Automatic rotation in CODE and PROD
 
-The CDK stack creates a Node.js 24 Lambda in both CODE and PROD, triggered daily by EventBridge. Its handler is defined inline in the CDK stack and deployed directly through CloudFormation, using Node's cryptographic random generator and the AWS SDK bundled with the Lambda runtime. No third-party rotation JAR or S3 artifact upload is required. The daily schedule is enabled by default on deployment.
+CDK deploys an inline Node.js 24 Lambda in CODE and PROD, scheduled daily by EventBridge and enabled on deployment. No separate Lambda artifact is required.
 
-The handler is `index.handler`. It generates a fresh 64-character hexadecimal secret and overwrites `/admin-console/{stage}/play.http.secret.key` as a new SecureString version using `alias/aws/ssm`, matching the existing parameter configuration. Each stage's Lambda can update only that stage's parameter. Deploy the rotation-enabled Play app to each stage before deploying its automation; a Lambda test invocation performs a real rotation.
+The handler generates a cryptographically random 64-character hexadecimal secret and writes a new SecureString version to `/admin-console/{stage}/play.http.secret.key` using `alias/aws/ssm`. Write access is restricted to that stage's parameter.
 
-The inline handler has no cooldown or duplicate-event protection. Concurrent invocations are limited to one, and automatic retries are disabled in the AWS SDK, EventBridge, and Lambda. Avoid additional rotations within 2 hours 3 minutes of an update: another version can remove a still-needed secret from the latest two versions. Pause the schedule before a manual rotation or replay. Only the target parameter can be updated; no account-wide `ssm:DescribeParameters` permission is needed.
+Concurrency is limited to one and retries are disabled, but there is no cooldown or duplicate-event protection. Keep rotations at least **2 hours 3 minutes apart** to preserve still-needed secret versions. Pause the schedule before manual rotation or replay; Lambda console Test invocations perform real rotations.
+
+Lambda execution and EventBridge delivery failures go to `admin-console-{stage}-play-secret-rotation-failures` (SQS, 14-day retention). PROD-only CloudWatch alarms monitor Lambda errors and queued messages, notifying existing subscribers through `alarms-handler-topic-PROD`. CODE retains logs and the failure queue, without alarms.
+
+Disable the stage's `DailyPlaySecretRotation` EventBridge rule to pause rotation or before rolling back to an app without rotation support. Re-enable it once the rotation-enabled app is healthy.
 
 ### Running Playwright E2E tests (awailable only locally)
 
