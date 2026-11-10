@@ -327,7 +327,7 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
 
   return (
     <Container>
-      <SectionHeader variant="h4">Newsletter signups content</SectionHeader>
+      <SectionHeader variant="h4">Newsletter sign ups content</SectionHeader>
       <Controller
         name="heading"
         control={control}
@@ -472,7 +472,7 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
           labels={{
             Inline1SupportMessage: 'Supporter revenue / App download',
             Inline1PuzzlesMessage: 'Puzzles',
-            Inline1NewsletterMessage: 'Newsletter signups',
+            Inline1NewsletterMessage: 'Newsletter sign ups',
           }}
         />
       </HorizontalRadioGroup>
