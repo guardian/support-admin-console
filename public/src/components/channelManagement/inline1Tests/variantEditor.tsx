@@ -1,7 +1,7 @@
 import { Autocomplete, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { JSX, useCallback, useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
 import { ResponsiveImage } from '../../../models/shared';
@@ -46,6 +46,10 @@ const SectionHeader = styled(Typography)(({ theme }) => ({
 
 type SupportMessage = Extract<Inline1Message, { type: 'Inline1SupportMessage' }>;
 type NewsletterMessage = Extract<Inline1Message, { type: 'Inline1NewsletterMessage' }>;
+type NewsletterData = {
+  id: string;
+  status: string;
+};
 type SupportCopy = Pick<SupportMessage, 'heading' | 'body'>;
 
 const getSupportCopyHelperText = (
@@ -284,7 +288,20 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
     );
   }, [errors.newsletterId, errors.heading, errors.body, onValidationChange]);
 
-  const [newsletterOptions, setNewsletterOptions] = useState<string[]>([]);
+  const [newsletters, setNewsletters] = useState<NewsletterData[]>([]);
+  const newsletterOptions = newsletters.map((newsletter) => newsletter.id);
+
+  const selectedNewsletterId = useWatch({
+    control,
+    name: 'newsletterId',
+  });
+  const selectedNewsletter = newsletters.find(
+    (newsletter) => newsletter.id === selectedNewsletterId,
+  );
+  const newsletterWarning =
+    selectedNewsletter?.status !== 'live'
+      ? `Warning: this newsletter's status is ${selectedNewsletter?.status}`
+      : undefined;
 
   useEffect(() => {
     fetch(`/newsletters`)
@@ -303,7 +320,7 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
             }
             return -1;
           });
-        setNewsletterOptions(filteredNewsletters.map((newsletter) => newsletter.id));
+        setNewsletters(filteredNewsletters);
       })
       .catch((error) => alert(`Error fetching newsletters data: ${error}`));
   }, []);
@@ -368,7 +385,7 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
                 label="Newsletter ID"
                 error={errors.newsletterId !== undefined}
                 inputRef={field.ref}
-                helperText={errors.newsletterId?.message}
+                helperText={errors.newsletterId?.message ?? newsletterWarning}
               />
             )}
             onChange={(_, option): void => {
