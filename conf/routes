@@ -241,6 +241,9 @@ GET   /capi/tags                                       controllers.CapiControlle
 GET   /capi/sections                                   controllers.CapiController.getSections()
 GET   /capi/content/*path                              controllers.CapiController.getContent(path: String)
 
+# ----- newsletters ----- #
+GET   /newsletters                                     controllers.NewslettersController.getNewsletters()
+
 # ----- apps metering switches ----- #
 GET   /apps/apps-metering-switches                     controllers.AppsMeteringSwitchesController.get
 POST  /apps/apps-metering-switches/update              controllers.AppsMeteringSwitchesController.set

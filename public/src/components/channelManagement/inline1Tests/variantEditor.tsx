@@ -1,7 +1,7 @@
-import { Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
+import { Autocomplete, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import React, { useCallback, useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { JSX, useCallback, useEffect, useState } from 'react';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
 import { ResponsiveImage } from '../../../models/shared';
@@ -46,6 +46,10 @@ const SectionHeader = styled(Typography)(({ theme }) => ({
 
 type SupportMessage = Extract<Inline1Message, { type: 'Inline1SupportMessage' }>;
 type NewsletterMessage = Extract<Inline1Message, { type: 'Inline1NewsletterMessage' }>;
+type NewsletterData = {
+  id: string;
+  status: string;
+};
 type SupportCopy = Pick<SupportMessage, 'heading' | 'body'>;
 
 const getSupportCopyHelperText = (
@@ -265,7 +269,6 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
 }: MessageEditorProps<NewsletterMessage>) => {
   const { validateCopy, rteMenuConstraints } = buildCopyFieldConfig(inline1EditorConfig);
   const {
-    register,
     handleSubmit,
     trigger,
     control,
@@ -285,9 +288,46 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
     );
   }, [errors.newsletterId, errors.heading, errors.body, onValidationChange]);
 
+  const [newsletters, setNewsletters] = useState<NewsletterData[]>([]);
+  const newsletterOptions = newsletters.map((newsletter) => newsletter.id);
+
+  const selectedNewsletterId = useWatch({
+    control,
+    name: 'newsletterId',
+  });
+  const selectedNewsletter = newsletters.find(
+    (newsletter) => newsletter.id === selectedNewsletterId,
+  );
+  const newsletterWarning =
+    selectedNewsletter?.status !== 'live'
+      ? `Warning: this newsletter's status is ${selectedNewsletter?.status}`
+      : undefined;
+
+  useEffect(() => {
+    fetch(`/newsletters`)
+      .then((response) => response.json())
+      .then((data: { data: Array<{ identityName: string; status: string }> }) => {
+        const newsletters = data.data.map((newsletter) => ({
+          id: newsletter.identityName,
+          status: newsletter.status,
+        }));
+
+        const filteredNewsletters = newsletters
+          .filter((newsletter) => newsletter.status !== 'cancelled')
+          .sort((a: { id: string }, b: { id: string }) => {
+            if (a.id > b.id) {
+              return 1;
+            }
+            return -1;
+          });
+        setNewsletters(filteredNewsletters);
+      })
+      .catch((error) => alert(`Error fetching newsletters data: ${error}`));
+  }, []);
+
   return (
     <Container>
-      <SectionHeader variant="h4">Newsletter signups content</SectionHeader>
+      <SectionHeader variant="h4">Newsletter sign ups content</SectionHeader>
       <Controller
         name="heading"
         control={control}
@@ -328,18 +368,32 @@ const NewsletterMessageEditor: React.FC<MessageEditorProps<NewsletterMessage>> =
           />
         )}
       />
-      <TextField
-        error={errors.newsletterId !== undefined}
-        helperText={errors.newsletterId?.message}
-        {...register('newsletterId', {
-          required: EMPTY_ERROR_HELPER_TEXT,
-        })}
-        onBlur={() => void handleSubmit(onChange)()}
-        label="Newsletter ID"
-        margin="normal"
-        variant="outlined"
-        disabled={isDisabled}
-        fullWidth
+      <Controller
+        name="newsletterId"
+        control={control}
+        rules={{ required: 'Please select a newsletter' }}
+        render={({ field }) => (
+          <Autocomplete
+            disabled={isDisabled}
+            options={newsletterOptions}
+            autoComplete
+            value={newsletterOptions.find((option) => option === field.value) ?? null}
+            renderInput={(params): JSX.Element => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Newsletter ID"
+                error={errors.newsletterId !== undefined}
+                inputRef={field.ref}
+                helperText={errors.newsletterId?.message ?? newsletterWarning}
+              />
+            )}
+            onChange={(_, option): void => {
+              field.onChange(option ?? '');
+              void handleSubmit(onChange)();
+            }}
+          />
+        )}
       />
     </Container>
   );
@@ -418,7 +472,7 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
           labels={{
             Inline1SupportMessage: 'Supporter revenue / App download',
             Inline1PuzzlesMessage: 'Puzzles',
-            Inline1NewsletterMessage: 'Newsletter signups',
+            Inline1NewsletterMessage: 'Newsletter sign ups',
           }}
         />
       </HorizontalRadioGroup>
