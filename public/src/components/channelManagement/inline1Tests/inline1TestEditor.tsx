@@ -79,7 +79,14 @@ export const getInline1TestEditor = (
       onTestChange((current) => ({ ...current, mParticleAudience }));
 
     const onBidPriceChange = (bidPrice: 'High' | 'Low'): void =>
-      onTestChange((current) => ({ ...current, bidPrice: bidPrice === 'High' ? 1.0 : 0.0 }));
+      onTestChange((current) => ({
+        ...current,
+        variants: current.variants.map((currentVariant) =>
+          currentVariant.name === variant.name
+            ? { ...currentVariant, bidPrice: bidPrice === 'High' ? 1 : 0 }
+            : currentVariant,
+        ),
+      }));
 
     const onArticlesViewedSettingsChange = (
       updatedArticlesViewedSettings?: ArticlesViewedSettings,
@@ -177,7 +184,7 @@ export const getInline1TestEditor = (
               mParticleAudience: test.mParticleAudience,
               onMParticleAudienceChange,
             }}
-            selectedBidPrice={test.bidPrice === 1 ? 'High' : 'Low'}
+            selectedBidPrice={variant.bidPrice === 1 ? 'High' : 'Low'}
             onBidPriceChange={onBidPriceChange}
           />
         </SectionContainer>

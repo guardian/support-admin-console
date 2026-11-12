@@ -41,6 +41,7 @@ export type Inline1MessageType = Inline1Message['type'];
 
 export interface Inline1Variant extends Variant {
   message: Inline1Message;
+  bidPrice?: 0.0 | 1.0;
 }
 
 export interface Inline1Test extends Test {
@@ -55,5 +56,4 @@ export interface Inline1Test extends Test {
   mParticleAudience?: number;
   variants: Inline1Variant[];
   controlProportionSettings?: ControlProportionSettings;
-  bidPrice?: 0.0 | 1.0;
 }

@@ -1,6 +1,5 @@
 package models
 
-import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
@@ -35,8 +34,13 @@ object Inline1Message {
 
 case class Inline1Variant(
     name: String,
-    message: Inline1Message
-) derives Codec.AsObject
+    message: Inline1Message,
+    bidPrice: Float = 0.0f
+) derives ConfiguredCodec
+
+object Inline1Variant {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class Inline1Test(
     name: String,
@@ -56,8 +60,7 @@ case class Inline1Test(
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     methodologies: List[Methodology] = defaultMethodologies,
     scheduler: Option[Scheduler] = None,
-    variants: List[Inline1Variant],
-    bidPrice: Float = 0.0
+    variants: List[Inline1Variant]
 ) extends ChannelTest[Inline1Test] derives ConfiguredCodec {
   override def withChannel(channel: Channel): Inline1Test =
     this.copy(channel = Some(channel))
