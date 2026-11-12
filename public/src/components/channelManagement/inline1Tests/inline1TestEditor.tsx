@@ -1,6 +1,7 @@
 import React from 'react';
 import { Inline1Test, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
+import VariantSummaryWebPreviewButton from '../../tests/variants/variantSummaryWebPreviewButton';
 import CampaignSelector from '../CampaignSelector';
 import {
   ArticlesViewedSettings,
@@ -13,7 +14,13 @@ import {
   SignedInStatus,
   UserCohort,
 } from '../helpers/shared';
-import { Container, SectionContainer, SectionHeader } from '../helpers/testEditorStyles';
+import {
+  Container,
+  SectionContainer,
+  SectionHeader,
+  VariantsHeaderButtonsContainer,
+  VariantsHeaderContainer,
+} from '../helpers/testEditorStyles';
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
@@ -114,7 +121,19 @@ export const getInline1TestEditor = (
       <Container>
         {!inline1EditorConfig.allowMultipleVariants && (
           <SectionContainer>
-            <SectionHeader variant={'h3'}>Message Type</SectionHeader>
+            <VariantsHeaderContainer>
+              <SectionHeader variant={'h3'}>Message Type</SectionHeader>
+              <VariantsHeaderButtonsContainer>
+                <VariantSummaryWebPreviewButton
+                  name={variant.name}
+                  testName={test.name}
+                  testType="INLINE1"
+                  platform={inline1EditorConfig.platform}
+                  isDisabled={userHasTestLocked}
+                  articleType="Inline1Article"
+                />
+              </VariantsHeaderButtonsContainer>
+            </VariantsHeaderContainer>
             <div>
               <Inline1VariantEditor
                 key={`inline1-${test.name}-${variant.name}`}
