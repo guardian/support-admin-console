@@ -35,4 +35,5 @@ export const getDefaultTest = (): Inline1Test => ({
   variants: [getDefaultVariant()],
   methodologies: [{ name: 'ABTest' }],
   campaignName: '',
+  bidPrice: 0,
 });

@@ -55,4 +55,5 @@ export interface Inline1Test extends Test {
   mParticleAudience?: number;
   variants: Inline1Variant[];
   controlProportionSettings?: ControlProportionSettings;
+  bidPrice?: 0.0 | 1.0;
 }

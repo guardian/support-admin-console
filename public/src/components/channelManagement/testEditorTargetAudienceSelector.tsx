@@ -11,6 +11,7 @@ import {
   TestPlatform,
   UserCohort,
 } from './helpers/shared';
+import BidPriceEditor from './inline1Tests/BidPriceEditor';
 import { MParticleAudienceEditor } from './mParticleAudienceEditor';
 import MultiSelectCountryEditor from './MultiSelectCountryEditor';
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
@@ -60,6 +61,8 @@ interface TestEditorTargetAudienceSelectorProps {
     onMParticleAudienceChange: (mParticleAudience?: number) => void;
   };
   mParticleAudienceValidation?: boolean;
+  selectedBidPrice?: 'High' | 'Low';
+  onBidPriceChange?: (bidPrice: 'High' | 'Low') => void;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
   regionTargeting,
@@ -81,6 +84,8 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   platform,
   mParticleAudienceEditor,
   mParticleAudienceValidation,
+  selectedBidPrice,
+  onBidPriceChange,
 }: TestEditorTargetAudienceSelectorProps) => {
   const regionTargetingOrDefault: RegionTargeting = regionTargeting ?? {
     targetedCountryGroups: [],
@@ -213,6 +218,13 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
           </>
         )}
       </MParticleContainer>
+      {onBidPriceChange && (
+        <BidPriceEditor
+          selectedBidPrice={selectedBidPrice}
+          onBidPriceChange={onBidPriceChange}
+          isDisabled={isDisabled}
+        />
+      )}
     </Container>
   );
 };
