@@ -21,6 +21,29 @@ export async function releaseEditModeIfActive(page: Page): Promise<void> {
 
 const E2E_TEST_NAME = 'TEST_E2E';
 const E2E_TEST_LOCK_DIR = path.join(os.tmpdir(), 'e2e-test.lock');
+const ARTICLE_COUNT_VALIDATION_ERROR =
+  'Copy contains %%ARTICLE_COUNT%%. Enable article count targeting or remove the template before saving.';
+
+const getTestRow = (page: Page, testName: string, status?: 'Draft' | 'Live') => {
+  const escapedName = testName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const statusPattern = status ?? '(?:Draft|Live)';
+  return page.getByRole('button', {
+    name: new RegExp(`^${statusPattern} ${escapedName}(?: AC)?$`),
+  });
+};
+
+async function enableArticleCountIfRequired(page: Page): Promise<void> {
+  const articleCountError = page.getByText(ARTICLE_COUNT_VALIDATION_ERROR);
+  if (await articleCountError.isVisible()) {
+    const articleCountRadio = page.getByRole('radio', {
+      name: "Target by user's article count",
+      exact: true,
+    });
+    await articleCountRadio.scrollIntoViewIfNeeded();
+    await articleCountRadio.check();
+    await expect(articleCountError).not.toBeVisible();
+  }
+}
 
 export async function acquireTestE2ELock(): Promise<void> {
   const maxWaitMs = 15000;
@@ -62,15 +85,14 @@ export async function ensureTestE2EExists(page: Page): Promise<void> {
       page.goto('/epic-tests', { waitUntil: 'domcontentloaded' }),
     ]);
 
-    const testRows = page.getByRole('button', {
-      name: new RegExp(`^(Draft|Live) ${E2E_TEST_NAME}$`),
-    });
+    const testRows = getTestRow(page, E2E_TEST_NAME);
     if ((await testRows.count()) === 0) {
       await page.getByRole('button', { name: 'Create a new test' }).click();
       await page.getByRole('textbox', { name: 'Full test name' }).fill(E2E_TEST_NAME);
       await page.getByRole('textbox', { name: 'Nickname' }).fill(E2E_TEST_NAME);
       await page.getByRole('button', { name: 'Create test' }).click();
-      await expect(page.getByRole('button', { name: 'Draft TEST_E2E' })).toBeVisible();
+      await expect(getTestRow(page, E2E_TEST_NAME, 'Draft')).toBeVisible();
+      await enableArticleCountIfRequired(page);
 
       await Promise.all([
         page.waitForResponse(
@@ -89,6 +111,8 @@ export async function ensureTestE2EExists(page: Page): Promise<void> {
       await page.getByRole('button', { name: 'New variant' }).click();
       await page.getByRole('textbox', { name: 'Variant name' }).fill('CONTROL');
       await page.getByRole('button', { name: 'Create variant' }).click();
+
+      await enableArticleCountIfRequired(page);
 
       await Promise.all([
         page.waitForResponse(
@@ -112,8 +136,8 @@ export async function openTestRow(page: Page, name: string): Promise<void> {
   await exitReorderModeIfActive(page);
 
   const testName = name.replace(/^(Draft|Live) /, '');
-  const draftRow = page.getByRole('button', { name: `Draft ${testName}`, exact: true });
-  const liveRow = page.getByRole('button', { name: `Live ${testName}`, exact: true });
+  const draftRow = getTestRow(page, testName, 'Draft');
+  const liveRow = getTestRow(page, testName, 'Live');
   await expect(draftRow.or(liveRow).last()).toBeVisible();
   const row = (await draftRow.count()) > 0 ? draftRow.last() : liveRow.last();
 

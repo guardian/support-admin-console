@@ -85,6 +85,49 @@ test.describe('Shared TEST_E2E and test-list state', () => {
     expect(submittedParagraphs).toEqual(['First body line', 'Second body line']);
   });
 
+  test('Epic body copy keeps list prefixes as text', async ({ page }) => {
+    let submittedParagraphs: string[] | undefined;
+    await page.route('**/frontend/epic-tests/test/update', async (route) => {
+      const updatedTest = route.request().postDataJSON() as {
+        variants: Array<{ name: string; paragraphs: string[] }>;
+      };
+      submittedParagraphs = updatedTest.variants.find(
+        (variant) => variant.name.toUpperCase() === 'BODY_COPY_LIST_PREFIXES',
+      )?.paragraphs;
+      await route.fulfill({ status: 200 });
+    });
+
+    await page.goto('/epic-tests');
+    await openTestRow(page, 'Draft TEST_E2E');
+    await page.getByRole('button', { name: 'Edit test' }).click();
+    await page.getByRole('button', { name: 'New variant' }).click();
+    await page.getByRole('textbox', { name: 'Variant name' }).fill('body_copy_list_prefixes');
+    await page.getByRole('button', { name: 'Create variant' }).click();
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await page.getByRole('heading', { name: 'BODY_COPY_LIST_PREFIXES' }).click();
+
+    const bodyCopy = page.locator('#RTE-paragraphs .ProseMirror').last();
+    await expect(bodyCopy).toBeVisible();
+    await bodyCopy.fill('');
+    await bodyCopy.pressSequentially('1. First numbered line');
+    await bodyCopy.press('Enter');
+    await bodyCopy.pressSequentially('- First bulleted line');
+
+    await expect(bodyCopy.locator('[data-list-kind="ordered"]')).toHaveCount(0);
+    await expect(bodyCopy.locator('[data-list-kind="bullet"]')).toHaveCount(0);
+
+    await Promise.all([
+      page.waitForResponse(
+        (response) =>
+          response.url().endsWith('/frontend/epic-tests/test/update') &&
+          response.request().method() === 'POST',
+      ),
+      page.getByRole('button', { name: 'Save test' }).click(),
+    ]);
+
+    expect(submittedParagraphs).toEqual(['1. First numbered line', '- First bulleted line']);
+  });
+
   test('Edit an existing draft test and discard changes', async ({ page }) => {
     await page.goto('/epic-tests');
     await openTestRow(page, 'Draft TEST_E2E');

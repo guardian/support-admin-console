@@ -2,9 +2,26 @@ import 'prosekit/basic/style.css';
 import 'prosekit/basic/typography.css';
 
 import { Plugin, TextSelection } from '@prosekit/pm/state';
-import { defineBasicExtension } from 'prosekit/basic';
-import { createEditor, definePlugin, type Editor, union } from 'prosekit/core';
+import {
+  createEditor,
+  defineBaseCommands,
+  defineBaseKeymap,
+  defineHistory,
+  definePlugin,
+  type Editor,
+  union,
+} from 'prosekit/core';
+import { defineBold } from 'prosekit/extensions/bold';
+import { defineDoc } from 'prosekit/extensions/doc';
+import { defineGapCursor } from 'prosekit/extensions/gap-cursor';
+import { defineItalic } from 'prosekit/extensions/italic';
+import { defineLink } from 'prosekit/extensions/link';
+import { defineModClickPrevention } from 'prosekit/extensions/mod-click-prevention';
+import { defineParagraph } from 'prosekit/extensions/paragraph';
 import { defineReadonly } from 'prosekit/extensions/readonly';
+import { defineStrike } from 'prosekit/extensions/strike';
+import { defineText } from 'prosekit/extensions/text';
+import { defineVirtualSelection } from 'prosekit/extensions/virtual-selection';
 import { ProseKit, useEditor, useEditorDerivedValue, useExtension } from 'prosekit/react';
 import {
   InlinePopoverPopup,
@@ -73,12 +90,29 @@ export interface RteMenuConstraints {
 }
 
 type ProseKitEditor = ReturnType<typeof createEditor>;
-type ProseKitExtension = ReturnType<typeof defineBasicExtension>;
+type ProseKitExtension = ReturnType<typeof defineRichTextEditorExtension>;
 type LinkMarkAttrs = {
   href?: string | null;
   target?: string | null;
   rel?: string | null;
 };
+
+const defineRichTextEditorExtension = () =>
+  union(
+    defineDoc(),
+    defineText(),
+    defineParagraph(),
+    defineItalic(),
+    defineBold(),
+    defineStrike(),
+    defineLink(),
+    defineBaseKeymap(),
+    defineBaseCommands(),
+    defineHistory(),
+    defineGapCursor(),
+    defineVirtualSelection(),
+    defineModClickPrevention(),
+  );
 
 const removePastedHtmlExtension = definePlugin(
   () =>
@@ -501,7 +535,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ copyData = [], ...props
   const editor = useMemo(
     () =>
       createEditor({
-        extension: union(defineBasicExtension(), removePastedHtmlExtension),
+        extension: union(defineRichTextEditorExtension(), removePastedHtmlExtension),
         defaultContent: initialContent,
       }),
     [initialContent],
