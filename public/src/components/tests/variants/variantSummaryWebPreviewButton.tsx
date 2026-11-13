@@ -4,12 +4,14 @@ import React from 'react';
 import { getStage, Stage } from '../../../utils/stage';
 import { TestPlatform, TestType } from '../../channelManagement/helpers/shared';
 
-export type ArticleType = 'Standard' | 'Liveblog';
+export type ArticleType = 'Standard' | 'Liveblog' | 'Inline1Article';
 
 const ArticlePaths: Record<ArticleType, string> = {
   Standard:
     'world/2020/may/08/commemorating-ve-day-during-coronavirus-lockdown-somehow-the-quiet-made-it-louder',
   Liveblog: 'world/live/2022/oct/07/nobel-peace-prize-2022-live-winners',
+  Inline1Article:
+    'fashion/2026/nov/06/minimal-look-maximal-politics-how-the-black-t-shirt-became-a-political-weapon',
 };
 
 const getHostName = (stage: Stage): string => {
