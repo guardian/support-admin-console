@@ -35,7 +35,7 @@ object Inline1Message {
 case class Inline1Variant(
     name: String,
     message: Inline1Message,
-    bidScore: Int = 0
+    bidScore: Double = 0.0
 ) derives ConfiguredCodec
 
 object Inline1Variant {
