@@ -1,5 +1,5 @@
 import { Button, Checkbox, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { fetchCountryGroups, fetchProductDetails } from '../../utils/requests';
 import {
   ButtonGroup,
@@ -21,6 +21,7 @@ import {
 } from './utils/productCatalog';
 import {
   CountryGroup,
+  getPromoCountryTargeting,
   LandingPage,
   mapPromoProductToCatalogProducts,
   Promo,
@@ -55,18 +56,6 @@ const PromoEditor = ({
   const [backupLandingPage, setBackupLandingPage] = useState<LandingPage | undefined>(
     promo?.landingPage,
   );
-
-  const selectedCountryGroups = useMemo(() => {
-    if (editedPromo && countryGroups.length > 0) {
-      const countryCodes = editedPromo.appliesTo.countries;
-      const matchedGroupIds = countryCodes
-        .map((countryCode) => countryGroups.find((cg) => cg.countries.includes(countryCode)))
-        .filter((group): group is CountryGroup => group != undefined)
-        .map((group) => group.id);
-      return [...new Set(matchedGroupIds)];
-    }
-    return [];
-  }, [editedPromo, countryGroups]);
 
   useEffect(() => {
     fetchCountryGroups()
@@ -103,6 +92,8 @@ const PromoEditor = ({
       </Root>
     );
   }
+
+  const targeting = editedPromo && getPromoCountryTargeting(editedPromo.appliesTo, countryGroups);
 
   const handleFieldChange = (field: keyof Promo, value: string) => {
     if (editedPromo) {
@@ -162,28 +153,21 @@ const PromoEditor = ({
     }
   };
 
-  const handleCountryGroupToggle = (countryGroupId: string) => {
-    if (!editedPromo) {
+  const handleCountryGroupToggle = (group: CountryGroup) => {
+    if (!editedPromo || !targeting) {
       return;
     }
 
-    const currentCountries = editedPromo.appliesTo.countries;
-    const groupCountries = countryGroups.find((g) => g.id === countryGroupId)?.countries ?? [];
-
-    const isGroupSelected = groupCountries.every((country) => currentCountries.includes(country));
-
-    let newCountries: string[];
-    if (isGroupSelected) {
-      newCountries = currentCountries.filter((country) => !groupCountries.includes(country));
-    } else {
-      newCountries = [...new Set([...currentCountries, ...groupCountries])];
-    }
-
+    const groupIds = targeting.groupIds.includes(group.id)
+      ? targeting.groupIds.filter((id) => id !== group.id)
+      : [...targeting.groupIds, group.id];
+    const countries = targeting.countries.filter((country) => !group.countries.includes(country));
     setEditedPromo({
       ...editedPromo,
       appliesTo: {
         ...editedPromo.appliesTo,
-        countries: newCountries,
+        countryGroups: groupIds,
+        countries: countries.length > 0 ? countries : undefined,
       },
     });
   };
@@ -223,8 +207,17 @@ const PromoEditor = ({
   };
 
   const handleSave = () => {
-    if (editedPromo && !hasFractionalSelectedPlan) {
-      onSave(editedPromo);
+    if (editedPromo && targeting && !hasFractionalSelectedPlan) {
+      const { appliesTo } = editedPromo;
+      const hasGroups = targeting.groupIds.length > 0 || appliesTo.countryGroups !== undefined;
+      onSave({
+        ...editedPromo,
+        appliesTo: {
+          ...appliesTo,
+          countryGroups: hasGroups ? targeting.groupIds : undefined,
+          countries: !hasGroups || targeting.countries.length > 0 ? targeting.countries : undefined,
+        },
+      });
     }
   };
 
@@ -380,20 +373,27 @@ const PromoEditor = ({
         </Typography>
         <CountryGroupsContainer>
           <Grid container spacing={2}>
-            {countryGroups.map((group) => (
-              <Grid item xs={6} key={group.id}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={selectedCountryGroups.includes(group.id)}
-                      onChange={() => handleCountryGroupToggle(group.id)}
-                      disabled={!isEditing}
-                    />
-                  }
-                  label={group.name}
-                />
-              </Grid>
-            ))}
+            {countryGroups.map((group) => {
+              const checked = targeting?.groupIds.includes(group.id) ?? false;
+              const indeterminate =
+                targeting?.countries.some((country) => group.countries.includes(country)) ?? false;
+              return (
+                <Grid item xs={6} key={group.id}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={checked}
+                        indeterminate={indeterminate}
+                        inputProps={{ 'aria-checked': indeterminate ? 'mixed' : checked }}
+                        onChange={() => handleCountryGroupToggle(group)}
+                        disabled={!isEditing}
+                      />
+                    }
+                    label={group.name}
+                  />
+                </Grid>
+              );
+            })}
           </Grid>
         </CountryGroupsContainer>
       </Section>

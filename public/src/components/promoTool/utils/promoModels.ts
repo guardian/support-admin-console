@@ -31,13 +31,34 @@ export interface PromoCampaign {
 
 export interface AppliesTo {
   productRatePlanIds: string[];
-  countries: string[];
+  countries?: string[];
+  countryGroups?: string[];
 }
 
 export interface CountryGroup {
   id: string;
   name: string;
   countries: string[];
+}
+
+export function getPromoCountryTargeting(
+  appliesTo: AppliesTo,
+  countryGroups: CountryGroup[],
+): { groupIds: string[]; countries: string[] } {
+  const countries = appliesTo.countries ?? [];
+  const groupIds = new Set(appliesTo.countryGroups);
+  for (const group of countryGroups) {
+    if (group.countries.every((country) => countries.includes(country))) {
+      groupIds.add(group.id);
+    }
+  }
+  const groupedCountries = new Set(
+    countryGroups.filter((group) => groupIds.has(group.id)).flatMap((group) => group.countries),
+  );
+  return {
+    groupIds: [...groupIds],
+    countries: countries.filter((country) => !groupedCountries.has(country)),
+  };
 }
 
 export interface DiscountDetails {
