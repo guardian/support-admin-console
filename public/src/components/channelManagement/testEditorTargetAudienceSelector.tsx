@@ -11,7 +11,7 @@ import {
   TestPlatform,
   UserCohort,
 } from './helpers/shared';
-import BidPriceEditor from './inline1Tests/BidPriceEditor';
+import BidScoreEditor from './inline1Tests/BidScoreEditor';
 import { MParticleAudienceEditor } from './mParticleAudienceEditor';
 import MultiSelectCountryEditor from './MultiSelectCountryEditor';
 import TestEditorTargetRegionsSelector from './testEditorTargetRegionsSelector';
@@ -61,8 +61,8 @@ interface TestEditorTargetAudienceSelectorProps {
     onMParticleAudienceChange: (mParticleAudience?: number) => void;
   };
   mParticleAudienceValidation?: boolean;
-  selectedBidPrice?: 'High' | 'Low';
-  onBidPriceChange?: (bidPrice: 'High' | 'Low') => void;
+  selectedBidScore?: 'High' | 'Low';
+  onBidScoreChange?: (bidScore: 'High' | 'Low') => void;
 }
 const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelectorProps> = ({
   regionTargeting,
@@ -84,8 +84,8 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
   platform,
   mParticleAudienceEditor,
   mParticleAudienceValidation,
-  selectedBidPrice,
-  onBidPriceChange,
+  selectedBidScore,
+  onBidScoreChange,
 }: TestEditorTargetAudienceSelectorProps) => {
   const regionTargetingOrDefault: RegionTargeting = regionTargeting ?? {
     targetedCountryGroups: [],
@@ -218,10 +218,10 @@ const TestEditorTargetAudienceSelector: React.FC<TestEditorTargetAudienceSelecto
           </>
         )}
       </MParticleContainer>
-      {onBidPriceChange && (
-        <BidPriceEditor
-          selectedBidPrice={selectedBidPrice}
-          onBidPriceChange={onBidPriceChange}
+      {onBidScoreChange && (
+        <BidScoreEditor
+          selectedBidScore={selectedBidScore}
+          onBidScoreChange={onBidScoreChange}
           isDisabled={isDisabled}
         />
       )}

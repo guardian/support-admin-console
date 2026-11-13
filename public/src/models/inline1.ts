@@ -41,7 +41,7 @@ export type Inline1MessageType = Inline1Message['type'];
 
 export interface Inline1Variant extends Variant {
   message: Inline1Message;
-  bidPrice?: 0.0 | 1.0;
+  bidScore?: 0 | 1;
 }
 
 export interface Inline1Test extends Test {

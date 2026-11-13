@@ -13,23 +13,23 @@ export const Heading = styled(Typography)(({ theme }) => ({
   fontWeight: 500,
 }));
 
-interface BidPriceEditorProps {
-  selectedBidPrice?: 'High' | 'Low';
-  onBidPriceChange: (bidPrice: 'High' | 'Low') => void;
+interface BidScoreEditorProps {
+  selectedBidScore?: 'High' | 'Low';
+  onBidScoreChange: (bidScore: 'High' | 'Low') => void;
   isDisabled: boolean;
 }
-const BidPriceEditor: React.FC<BidPriceEditorProps> = ({
-  selectedBidPrice,
-  onBidPriceChange,
+const BidScoreEditor: React.FC<BidScoreEditorProps> = ({
+  selectedBidScore,
+  onBidScoreChange,
   isDisabled,
 }) => {
   return (
     <Container>
       <div style={{ marginTop: 16 }}>
-        <Heading>Bid price</Heading>
+        <Heading>Bid score</Heading>
         <TypedRadioGroup
-          selectedValue={selectedBidPrice ?? 'Low'}
-          onChange={onBidPriceChange}
+          selectedValue={selectedBidScore ?? 'Low'}
+          onChange={onBidScoreChange}
           isDisabled={isDisabled}
           labels={{
             High: 'High',
@@ -41,4 +41,4 @@ const BidPriceEditor: React.FC<BidPriceEditorProps> = ({
   );
 };
 
-export default BidPriceEditor;
+export default BidScoreEditor;

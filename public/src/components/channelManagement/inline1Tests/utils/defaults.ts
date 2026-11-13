@@ -22,7 +22,7 @@ export const getDefaultInline1NewsletterMessage = (): Inline1Variant['message'] 
 export const getDefaultVariant = (): Inline1Variant => ({
   name: 'CONTROL',
   message: getDefaultInline1SupportMessage(),
-  bidPrice: 0,
+  bidScore: 0,
 });
 
 export const getDefaultTest = (): Inline1Test => ({
