@@ -1,6 +1,8 @@
+import { FormControlLabel, Switch } from '@mui/material';
 import React from 'react';
 import { Inline1Test, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
+import { MaxViews } from '../../../models/shared';
 import VariantSummaryWebPreviewButton from '../../tests/variants/variantSummaryWebPreviewButton';
 import CampaignSelector from '../CampaignSelector';
 import {
@@ -21,6 +23,7 @@ import {
   VariantsHeaderButtonsContainer,
   VariantsHeaderContainer,
 } from '../helpers/testEditorStyles';
+import { MaxViewsEditor } from '../maxViewsEditor';
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorArticleCountEditor from '../testEditorArticleCountEditor';
 import TestEditorContextTargeting from '../testEditorContextTargeting';
@@ -28,6 +31,7 @@ import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelecto
 import { TestEditorProps } from '../testsForm';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
 import {
+  DEFAULT_MAX_INLINE1_VIEWS,
   getDefaultInline1NewsletterMessage,
   getDefaultInline1SupportMessage,
 } from './utils/defaults';
@@ -84,6 +88,24 @@ export const getInline1TestEditor = (
 
     const onMParticleAudienceChange = (mParticleAudience?: number): void =>
       onTestChange((current) => ({ ...current, mParticleAudience }));
+
+    const onMaxViewsValidationChange = (isValid: boolean): void =>
+      setValidationStatusForField('maxViews', isValid);
+
+    const onMaxViewsChange = (updatedMaxViews?: MaxViews): void => {
+      onTestChange((current) => ({
+        ...current,
+        alwaysAsk: !updatedMaxViews,
+        maxViews: updatedMaxViews,
+      }));
+    };
+
+    const onSwitchChange =
+      (fieldName: string) =>
+      (event: React.ChangeEvent<HTMLInputElement>): void => {
+        const updatedBool = event.target.checked;
+        onTestChange((current) => ({ ...current, [fieldName]: updatedBool }));
+      };
 
     const onArticlesViewedSettingsChange = (
       updatedArticlesViewedSettings?: ArticlesViewedSettings,
@@ -195,6 +217,31 @@ export const getInline1TestEditor = (
             }}
           />
         </SectionContainer>
+
+        {inline1EditorConfig.allowViewFrequencySettings && (
+          <SectionContainer>
+            <SectionHeader variant={'h3'}>View frequency settings</SectionHeader>
+
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={test.useLocalViewLog}
+                  onChange={onSwitchChange('useLocalViewLog')}
+                  disabled={!userHasTestLocked}
+                />
+              }
+              label={`Use private view counter for this test (instead of the global one)`}
+            />
+
+            <MaxViewsEditor
+              maxViews={test.alwaysAsk ? undefined : test.maxViews}
+              defaultViews={DEFAULT_MAX_INLINE1_VIEWS}
+              isDisabled={!userHasTestLocked}
+              onMaxViewsChanged={onMaxViewsChange}
+              onValidationChange={onMaxViewsValidationChange}
+            />
+          </SectionContainer>
+        )}
 
         <SectionContainer>
           <SectionHeader variant={'h3'}>Article count</SectionHeader>

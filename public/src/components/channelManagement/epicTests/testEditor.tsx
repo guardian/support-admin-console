@@ -1,6 +1,7 @@
 import { Alert, FormControlLabel, Switch } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
-import { EpicTest, EpicVariant, MaxEpicViews } from '../../../models/epic';
+import { EpicTest, EpicVariant } from '../../../models/epic';
+import { MaxViews } from '../../../models/shared';
 import TestVariantsSplitEditor from '../../tests/variants/testVariantsSplitEditor';
 import VariantEditorWithPreviewTab from '../../tests/variants/variantEditorWithPreviewTab';
 import VariantsEditor from '../../tests/variants/variantsEditor';
@@ -33,6 +34,7 @@ import {
   COUNTRY_NAME_TEMPLATE,
   getArticleCountTemplateError,
 } from '../helpers/validation';
+import { MaxViewsEditor } from '../maxViewsEditor';
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
@@ -42,9 +44,8 @@ import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelecto
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
 import { TestEditorProps } from '../testsForm';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
-import MaxViewsEditor from './maxViewsEditor';
 import { EpicTestPreviewButton } from './testPreview';
-import { getDefaultVariant } from './utils/defaults';
+import { DEFAULT_MAX_EPIC_VIEWS, getDefaultVariant } from './utils/defaults';
 import { findMParticleTemplates } from './utils/findMParticleTemplates';
 import VariantEditor from './variantEditor';
 import VariantPreview from './variantPreview';
@@ -268,7 +269,7 @@ export const getEpicTestEditor = (
       }));
     };
 
-    const onMaxViewsChange = (updatedMaxViews?: MaxEpicViews): void => {
+    const onMaxViewsChange = (updatedMaxViews?: MaxViews): void => {
       updateTest((current) => ({
         ...current,
         alwaysAsk: !updatedMaxViews,
@@ -466,7 +467,8 @@ export const getEpicTestEditor = (
             />
 
             <MaxViewsEditor
-              maxEpicViews={test.alwaysAsk ? undefined : test.maxViews}
+              maxViews={test.alwaysAsk ? undefined : test.maxViews}
+              defaultViews={DEFAULT_MAX_EPIC_VIEWS}
               isDisabled={!userHasTestLocked}
               onMaxViewsChanged={onMaxViewsChange}
               onValidationChange={onMaxViewsValidationChange}
