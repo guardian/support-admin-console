@@ -16,6 +16,7 @@ import {
 import useValidation from '../hooks/useValidation';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
+import BidScoreEditor from './BidScoreEditor';
 
 const Container = styled('div')(({ theme }) => ({
   width: '100%',
@@ -422,6 +423,8 @@ interface Inline1VariantEditorProps {
   onMessageTypeChange: (messageType: Inline1MessageType) => void;
   isDisabled: boolean;
   inline1EditorConfig: Inline1EditorConfig;
+  selectedBidScore?: 'High' | 'Low';
+  onBidScoreChange?: (bidScore: 'High' | 'Low') => void;
 }
 
 const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
@@ -431,6 +434,8 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
   onMessageTypeChange,
   isDisabled,
   inline1EditorConfig,
+  selectedBidScore,
+  onBidScoreChange,
 }: Inline1VariantEditorProps) => {
   let messageEditor: React.ReactElement;
 
@@ -477,6 +482,16 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
         />
       </HorizontalRadioGroup>
       {messageEditor}
+
+      {onBidScoreChange && (
+        <Container>
+          <BidScoreEditor
+            selectedBidScore={selectedBidScore}
+            onBidScoreChange={onBidScoreChange}
+            isDisabled={isDisabled}
+          />
+        </Container>
+      )}
     </>
   );
 };

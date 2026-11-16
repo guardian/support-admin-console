@@ -157,6 +157,8 @@ export const getInline1TestEditor = (
                 }
                 isDisabled={!userHasTestLocked}
                 inline1EditorConfig={inline1EditorConfig}
+                selectedBidScore={variant.bidScore === 1 ? 'High' : 'Low'}
+                onBidScoreChange={onBidScoreChange}
               />
             </div>
           </SectionContainer>
@@ -203,8 +205,6 @@ export const getInline1TestEditor = (
               mParticleAudience: test.mParticleAudience,
               onMParticleAudienceChange,
             }}
-            selectedBidScore={variant.bidScore === 1 ? 'High' : 'Low'}
-            onBidScoreChange={onBidScoreChange}
           />
         </SectionContainer>
 
