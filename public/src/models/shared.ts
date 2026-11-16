@@ -4,3 +4,9 @@ export interface ResponsiveImage {
   desktopUrl: string;
   altText: string;
 }
+
+export interface MaxViews {
+  maxViewsCount: number;
+  maxViewsDays: number;
+  minDaysBetweenViews: number;
+}

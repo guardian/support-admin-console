@@ -60,7 +60,10 @@ case class Inline1Test(
     campaignName: Option[String] = Some("NOT_IN_CAMPAIGN"),
     methodologies: List[Methodology] = defaultMethodologies,
     scheduler: Option[Scheduler] = None,
-    variants: List[Inline1Variant]
+    variants: List[Inline1Variant],
+    alwaysAsk: Boolean = false,
+    maxViews: Option[MaxViews],
+    useLocalViewLog: Boolean = false
 ) extends ChannelTest[Inline1Test] derives ConfiguredCodec {
   override def withChannel(channel: Channel): Inline1Test =
     this.copy(channel = Some(channel))
