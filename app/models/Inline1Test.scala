@@ -1,6 +1,5 @@
 package models
 
-import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
@@ -35,8 +34,13 @@ object Inline1Message {
 
 case class Inline1Variant(
     name: String,
-    message: Inline1Message
-) derives Codec.AsObject
+    message: Inline1Message,
+    bidScore: Double = 0.0
+) derives ConfiguredCodec
+
+object Inline1Variant {
+  given Configuration = Configuration.default.withDefaults
+}
 
 case class Inline1Test(
     name: String,

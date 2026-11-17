@@ -16,6 +16,7 @@ import {
 import useValidation from '../hooks/useValidation';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
+import BidScoreEditor from './BidScoreEditor';
 
 const Container = styled('div')(({ theme }) => ({
   width: '100%',
@@ -477,6 +478,16 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
         />
       </HorizontalRadioGroup>
       {messageEditor}
+
+      <Container>
+        <BidScoreEditor
+          selectedBidScore={variant.bidScore === 1 ? 'High' : 'Low'}
+          onBidScoreChange={(bidScore) =>
+            onChange({ ...variant, bidScore: bidScore === 'High' ? 1 : 0 })
+          }
+          isDisabled={isDisabled}
+        />
+      </Container>
     </>
   );
 };
