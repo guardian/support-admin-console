@@ -423,8 +423,6 @@ interface Inline1VariantEditorProps {
   onMessageTypeChange: (messageType: Inline1MessageType) => void;
   isDisabled: boolean;
   inline1EditorConfig: Inline1EditorConfig;
-  selectedBidScore?: 'High' | 'Low';
-  onBidScoreChange?: (bidScore: 'High' | 'Low') => void;
 }
 
 const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
@@ -434,8 +432,6 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
   onMessageTypeChange,
   isDisabled,
   inline1EditorConfig,
-  selectedBidScore,
-  onBidScoreChange,
 }: Inline1VariantEditorProps) => {
   let messageEditor: React.ReactElement;
 
@@ -483,15 +479,15 @@ const Inline1VariantEditor: React.FC<Inline1VariantEditorProps> = ({
       </HorizontalRadioGroup>
       {messageEditor}
 
-      {onBidScoreChange && (
-        <Container>
-          <BidScoreEditor
-            selectedBidScore={selectedBidScore}
-            onBidScoreChange={onBidScoreChange}
-            isDisabled={isDisabled}
-          />
-        </Container>
-      )}
+      <Container>
+        <BidScoreEditor
+          selectedBidScore={variant.bidScore === 1 ? 'High' : 'Low'}
+          onBidScoreChange={(bidScore) =>
+            onChange({ ...variant, bidScore: bidScore === 'High' ? 1 : 0 })
+          }
+          isDisabled={isDisabled}
+        />
+      </Container>
     </>
   );
 };
