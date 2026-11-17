@@ -1,4 +1,12 @@
-import { Box, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Switch,
+  TextField,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -9,6 +17,10 @@ const Container = styled(Box)(({ theme }) => ({
   '& > * + *': {
     marginTop: theme.spacing(2),
   },
+}));
+
+const ContainerSection = styled('div')(({ theme }) => ({
+  marginBottom: theme.spacing(4),
 }));
 
 const FormContainer = styled(Box)(({ theme }) => ({
@@ -25,7 +37,9 @@ interface FormData {
   minDaysBetweenViews: string;
 }
 
-interface TestEditorArticleCountEditorProps {
+interface ViewFrequencyEditorProps {
+  useLocalViewLog: boolean;
+  onUseLocalViewLogChange: (checked: boolean) => void;
   maxViews?: MaxViews;
   defaultViews: MaxViews;
   onMaxViewsChanged: (updatedMaxViews?: MaxViews) => void;
@@ -33,13 +47,15 @@ interface TestEditorArticleCountEditorProps {
   isDisabled: boolean;
 }
 
-export const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
+export const ViewFrequencyEditor: React.FC<ViewFrequencyEditorProps> = ({
+  useLocalViewLog,
+  onUseLocalViewLogChange,
   maxViews,
   defaultViews,
   onMaxViewsChanged,
   onValidationChange,
   isDisabled,
-}: TestEditorArticleCountEditorProps) => {
+}: ViewFrequencyEditorProps) => {
   const defaultValues: FormData = useMemo(
     () => ({
       maxViewsCount: maxViews?.maxViewsCount.toString() ?? '',
@@ -97,6 +113,18 @@ export const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
 
   return (
     <Container>
+      <ContainerSection>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={useLocalViewLog}
+              onChange={(_, checked) => onUseLocalViewLogChange(checked)}
+              disabled={isDisabled}
+            />
+          }
+          label={`Use private view counter for this test (instead of the global one)`}
+        />
+      </ContainerSection>
       <FormControl>
         <RadioGroup value={maxViews ? 'enabled' : 'disabled'} onChange={onRadioGroupChange}>
           <FormControlLabel

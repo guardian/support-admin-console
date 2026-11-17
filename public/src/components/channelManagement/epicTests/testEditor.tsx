@@ -1,4 +1,4 @@
-import { Alert, FormControlLabel, Switch } from '@mui/material';
+import { Alert } from '@mui/material';
 import React, { useEffect, useRef } from 'react';
 import { EpicTest, EpicVariant } from '../../../models/epic';
 import { MaxViews } from '../../../models/shared';
@@ -34,7 +34,6 @@ import {
   COUNTRY_NAME_TEMPLATE,
   getArticleCountTemplateError,
 } from '../helpers/validation';
-import { MaxViewsEditor } from '../maxViewsEditor';
 import ScheduleEditor from '../scheduleEditor';
 import TestEditorArticleCountEditor, {
   DEFAULT_ARTICLES_VIEWED_SETTINGS,
@@ -44,6 +43,7 @@ import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelecto
 import { TestMethodologyEditor } from '../TestMethodologyEditor';
 import { TestEditorProps } from '../testsForm';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
+import { ViewFrequencyEditor } from '../ViewFrequencyEditor';
 import { EpicTestPreviewButton } from './testPreview';
 import { DEFAULT_MAX_EPIC_VIEWS, getDefaultVariant } from './utils/defaults';
 import { findMParticleTemplates } from './utils/findMParticleTemplates';
@@ -213,12 +213,9 @@ export const getEpicTestEditor = (
       return variantChangeCallbacksRef.current.get(variantName)!;
     };
 
-    const onSwitchChange =
-      (fieldName: string) =>
-      (event: React.ChangeEvent<HTMLInputElement>): void => {
-        const updatedBool = event.target.checked;
-        updateTest((current) => ({ ...current, [fieldName]: updatedBool }));
-      };
+    const onUseLocalViewLogChange = (useLocalViewLog: boolean): void => {
+      updateTest((current) => ({ ...current, useLocalViewLog }));
+    };
 
     const updateContextTargeting = (contextTargeting: PageContextTargeting): void => {
       updateTest((current) => ({
@@ -454,19 +451,9 @@ export const getEpicTestEditor = (
         {epicEditorConfig.allowViewFrequencySettings && (
           <SectionContainer>
             <SectionHeader variant={'h3'}>View frequency settings</SectionHeader>
-
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={test.useLocalViewLog}
-                  onChange={onSwitchChange('useLocalViewLog')}
-                  disabled={!userHasTestLocked}
-                />
-              }
-              label={`Use private view counter for this test (instead of the global one)`}
-            />
-
-            <MaxViewsEditor
+            <ViewFrequencyEditor
+              useLocalViewLog={test.useLocalViewLog}
+              onUseLocalViewLogChange={onUseLocalViewLogChange}
               maxViews={test.alwaysAsk ? undefined : test.maxViews}
               defaultViews={DEFAULT_MAX_EPIC_VIEWS}
               isDisabled={!userHasTestLocked}
