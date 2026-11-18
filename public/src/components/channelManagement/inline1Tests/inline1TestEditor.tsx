@@ -214,21 +214,19 @@ export const getInline1TestEditor = (
           />
         </SectionContainer>
 
-        {inline1EditorConfig.allowViewFrequencySettings && (
-          <SectionContainer>
-            <SectionHeader variant={'h3'}>View frequency settings</SectionHeader>
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>View frequency settings</SectionHeader>
 
-            <ViewFrequencyEditor
-              useLocalViewLog={test.useLocalViewLog}
-              onUseLocalViewLogChange={onUseLocalViewLogChange}
-              maxViews={test.alwaysAsk ? undefined : test.maxViews}
-              defaultViews={DEFAULT_MAX_INLINE1_VIEWS}
-              isDisabled={!userHasTestLocked}
-              onMaxViewsChanged={onMaxViewsChange}
-              onValidationChange={onMaxViewsValidationChange}
-            />
-          </SectionContainer>
-        )}
+          <ViewFrequencyEditor
+            useLocalViewLog={test.useLocalViewLog}
+            onUseLocalViewLogChange={onUseLocalViewLogChange}
+            maxViews={test.alwaysAsk ? undefined : test.maxViews}
+            defaultViews={DEFAULT_MAX_INLINE1_VIEWS}
+            isDisabled={!userHasTestLocked}
+            onMaxViewsChanged={onMaxViewsChange}
+            onValidationChange={onMaxViewsValidationChange}
+          />
+        </SectionContainer>
 
         <SectionContainer>
           <SectionHeader variant={'h3'}>Article count</SectionHeader>

@@ -327,11 +327,9 @@ export interface Inline1EditorConfig {
   // test level settings
   allowMultipleVariants: boolean;
   platform: TestPlatform;
-  allowViewFrequencySettings: boolean;
 }
 
 export const INLINE1_EDITOR_CONFIG: Inline1EditorConfig = {
   allowMultipleVariants: false,
   platform: 'DOTCOM',
-  allowViewFrequencySettings: true,
 };
