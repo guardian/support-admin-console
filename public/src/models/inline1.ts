@@ -10,7 +10,7 @@ import {
   UserCohort,
   Variant,
 } from '../components/channelManagement/helpers/shared';
-import { ResponsiveImage } from './shared';
+import { MaxViews, ResponsiveImage } from './shared';
 
 interface Inline1SupportMessage {
   type: 'Inline1SupportMessage';
@@ -56,4 +56,7 @@ export interface Inline1Test extends Test {
   mParticleAudience?: number;
   variants: Inline1Variant[];
   controlProportionSettings?: ControlProportionSettings;
+  alwaysAsk: boolean;
+  maxViews?: MaxViews;
+  useLocalViewLog: boolean;
 }

@@ -1,6 +1,13 @@
 import { Inline1Test, Inline1Variant } from '../../../../models/inline1';
+import { MaxViews } from '../../../../models/shared';
 import { DEFAULT_REGION_TARGETING } from '../../epicTests/utils/defaults';
 import { UserCohort } from '../../helpers/shared';
+
+export const DEFAULT_MAX_INLINE1_VIEWS: MaxViews = {
+  maxViewsCount: 4,
+  maxViewsDays: 30,
+  minDaysBetweenViews: 0,
+};
 
 export const getDefaultInline1SupportMessage = (): Inline1Variant['message'] => ({
   type: 'Inline1SupportMessage',
@@ -36,4 +43,7 @@ export const getDefaultTest = (): Inline1Test => ({
   variants: [getDefaultVariant()],
   methodologies: [{ name: 'ABTest' }],
   campaignName: '',
+  alwaysAsk: false,
+  useLocalViewLog: false,
+  maxViews: DEFAULT_MAX_INLINE1_VIEWS,
 });

@@ -1,15 +1,26 @@
-import { Box, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Switch,
+  TextField,
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { MaxEpicViews } from '../../../models/epic';
-import { EMPTY_ERROR_HELPER_TEXT, notNumberValidator } from '../helpers/validation';
-import { DEFAULT_MAX_EPIC_VIEWS } from './utils/defaults';
+import { MaxViews } from '../../models/shared';
+import { EMPTY_ERROR_HELPER_TEXT, notNumberValidator } from './helpers/validation';
 
 const Container = styled(Box)(({ theme }) => ({
   '& > * + *': {
     marginTop: theme.spacing(2),
   },
+}));
+
+const ContainerSection = styled('div')(({ theme }) => ({
+  marginBottom: theme.spacing(4),
 }));
 
 const FormContainer = styled(Box)(({ theme }) => ({
@@ -26,26 +37,32 @@ interface FormData {
   minDaysBetweenViews: string;
 }
 
-interface TestEditorArticleCountEditorProps {
-  maxEpicViews?: MaxEpicViews;
-  onMaxViewsChanged: (updatedMaxViews?: MaxEpicViews) => void;
+interface ViewFrequencyEditorProps {
+  useLocalViewLog: boolean;
+  onUseLocalViewLogChange: (checked: boolean) => void;
+  maxViews?: MaxViews;
+  defaultViews: MaxViews;
+  onMaxViewsChanged: (updatedMaxViews?: MaxViews) => void;
   onValidationChange: (isValid: boolean) => void;
   isDisabled: boolean;
 }
 
-const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
-  maxEpicViews,
+export const ViewFrequencyEditor: React.FC<ViewFrequencyEditorProps> = ({
+  useLocalViewLog,
+  onUseLocalViewLogChange,
+  maxViews,
+  defaultViews,
   onMaxViewsChanged,
   onValidationChange,
   isDisabled,
-}: TestEditorArticleCountEditorProps) => {
+}: ViewFrequencyEditorProps) => {
   const defaultValues: FormData = useMemo(
     () => ({
-      maxViewsCount: maxEpicViews?.maxViewsCount.toString() ?? '',
-      maxViewsDays: maxEpicViews?.maxViewsDays.toString() ?? '',
-      minDaysBetweenViews: maxEpicViews?.minDaysBetweenViews.toString() ?? '',
+      maxViewsCount: maxViews?.maxViewsCount.toString() ?? '',
+      maxViewsDays: maxViews?.maxViewsDays.toString() ?? '',
+      minDaysBetweenViews: maxViews?.minDaysBetweenViews.toString() ?? '',
     }),
-    [maxEpicViews?.maxViewsCount, maxEpicViews?.maxViewsDays, maxEpicViews?.minDaysBetweenViews],
+    [maxViews?.maxViewsCount, maxViews?.maxViewsDays, maxViews?.minDaysBetweenViews],
   );
 
   const {
@@ -73,13 +90,13 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
 
   useEffect(() => {
     const isValid =
-      !maxEpicViews ||
+      !maxViews ||
       (errors.maxViewsCount === undefined &&
         errors.maxViewsDays === undefined &&
         errors.minDaysBetweenViews === undefined);
     onValidationChange(isValid);
   }, [
-    maxEpicViews,
+    maxViews,
     errors.maxViewsCount,
     errors.maxViewsDays,
     errors.minDaysBetweenViews,
@@ -88,7 +105,7 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
 
   const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.value === 'enabled') {
-      onMaxViewsChanged(DEFAULT_MAX_EPIC_VIEWS);
+      onMaxViewsChanged(defaultViews);
     } else {
       onMaxViewsChanged(undefined);
     }
@@ -96,8 +113,20 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
 
   return (
     <Container>
+      <ContainerSection>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={useLocalViewLog}
+              onChange={(_, checked) => onUseLocalViewLogChange(checked)}
+              disabled={isDisabled}
+            />
+          }
+          label={`Use private view counter for this test (instead of the global one)`}
+        />
+      </ContainerSection>
       <FormControl>
-        <RadioGroup value={maxEpicViews ? 'enabled' : 'disabled'} onChange={onRadioGroupChange}>
+        <RadioGroup value={maxViews ? 'enabled' : 'disabled'} onChange={onRadioGroupChange}>
           <FormControlLabel
             value="disabled"
             key="disabled"
@@ -115,7 +144,7 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
         </RadioGroup>
       </FormControl>
 
-      {maxEpicViews && (
+      {maxViews && (
         <FormContainer>
           <div>
             <TextField
@@ -179,5 +208,3 @@ const MaxViewsEditor: React.FC<TestEditorArticleCountEditorProps> = ({
     </Container>
   );
 };
-
-export default MaxViewsEditor;

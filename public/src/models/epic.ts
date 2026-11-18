@@ -17,6 +17,7 @@ import {
 } from '../components/channelManagement/helpers/shared';
 import { Region } from '../utils/models';
 import { ChoiceCardsSettings } from './choiceCards';
+import { MaxViews } from './shared';
 
 export interface SeparateArticleCount {
   type: 'above';
@@ -42,12 +43,6 @@ export interface EpicVariant extends Variant {
   newsletterSignup?: NewsletterSignup;
 }
 
-export interface MaxEpicViews {
-  maxViewsCount: number;
-  maxViewsDays: number;
-  minDaysBetweenViews: number;
-}
-
 export interface EpicTest extends Test {
   name: string;
   nickname?: string;
@@ -59,7 +54,7 @@ export interface EpicTest extends Test {
   excludedTagIds: string[];
   excludedSections: string[];
   alwaysAsk: boolean;
-  maxViews?: MaxEpicViews;
+  maxViews?: MaxViews;
   userCohort: UserCohort;
   hasCountryName: boolean;
   variants: EpicVariant[];

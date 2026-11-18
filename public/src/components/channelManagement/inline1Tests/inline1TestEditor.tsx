@@ -1,6 +1,7 @@
 import React from 'react';
 import { Inline1Test, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
+import { MaxViews } from '../../../models/shared';
 import VariantSummaryWebPreviewButton from '../../tests/variants/variantSummaryWebPreviewButton';
 import CampaignSelector from '../CampaignSelector';
 import {
@@ -27,7 +28,9 @@ import TestEditorContextTargeting from '../testEditorContextTargeting';
 import TestEditorTargetAudienceSelector from '../testEditorTargetAudienceSelector';
 import { TestEditorProps } from '../testsForm';
 import { ValidatedTestEditor, ValidatedTestEditorProps } from '../validatedTestEditor';
+import { ViewFrequencyEditor } from '../ViewFrequencyEditor';
 import {
+  DEFAULT_MAX_INLINE1_VIEWS,
   getDefaultInline1NewsletterMessage,
   getDefaultInline1SupportMessage,
 } from './utils/defaults';
@@ -84,6 +87,21 @@ export const getInline1TestEditor = (
 
     const onMParticleAudienceChange = (mParticleAudience?: number): void =>
       onTestChange((current) => ({ ...current, mParticleAudience }));
+
+    const onMaxViewsValidationChange = (isValid: boolean): void =>
+      setValidationStatusForField('maxViews', isValid);
+
+    const onMaxViewsChange = (updatedMaxViews?: MaxViews): void => {
+      onTestChange((current) => ({
+        ...current,
+        alwaysAsk: !updatedMaxViews,
+        maxViews: updatedMaxViews,
+      }));
+    };
+
+    const onUseLocalViewLogChange = (useLocalViewLog: boolean): void => {
+      onTestChange((current) => ({ ...current, useLocalViewLog }));
+    };
 
     const onArticlesViewedSettingsChange = (
       updatedArticlesViewedSettings?: ArticlesViewedSettings,
@@ -193,6 +211,20 @@ export const getInline1TestEditor = (
               mParticleAudience: test.mParticleAudience,
               onMParticleAudienceChange,
             }}
+          />
+        </SectionContainer>
+
+        <SectionContainer>
+          <SectionHeader variant={'h3'}>View frequency settings</SectionHeader>
+
+          <ViewFrequencyEditor
+            useLocalViewLog={test.useLocalViewLog}
+            onUseLocalViewLogChange={onUseLocalViewLogChange}
+            maxViews={test.alwaysAsk ? undefined : test.maxViews}
+            defaultViews={DEFAULT_MAX_INLINE1_VIEWS}
+            isDisabled={!userHasTestLocked}
+            onMaxViewsChanged={onMaxViewsChange}
+            onValidationChange={onMaxViewsValidationChange}
           />
         </SectionContainer>
 
