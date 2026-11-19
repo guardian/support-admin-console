@@ -5,6 +5,7 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Tooltip,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
@@ -111,13 +112,22 @@ export const ViewFrequencyEditor: React.FC<ViewFrequencyEditorProps> = ({
           value={maxViews ? 'enabled' : 'disabled'}
           onChange={(e) => onMaxViewsChanged(isEnabled(e.target.value) ? defaultViews : undefined)}
         >
-          <FormControlLabel
-            value="disabled"
-            key="disabled"
-            control={<Radio />}
-            label="No view limit"
-            disabled={isDisabled}
-          />
+          <Tooltip
+            describeChild
+            title={
+              'Override the view limit to show this test regardless of how many messages a user has viewed.'
+            }
+            placement="right"
+            arrow
+          >
+            <FormControlLabel
+              value="disabled"
+              key="disabled"
+              control={<Radio />}
+              label="No view limit"
+              disabled={isDisabled}
+            />
+          </Tooltip>
           <FormControlLabel
             value="enabled"
             key="enabled"
@@ -202,13 +212,22 @@ export const ViewFrequencyEditor: React.FC<ViewFrequencyEditorProps> = ({
                   label="Use shared view count"
                   disabled={isDisabled}
                 />
-                <FormControlLabel
-                  value="enabled"
-                  key="enabled"
-                  control={<Radio />}
-                  label="Create a separate view count for this test"
-                  disabled={isDisabled}
-                />
+                <Tooltip
+                  describeChild
+                  title={
+                    'For example, if a user has already hit the max views for this month, they will get an additional set of views for this specific test.'
+                  }
+                  placement="right"
+                  arrow
+                >
+                  <FormControlLabel
+                    value="enabled"
+                    key="enabled"
+                    control={<Radio />}
+                    label="Create a separate view count for this test"
+                    disabled={isDisabled}
+                  />
+                </Tooltip>
               </RadioGroup>
             </FormControl>
           </ContainerSection>
