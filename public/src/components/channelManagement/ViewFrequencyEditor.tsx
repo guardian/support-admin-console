@@ -4,7 +4,6 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
-  Switch,
   TextField,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -20,7 +19,7 @@ const Container = styled(Box)(({ theme }) => ({
 }));
 
 const ContainerSection = styled('div')(({ theme }) => ({
-  marginBottom: theme.spacing(4),
+  marginTop: theme.spacing(2),
 }));
 
 const FormContainer = styled(Box)(({ theme }) => ({
@@ -39,7 +38,7 @@ interface FormData {
 
 interface ViewFrequencyEditorProps {
   useLocalViewLog: boolean;
-  onUseLocalViewLogChange: (checked: boolean) => void;
+  onUseLocalViewLogChange: (enabled: boolean) => void;
   maxViews?: MaxViews;
   defaultViews: MaxViews;
   onMaxViewsChanged: (updatedMaxViews?: MaxViews) => void;
@@ -103,30 +102,15 @@ export const ViewFrequencyEditor: React.FC<ViewFrequencyEditorProps> = ({
     onValidationChange,
   ]);
 
-  const onRadioGroupChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    if (event.target.value === 'enabled') {
-      onMaxViewsChanged(defaultViews);
-    } else {
-      onMaxViewsChanged(undefined);
-    }
-  };
+  const isEnabled = (value: string): boolean => value === 'enabled';
 
   return (
     <Container>
-      <ContainerSection>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={useLocalViewLog}
-              onChange={(_, checked) => onUseLocalViewLogChange(checked)}
-              disabled={isDisabled}
-            />
-          }
-          label={`Use private view counter for this test (instead of the global one)`}
-        />
-      </ContainerSection>
       <FormControl>
-        <RadioGroup value={maxViews ? 'enabled' : 'disabled'} onChange={onRadioGroupChange}>
+        <RadioGroup
+          value={maxViews ? 'enabled' : 'disabled'}
+          onChange={(e) => onMaxViewsChanged(isEnabled(e.target.value) ? defaultViews : undefined)}
+        >
           <FormControlLabel
             value="disabled"
             key="disabled"
@@ -145,65 +129,90 @@ export const ViewFrequencyEditor: React.FC<ViewFrequencyEditorProps> = ({
       </FormControl>
 
       {maxViews && (
-        <FormContainer>
-          <div>
-            <TextField
-              error={errors.maxViewsCount !== undefined}
-              helperText={errors.maxViewsCount?.message}
-              {...register('maxViewsCount', {
-                required: EMPTY_ERROR_HELPER_TEXT,
-                validate: notNumberValidator,
-              })}
-              onBlur={(e) => {
-                e.preventDefault();
-                void handleSubmit(onSubmit)(e);
-              }}
-              label="Maximum views"
-              InputLabelProps={{ shrink: true }}
-              variant="filled"
-              fullWidth
-              disabled={isDisabled}
-            />
-          </div>
-          <div>
-            <TextField
-              error={errors.maxViewsDays !== undefined}
-              helperText={errors.maxViewsDays?.message}
-              {...register('maxViewsDays', {
-                required: EMPTY_ERROR_HELPER_TEXT,
-                validate: notNumberValidator,
-              })}
-              onBlur={(e) => {
-                e.preventDefault();
-                void handleSubmit(onSubmit)(e);
-              }}
-              label="Time period (days)"
-              InputLabelProps={{ shrink: true }}
-              variant="filled"
-              fullWidth
-              disabled={isDisabled}
-            />
-          </div>
-          <div>
-            <TextField
-              error={errors.minDaysBetweenViews !== undefined}
-              helperText={errors.minDaysBetweenViews?.message}
-              {...register('minDaysBetweenViews', {
-                required: EMPTY_ERROR_HELPER_TEXT,
-                validate: notNumberValidator,
-              })}
-              onBlur={(e) => {
-                e.preventDefault();
-                void handleSubmit(onSubmit)(e);
-              }}
-              label="Minimum gap between views (days)"
-              InputLabelProps={{ shrink: true }}
-              variant="filled"
-              fullWidth
-              disabled={isDisabled}
-            />
-          </div>
-        </FormContainer>
+        <ContainerSection>
+          <FormContainer>
+            <div>
+              <TextField
+                error={errors.maxViewsCount !== undefined}
+                helperText={errors.maxViewsCount?.message}
+                {...register('maxViewsCount', {
+                  required: EMPTY_ERROR_HELPER_TEXT,
+                  validate: notNumberValidator,
+                })}
+                onBlur={(e) => {
+                  e.preventDefault();
+                  void handleSubmit(onSubmit)(e);
+                }}
+                label="Maximum views"
+                InputLabelProps={{ shrink: true }}
+                variant="filled"
+                fullWidth
+                disabled={isDisabled}
+              />
+            </div>
+            <div>
+              <TextField
+                error={errors.maxViewsDays !== undefined}
+                helperText={errors.maxViewsDays?.message}
+                {...register('maxViewsDays', {
+                  required: EMPTY_ERROR_HELPER_TEXT,
+                  validate: notNumberValidator,
+                })}
+                onBlur={(e) => {
+                  e.preventDefault();
+                  void handleSubmit(onSubmit)(e);
+                }}
+                label="Time period (days)"
+                InputLabelProps={{ shrink: true }}
+                variant="filled"
+                fullWidth
+                disabled={isDisabled}
+              />
+            </div>
+            <div>
+              <TextField
+                error={errors.minDaysBetweenViews !== undefined}
+                helperText={errors.minDaysBetweenViews?.message}
+                {...register('minDaysBetweenViews', {
+                  required: EMPTY_ERROR_HELPER_TEXT,
+                  validate: notNumberValidator,
+                })}
+                onBlur={(e) => {
+                  e.preventDefault();
+                  void handleSubmit(onSubmit)(e);
+                }}
+                label="Minimum gap between views (days)"
+                InputLabelProps={{ shrink: true }}
+                variant="filled"
+                fullWidth
+                disabled={isDisabled}
+              />
+            </div>
+          </FormContainer>
+          <ContainerSection>
+            <FormControl>
+              <RadioGroup
+                value={useLocalViewLog ? 'enabled' : 'disabled'}
+                onChange={(e) => onUseLocalViewLogChange(isEnabled(e.target.value))}
+              >
+                <FormControlLabel
+                  value="disabled"
+                  key="disabled"
+                  control={<Radio />}
+                  label="Use shared view count"
+                  disabled={isDisabled}
+                />
+                <FormControlLabel
+                  value="enabled"
+                  key="enabled"
+                  control={<Radio />}
+                  label="Create a separate view count for this test"
+                  disabled={isDisabled}
+                />
+              </RadioGroup>
+            </FormControl>
+          </ContainerSection>
+        </ContainerSection>
       )}
     </Container>
   );
