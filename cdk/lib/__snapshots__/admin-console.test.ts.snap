@@ -634,6 +634,73 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "DailyPlaySecretRotationAllowEventRuleAdminConsolePlaySecretRotation5E122429091F04D3": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "PlaySecretRotationECDCF02B",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "DailyPlaySecretRotationC5AFC4C9",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "DailyPlaySecretRotationC5AFC4C9": {
+      "Properties": {
+        "ScheduleExpression": "rate(1 day)",
+        "State": "ENABLED",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "PlaySecretRotationECDCF02B",
+                "Arn",
+              ],
+            },
+            "DeadLetterConfig": {
+              "Arn": {
+                "Fn::GetAtt": [
+                  "PlaySecretRotationFailures58B375F4",
+                  "Arn",
+                ],
+              },
+            },
+            "Id": "Target0",
+            "RetryPolicy": {
+              "MaximumEventAgeInSeconds": 3600,
+              "MaximumRetryAttempts": 0,
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
     "DescribeEC2PolicyFF5F9295": {
       "Properties": {
         "PolicyDocument": {
@@ -1852,6 +1919,379 @@ exports[`The AdminConsole stack matches the snapshot 1`] = `
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "PlaySecretRotationECDCF02B": {
+      "DependsOn": [
+        "PlaySecretRotationServiceRoleDefaultPolicyF062F6C8",
+        "PlaySecretRotationServiceRole8A49BEB8",
+      ],
+      "Properties": {
+        "Code": {
+          "ZipFile": "
+          const { randomBytes } = require('node:crypto');
+          const { SSMClient, GetParameterCommand, PutParameterCommand } = require('@aws-sdk/client-ssm');
+
+          const client = new SSMClient({ maxAttempts: 1 });
+
+          exports.handler = async () => {
+            const parameterName = process.env.PARAMETER_NAME;
+            if (!parameterName) {
+              throw new Error('PARAMETER_NAME is required');
+            }
+            const parameter = await client.send(new GetParameterCommand({
+              Name: parameterName,
+              WithDecryption: false,
+            }));
+            const lastModifiedDate = parameter.Parameter?.LastModifiedDate;
+            if (!lastModifiedDate) {
+              throw new Error('SSM parameter LastModifiedDate is missing');
+            }
+            if (Date.now() - lastModifiedDate.getTime() < 123 * 60 * 1000) {
+              console.info('Skipping Play secret rotation: parameter was updated within 2 hours 3 minutes.');
+              return;
+            }
+            await client.send(new PutParameterCommand({
+              Name: parameterName,
+              Value: randomBytes(32).toString('hex'),
+              Type: 'SecureString',
+              KeyId: 'alias/aws/ssm',
+              Overwrite: true,
+            }));
+          };
+        ",
+        },
+        "DeadLetterConfig": {
+          "TargetArn": {
+            "Fn::GetAtt": [
+              "PlaySecretRotationFailures58B375F4",
+              "Arn",
+            ],
+          },
+        },
+        "Environment": {
+          "Variables": {
+            "PARAMETER_NAME": "/admin-console/PROD/play.http.secret.key",
+          },
+        },
+        "FunctionName": "admin-console-PROD-play-secret-rotation",
+        "Handler": "index.handler",
+        "ReservedConcurrentExecutions": 1,
+        "Role": {
+          "Fn::GetAtt": [
+            "PlaySecretRotationServiceRole8A49BEB8",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs24.x",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Timeout": 30,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "PlaySecretRotationErrors86E83118": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":sns:eu-west-1:",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "PROD Play secret rotation failed; inspect Lambda logs and the failure queue.",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "PlaySecretRotationECDCF02B",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 1,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "PlaySecretRotationEventInvokeConfigB5567178": {
+      "Properties": {
+        "FunctionName": {
+          "Ref": "PlaySecretRotationECDCF02B",
+        },
+        "MaximumEventAgeInSeconds": 3600,
+        "MaximumRetryAttempts": 0,
+        "Qualifier": "$LATEST",
+      },
+      "Type": "AWS::Lambda::EventInvokeConfig",
+    },
+    "PlaySecretRotationFailures58B375F4": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "MessageRetentionPeriod": 1209600,
+        "QueueName": "admin-console-PROD-play-secret-rotation-failures",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "PlaySecretRotationFailuresPolicyDF9A0B4F": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:SendMessage",
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
+                      "DailyPlaySecretRotationC5AFC4C9",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com",
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "PlaySecretRotationFailures58B375F4",
+                  "Arn",
+                ],
+              },
+              "Sid": "AllowEventRuleAdminConsoleDailyPlaySecretRotationAA65763E",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Queues": [
+          {
+            "Ref": "PlaySecretRotationFailures58B375F4",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::QueuePolicy",
+    },
+    "PlaySecretRotationServiceRole8A49BEB8": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "PlaySecretRotationServiceRoleDefaultPolicyF062F6C8": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:SendMessage",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "PlaySecretRotationFailures58B375F4",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "ssm:GetParameter",
+                "ssm:PutParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:eu-west-1:",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/admin-console/PROD/play.http.secret.key",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "PlaySecretRotationServiceRoleDefaultPolicyF062F6C8",
+        "Roles": [
+          {
+            "Ref": "PlaySecretRotationServiceRole8A49BEB8",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "PlaySecretRotationUndeliveredFB868012": {
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":sns:eu-west-1:",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":alarms-handler-topic-PROD",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "PROD Play secret rotation failure queue contains an event; investigate before replaying.",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "QueueName",
+            "Value": {
+              "Fn::GetAtt": [
+                "PlaySecretRotationFailures58B375F4",
+                "QueueName",
+              ],
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Namespace": "AWS/SQS",
+        "Period": 300,
+        "Statistic": "Maximum",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-admin-console",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Threshold": 1,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
     },
     "PromoCampaignsDynamoTableEAB74AB9": {
       "DeletionPolicy": "Retain",

@@ -42,6 +42,18 @@ The app is configured with a 3-minute usage delay and a 2-hour overlap. After a 
 
 To roll back, retrieve the known-good value from Parameter Store history and save it as a new version of the same parameter. The app will transition back using the same delay and overlap.
 
+#### Automatic rotation in CODE and PROD
+
+CDK deploys an inline Node.js 24 Lambda in CODE and PROD, scheduled daily by EventBridge and enabled on deployment. No separate Lambda artifact is required.
+
+The handler generates a cryptographically random 64-character hexadecimal secret and writes a new SecureString version to `/admin-console/{stage}/play.http.secret.key` using `alias/aws/ssm`. Write access is restricted to that stage's parameter.
+
+Before rotating, the Lambda reads the parameter's `LastModifiedDate` without decrypting its value and skips the rotation if the parameter changed within the last **2 hours 3 minutes**. This protects sequential duplicate deliveries and recent manual parameter updates. Concurrency is limited to one and retries are disabled. Direct SSM edits do not use this guard. Lambda console Test invocations perform real rotations when the cooldown has expired.
+
+Lambda execution and EventBridge delivery failures go to `admin-console-{stage}-play-secret-rotation-failures` (SQS, 14-day retention). PROD-only CloudWatch alarms monitor Lambda errors and queued messages, notifying existing subscribers through `alarms-handler-topic-PROD`. CODE retains logs and the failure queue, without alarms.
+
+Disable the stage's `DailyPlaySecretRotation` EventBridge rule to pause rotation or before rolling back to an app without rotation support. Re-enable it once the rotation-enabled app is healthy.
+
 ### Running Playwright E2E tests (awailable only locally)
 
 The full E2E suite reads and writes settings in S3. Before running it, obtain admin AWS credentials for the membership account from Janus with permission to read and write the S3 objects used by the app. Credentials without these permissions can cause tests to fail even when local authentication succeeds.

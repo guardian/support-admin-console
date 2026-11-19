@@ -11,6 +11,7 @@ import {
 } from '@guardian/cdk/lib/constructs/iam';
 import type { App, CfnElement } from 'aws-cdk-lib';
 import { Duration, RemovalPolicy, Tags } from 'aws-cdk-lib';
+import { SnsAction } from 'aws-cdk-lib/aws-cloudwatch-actions';
 import {
   AttributeType,
   BillingMode,
@@ -24,8 +25,13 @@ import {
   ListenerAction,
   ListenerCondition,
 } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import type { Policy } from 'aws-cdk-lib/aws-iam';
-import { AccountPrincipal, Role } from 'aws-cdk-lib/aws-iam';
+import { AccountPrincipal, PolicyStatement, Role } from 'aws-cdk-lib/aws-iam';
+import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { ParameterDataType, ParameterTier, StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { MultiDynamoTableReadPolicy, MultiDynamoTableWritePolicy } from './dynamo-managed-policy';
 
@@ -283,6 +289,95 @@ export class AdminConsole extends GuStack {
     const { domainName } = props;
 
     const app = 'admin-console';
+
+    if (this.stage === 'CODE' || this.stage === 'PROD') {
+      const parameterName = `/${app}/${this.stage}/play.http.secret.key`;
+      const failures = new Queue(this, 'PlaySecretRotationFailures', {
+        queueName: `${app}-${this.stage}-play-secret-rotation-failures`,
+        retentionPeriod: Duration.days(14),
+      });
+      const rotator = new Function(this, 'PlaySecretRotation', {
+        functionName: `${app}-${this.stage}-play-secret-rotation`,
+        runtime: Runtime.NODEJS_24_X,
+        handler: 'index.handler',
+        timeout: Duration.seconds(30),
+        reservedConcurrentExecutions: 1,
+        retryAttempts: 0,
+        maxEventAge: Duration.hours(1),
+        deadLetterQueue: failures,
+        environment: { PARAMETER_NAME: parameterName },
+        code: Code.fromInline(`
+          const { randomBytes } = require('node:crypto');
+          const { SSMClient, GetParameterCommand, PutParameterCommand } = require('@aws-sdk/client-ssm');
+
+          const client = new SSMClient({ maxAttempts: 1 });
+
+          exports.handler = async () => {
+            const parameterName = process.env.PARAMETER_NAME;
+            if (!parameterName) {
+              throw new Error('PARAMETER_NAME is required');
+            }
+            const parameter = await client.send(new GetParameterCommand({
+              Name: parameterName,
+              WithDecryption: false,
+            }));
+            const lastModifiedDate = parameter.Parameter?.LastModifiedDate;
+            if (!lastModifiedDate) {
+              throw new Error('SSM parameter LastModifiedDate is missing');
+            }
+            if (Date.now() - lastModifiedDate.getTime() < 123 * 60 * 1000) {
+              console.info('Skipping Play secret rotation: parameter was updated within 2 hours 3 minutes.');
+              return;
+            }
+            await client.send(new PutParameterCommand({
+              Name: parameterName,
+              Value: randomBytes(32).toString('hex'),
+              Type: 'SecureString',
+              KeyId: 'alias/aws/ssm',
+              Overwrite: true,
+            }));
+          };
+        `),
+      });
+      rotator.addToRolePolicy(
+        new PolicyStatement({
+          actions: ['ssm:GetParameter', 'ssm:PutParameter'],
+          resources: [`arn:aws:ssm:${this.region}:${this.account}:parameter${parameterName}`],
+        }),
+      );
+      new Rule(this, 'DailyPlaySecretRotation', {
+        schedule: Schedule.rate(Duration.days(1)),
+        targets: [
+          new LambdaFunction(rotator, {
+            retryAttempts: 0,
+            maxEventAge: Duration.hours(1),
+            deadLetterQueue: failures,
+          }),
+        ],
+      });
+      if (this.stage === 'PROD') {
+        const rotationErrors = rotator.metricErrors().createAlarm(this, 'PlaySecretRotationErrors', {
+          threshold: 1,
+          evaluationPeriods: 1,
+          alarmDescription: `${this.stage} Play secret rotation failed; inspect Lambda logs and the failure queue.`,
+        });
+        const undeliveredRotations = failures
+          .metricApproximateNumberOfMessagesVisible()
+          .createAlarm(this, 'PlaySecretRotationUndelivered', {
+            threshold: 1,
+            evaluationPeriods: 1,
+            alarmDescription: `${this.stage} Play secret rotation failure queue contains an event; investigate before replaying.`,
+          });
+        const alarmTopic = Topic.fromTopicArn(
+          this,
+          'PlaySecretRotationAlarmTopic',
+          this.formatArn({ service: 'sns', resource: 'alarms-handler-topic-PROD' }),
+        );
+        const notificationAction = new SnsAction(alarmTopic);
+        rotationErrors.addAlarmAction(notificationAction);
+        undeliveredRotations.addAlarmAction(notificationAction);
+      }
+    }
 
     const channelTestsDynamoTable = this.buildTestsTable();
     const archivedTestsDynamoTable = this.buildArchivedTestsTable();
