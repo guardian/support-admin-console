@@ -131,14 +131,14 @@ export const ViewFrequencyEditor: React.FC<ViewFrequencyEditorProps> = ({
             value="disabled"
             key="disabled"
             control={<Radio />}
-            label="Always ask"
+            label="No view limit"
             disabled={isDisabled}
           />
           <FormControlLabel
             value="enabled"
             key="enabled"
             control={<Radio />}
-            label="Use max views settings..."
+            label="Limit views per browser"
             disabled={isDisabled}
           />
         </RadioGroup>
@@ -158,7 +158,7 @@ export const ViewFrequencyEditor: React.FC<ViewFrequencyEditorProps> = ({
                 e.preventDefault();
                 void handleSubmit(onSubmit)(e);
               }}
-              label="Maximum view counts"
+              label="Maximum views"
               InputLabelProps={{ shrink: true }}
               variant="filled"
               fullWidth
@@ -177,7 +177,7 @@ export const ViewFrequencyEditor: React.FC<ViewFrequencyEditorProps> = ({
                 e.preventDefault();
                 void handleSubmit(onSubmit)(e);
               }}
-              label="Number of days"
+              label="Time period (days)"
               InputLabelProps={{ shrink: true }}
               variant="filled"
               fullWidth
@@ -196,7 +196,7 @@ export const ViewFrequencyEditor: React.FC<ViewFrequencyEditorProps> = ({
                 e.preventDefault();
                 void handleSubmit(onSubmit)(e);
               }}
-              label="Minimum days between views"
+              label="Minimum gap between views (days)"
               InputLabelProps={{ shrink: true }}
               variant="filled"
               fullWidth
