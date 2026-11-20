@@ -10,7 +10,7 @@ import {
 import { styled } from '@mui/material/styles';
 import React from 'react';
 import { RatePlanWithProduct } from './utils/productCatalog';
-import { CountryGroup, Promo } from './utils/promoModels';
+import { CountryGroup, getPromoCountryTargeting, Promo } from './utils/promoModels';
 
 const StyledListItem = styled(ListItem, { shouldForwardProp: (prop) => prop !== 'expired' })<{
   expired: boolean;
@@ -134,18 +134,14 @@ export const PromoListItem = ({
   };
 
   const getRegionsText = () => {
-    if (promo.appliesTo.countries.length === 0) {
-      return 'All regions';
-    }
-    const regionNames = promo.appliesTo.countries.map((country) => {
-      const countryGroup = countryGroups?.find((cg) => cg.countries.includes(country));
-      if (countryGroup) {
-        return countryGroup.name;
-      }
-      return country;
-    });
-    const uniqueRegionNames = [...new Set(regionNames)];
-    return uniqueRegionNames.join(', ');
+    const { groupIds, countries } = getPromoCountryTargeting(promo.appliesTo, countryGroups ?? []);
+    const regionNames = groupIds.map(
+      (id) => countryGroups?.find((group) => group.id === id)?.name ?? id,
+    );
+    const availability = [...regionNames, ...countries];
+    return (
+      availability.join(', ') || (promo.appliesTo.countryGroups ? 'No regions' : 'All regions')
+    );
   };
 
   return (
