@@ -1,6 +1,5 @@
 import {
   FormControl,
-  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -38,14 +37,14 @@ const Selectors = styled('div')(({ theme }) => ({
 }));
 
 export interface SelectedPalette {
-  styleId?: string;
-  themeId?: string;
-  colours?: Inline1SupportMessageColours;
+  styleId: string;
+  themeId: string;
+  colours: Inline1SupportMessageColours;
 }
 
 interface ThemeSelectorProps {
-  initialStyleId?: string;
-  initialThemeId?: string;
+  initialStyleId: string;
+  initialThemeId: string;
   onChange: (selected: SelectedPalette) => void;
   isDisabled: boolean;
 }
@@ -59,32 +58,32 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   const styles = inline1SupportMessageStyles;
 
   const getStyle = useCallback(
-    (styleId?: string) => styles.find((style) => style.id === styleId),
+    (styleId: string) => styles.find((style) => style.id === styleId),
     [styles],
   );
 
   const getTheme = useCallback(
-    (style?: Inline1SupportMessageStyle, themeId?: string) =>
-      style?.themes.find((theme) => theme.id === themeId),
+    (style: Inline1SupportMessageStyle, themeId: string) =>
+      style.themes.find((theme) => theme.id === themeId),
     [],
   );
 
-  const [style, setStyle] = useState<Inline1SupportMessageStyle | undefined>(() =>
-    getStyle(initialStyleId),
+  const [style, setStyle] = useState<Inline1SupportMessageStyle>(
+    () => getStyle(initialStyleId) ?? styles[0],
   );
 
-  const [theme, setTheme] = useState<Inline1SupportMessageTheme | undefined>(() =>
-    getTheme(style, initialThemeId),
+  const [theme, setTheme] = useState<Inline1SupportMessageTheme>(
+    () => getTheme(style, initialThemeId) ?? style.themes[0],
   );
 
-  const availableThemes = useMemo(() => style?.themes ?? [], [style]);
+  const availableThemes = useMemo(() => style.themes, [style]);
 
   const setSelectedPalette = useCallback(
-    (style?: Inline1SupportMessageStyle, theme?: Inline1SupportMessageTheme) => {
+    (style: Inline1SupportMessageStyle, theme: Inline1SupportMessageTheme) => {
       onChange({
-        styleId: style?.id,
-        themeId: theme?.id,
-        colours: theme?.colours,
+        styleId: style.id,
+        themeId: theme.id,
+        colours: theme.colours,
       });
     },
     [onChange],
@@ -92,22 +91,16 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
 
   const onStyleChange = (e: SelectChangeEvent) => {
     const newStyleId = e.target.value;
-    const newStyle = getStyle(newStyleId);
-
+    const newStyle = getStyle(newStyleId) ?? style;
+    const newTheme = getTheme(newStyle, theme.id) ?? newStyle.themes[0];
     setStyle(newStyle);
-    if (!newStyle) {
-      setTheme(undefined);
-      return;
-    }
-
-    const newTheme = getTheme(newStyle, theme?.id);
     setTheme(newTheme);
     setSelectedPalette(newStyle, newTheme);
   };
 
   const onThemeChange = (e: SelectChangeEvent) => {
     const newThemeId = e.target.value;
-    const newTheme = getTheme(style, newThemeId);
+    const newTheme = getTheme(style, newThemeId) ?? theme;
     setTheme(newTheme);
     setSelectedPalette(style, newTheme);
   };
@@ -122,7 +115,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           <Select
             labelId="style-label"
             label="Style"
-            value={style?.id ?? ''}
+            value={initialStyleId}
             onChange={onStyleChange}
             disabled={isDisabled}
             inputProps={{
@@ -135,7 +128,6 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               </MenuItem>
             ))}
           </Select>
-          {!style && <FormHelperText>Select a style</FormHelperText>}
         </FormControl>
         <FormControl required fullWidth error={!theme}>
           <InputLabel id="theme-label" htmlFor="theme-select">
@@ -144,7 +136,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           <Select
             labelId="theme-label"
             label="Colour theme"
-            value={theme?.id ?? ''}
+            value={initialThemeId}
             onChange={onThemeChange}
             disabled={isDisabled}
             inputProps={{
@@ -157,7 +149,6 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               </MenuItem>
             ))}
           </Select>
-          {!theme && <FormHelperText>Select a colour theme</FormHelperText>}
         </FormControl>
       </Selectors>
     </Container>

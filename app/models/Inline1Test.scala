@@ -1,5 +1,6 @@
 package models
 
+import io.circe.Codec
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
@@ -19,9 +20,9 @@ case class Inline1SupportMessage(
     body: String,
     primaryCta: Cta,
     image: Option[ResponsiveImage],
-    styleId: Option[String],
-    themeId: Option[String],
-    colours: Option[Inline1SupportMessageColours]
+    styleId: String,
+    themeId: String,
+    colours: Inline1SupportMessageColours
 ) extends Inline1Message
 
 case class Inline1PuzzlesMessage(

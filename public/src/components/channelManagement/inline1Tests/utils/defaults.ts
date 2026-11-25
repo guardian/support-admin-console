@@ -17,6 +17,16 @@ export const getDefaultInline1SupportMessage = (): Inline1Variant['message'] => 
     text: 'Support us',
     baseUrl: 'https://support.theguardian.com',
   },
+  styleId: 'business-as-usual',
+  themeId: 'support-default',
+  colours: {
+    backgroundColor: '#F1F8FC',
+    headlineColor: '#052962',
+    guardianLogoColor: '#000000',
+    fontColor: '#000000',
+    ctaBackgroundColor: '#FFE500',
+    ctaFontColor: '#052962',
+  },
 });
 
 export const getDefaultInline1NewsletterMessage = (): Inline1Variant['message'] => ({

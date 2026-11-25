@@ -270,8 +270,8 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
       <Section>
         <SectionHeader variant="h4">Theme</SectionHeader>
         <ThemeSelector
-          initialStyleId={message.styleId ?? ''}
-          initialThemeId={message.themeId ?? ''}
+          initialStyleId={message.styleId}
+          initialThemeId={message.themeId}
           onChange={applySelectedPalette}
           isDisabled={isDisabled}
         />

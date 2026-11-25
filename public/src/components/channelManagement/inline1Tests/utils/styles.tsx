@@ -21,7 +21,7 @@ export type Inline1SupportMessageColours = {
 
 export const inline1SupportMessageStyles: Inline1SupportMessageStyle[] = [
   {
-    id: 'Business as usual',
+    id: 'business-as-usual',
     label: 'Business as usual',
     themes: [
       {
