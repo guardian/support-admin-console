@@ -12,3 +12,10 @@ case class BylineWithImage(
     description: Option[String],
     headshot: Option[Image]
 ) derives Codec.AsObject
+
+case class ResponsiveImage(
+    mobileUrl: String,
+    tabletUrl: String,
+    desktopUrl: String,
+    altText: String
+) derives Codec.AsObject
