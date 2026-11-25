@@ -11,6 +11,7 @@ import {
   Variant,
 } from '../components/channelManagement/helpers/shared';
 import { MaxViews, ResponsiveImage } from './shared';
+import { Inline1SupportMessageColours } from '../components/channelManagement/inline1Tests/utils/styles';
 
 interface Inline1SupportMessage {
   type: 'Inline1SupportMessage';
@@ -18,6 +19,9 @@ interface Inline1SupportMessage {
   body: string;
   primaryCta: Cta;
   image?: ResponsiveImage;
+  styleId?: string;
+  themeId?: string;
+  colours?: Inline1SupportMessageColours;
 }
 interface Inline1PuzzlesMessage {
   type: 'Inline1PuzzlesMessage';

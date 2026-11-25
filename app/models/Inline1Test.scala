@@ -3,6 +3,14 @@ package models
 import io.circe.derivation.{Configuration, ConfiguredCodec}
 import models.Methodology.defaultMethodologies
 
+case class Inline1SupportMessageColours(
+  backgroundColor: String, 
+  headlineColor: String,
+  guardianLogoColor: String,
+  fontColor: String,
+  ctaBackgroundColor: String,
+  ctaFontColor: String) derives Codec.AsObject
+
 sealed trait Inline1Message derives ConfiguredCodec
 
 case class Inline1SupportMessage(
@@ -10,7 +18,10 @@ case class Inline1SupportMessage(
     heading: String,
     body: String,
     primaryCta: Cta,
-    image: Option[ResponsiveImage]
+    image: Option[ResponsiveImage],
+    styleId: Option[String],
+    themeId: Option[String],
+    colours: Option[Inline1SupportMessageColours]
 ) extends Inline1Message
 
 case class Inline1PuzzlesMessage(
