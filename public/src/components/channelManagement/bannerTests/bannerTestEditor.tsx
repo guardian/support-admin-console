@@ -264,6 +264,7 @@ const BannerTestEditor: React.FC<ValidatedTestEditorProps<BannerTest>> = ({
     <VariantEditor
       key={`banner-${test.name}-${variant.name}`}
       variant={variant}
+      isNewsletter={test.name.startsWith('NEWSLETTER')}
       showMParticleMenu={showMParticleMenu}
       onVariantChange={getVariantChangeCallback(variant.name)}
       onDelete={(): void => onVariantDelete(variant.name)}
