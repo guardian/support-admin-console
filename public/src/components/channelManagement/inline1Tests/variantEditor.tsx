@@ -17,6 +17,7 @@ import useValidation from '../hooks/useValidation';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 import BidScoreEditor from './BidScoreEditor';
+import ThemeSelector, { SelectedPalette } from './themeSelector';
 
 const Container = styled('div')(({ theme }) => ({
   width: '100%',
@@ -171,6 +172,14 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
     }
   };
 
+  const applySelectedPalette = (selectedPalette: SelectedPalette): void =>
+    onChange({
+      ...message,
+      styleId: selectedPalette.styleId,
+      themeId: selectedPalette.themeId,
+      colours: selectedPalette.colours,
+    });
+
   return (
     <Container>
       <Section>
@@ -256,6 +265,16 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
             onChange={updateImage}
           />
         )}
+      </Section>
+
+      <Section>
+        <SectionHeader variant="h4">Theme</SectionHeader>
+        <ThemeSelector
+          initialStyleId={message.styleId ?? ''}
+          initialThemeId={message.themeId ?? ''}
+          onChange={applySelectedPalette}
+          isDisabled={isDisabled}
+        />
       </Section>
     </Container>
   );
