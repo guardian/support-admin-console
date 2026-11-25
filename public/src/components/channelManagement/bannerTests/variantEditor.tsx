@@ -92,6 +92,7 @@ interface VariantContentEditorProps {
   editMode: boolean;
   deviceType: DeviceType;
   showMParticleMenu: boolean;
+  isNewsletter?: boolean;
   isPrimaryCtaUrlDisabled?: boolean;
 }
 
@@ -123,6 +124,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
   editMode,
   deviceType,
   showMParticleMenu,
+  isNewsletter,
   isPrimaryCtaUrlDisabled,
 }: VariantContentEditorProps) => {
   const templateValidator = templateValidatorForPlatform('DOTCOM');
@@ -239,19 +241,23 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                 name="heading"
                 label="Header"
                 disabled={!editMode}
-                rteMenuConstraints={{
-                  enableHtml: true,
-                  enableItalic: true,
-                  enableStrikethrough: true,
-                  enableCopyTemplates: true,
-                  enableCurrencyTemplate: true,
-                  enableCountryNameTemplate: true,
-                  enableArticleCountTemplate: true,
-                  enableDateTemplate: true,
-                  enableDayTemplate: true,
-                  enableLink: true,
-                  enableMParticleTemplates: showMParticleMenu,
-                }}
+                rteMenuConstraints={
+                  isNewsletter
+                    ? { enableHtml: true }
+                    : {
+                        enableHtml: true,
+                        enableItalic: true,
+                        enableStrikethrough: true,
+                        enableCopyTemplates: true,
+                        enableCurrencyTemplate: true,
+                        enableCountryNameTemplate: true,
+                        enableArticleCountTemplate: true,
+                        enableDateTemplate: true,
+                        enableDayTemplate: true,
+                        enableLink: true,
+                        enableMParticleTemplates: showMParticleMenu,
+                      }
+                }
               />
             );
           }}
@@ -285,21 +291,25 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
                   name="paragraphs"
                   label="Body copy"
                   disabled={!editMode}
-                  rteMenuConstraints={{
-                    enableHtml: true,
-                    enableBold: true,
-                    enableItalic: true,
-                    enableStrikethrough: true,
-                    enableCopyTemplates: true,
-                    enableCurrencyTemplate: true,
-                    enableCountryNameTemplate: true,
-                    enableArticleCountTemplate: true,
-                    enableDateTemplate: true,
-                    enableDayTemplate: true,
-                    enablePriceTemplates: true,
-                    enableLink: true,
-                    enableMParticleTemplates: showMParticleMenu,
-                  }}
+                  rteMenuConstraints={
+                    isNewsletter
+                      ? { enableHtml: true }
+                      : {
+                          enableHtml: true,
+                          enableBold: true,
+                          enableItalic: true,
+                          enableStrikethrough: true,
+                          enableCopyTemplates: true,
+                          enableCurrencyTemplate: true,
+                          enableCountryNameTemplate: true,
+                          enableArticleCountTemplate: true,
+                          enableDateTemplate: true,
+                          enableDayTemplate: true,
+                          enablePriceTemplates: true,
+                          enableLink: true,
+                          enableMParticleTemplates: showMParticleMenu,
+                        }
+                  }
                 />
               );
             }}
@@ -370,6 +380,7 @@ const VariantContentEditor: React.FC<VariantContentEditorProps> = ({
 interface VariantEditorProps {
   variant: BannerVariant;
   showMParticleMenu: boolean;
+  isNewsletter: boolean;
   onVariantChange: (update: (current: BannerVariant) => BannerVariant) => void;
   editMode: boolean;
   onDelete: () => void;
@@ -380,6 +391,7 @@ interface VariantEditorProps {
 const VariantEditor: React.FC<VariantEditorProps> = ({
   variant,
   showMParticleMenu,
+  isNewsletter,
   editMode,
   onValidationChange,
   onVariantChange,
@@ -504,6 +516,7 @@ const VariantEditor: React.FC<VariantEditorProps> = ({
           content={variant.bannerContent}
           template={variant.template}
           showMParticleMenu={showMParticleMenu}
+          isNewsletter={isNewsletter}
           onChange={onMainContentChange}
           onValidationChange={onMainContentValidationChange}
           editMode={editMode}
