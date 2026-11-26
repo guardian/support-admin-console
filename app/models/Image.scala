@@ -17,5 +17,5 @@ case class ResponsiveImage(
     mobileUrl: String,
     tabletUrl: String,
     desktopUrl: String,
-    altText: String
+    altText: Option[String]
 ) derives Codec.AsObject

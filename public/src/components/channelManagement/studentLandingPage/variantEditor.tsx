@@ -9,7 +9,8 @@ import { RichTextEditorSingleLine } from '../richTextEditor/richTextEditor';
 import { AcademicInstitutionDetailEditor } from './academicInstitutionDetails';
 
 // hidden until we can get the hero image sorted out in support-frontend as part of a future phase
-// NOTE: the ResponsiveImageEditor has been updated to make alt text optional so that users can omit alt text for decorative images
+// NOTE: the ResponsiveImageEditor and ResponiveImage have been updated to make alt text optional
+// so that users can omit alt text for decorative images
 // import { ImageGuidance, ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
 // import { ResponsiveImage } from '../../../models/shared';
 
