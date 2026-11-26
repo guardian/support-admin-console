@@ -92,13 +92,10 @@ export const ResponsiveImageEditor: React.FC<ResponsiveImageEditorProps> = ({
         fullWidth
       />
       <TextField
-        {...register('altText', {
-          required: 'Please add some descriptive text for the image',
-          validate: (value) =>
-            value.trim().length > 0 || 'Please add some descriptive text for the image',
-        })}
-        error={errors.altText !== undefined}
-        helperText={errors.altText?.message ?? 'A descriptive message for the user'}
+        {...register('altText')}
+        helperText={
+          'Enter a clear and concise description of the content of the image, including any words that appear. If the image is purely decorative, alt text is not necessary.'
+        }
         onBlur={() => void handleSubmit(onChange)()}
         label="Image Description (alt text)"
         margin="normal"

@@ -10,13 +10,6 @@ case class Institution(
     logoUrl: String
 ) derives Codec.AsObject
 
-case class ResponsiveImage(
-    mobileUrl: String,
-    tabletUrl: String,
-    desktopUrl: String,
-    altText: String
-) derives Codec.AsObject
-
 case class StudentLandingPageVariant(
     name: String,
     heading: String,
