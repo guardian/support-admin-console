@@ -25,7 +25,67 @@ class Inline1TestSpec extends AnyFlatSpec with Matchers with EitherValues {
   "Inline1Test codecs" should "round-trip every message type offered by the editor" in {
     val tests = List(
       decodeTest(
-        """{"type":"Inline1SupportMessage","heading":"Support us","body":"Body","primaryCta":{"text":"Support","baseUrl":"https://support.theguardian.com"},"image":{"mobileUrl":"mobile.jpg","tabletUrl":"tablet.jpg","desktopUrl":"desktop.jpg","altText":"Support"},"styleId":"business-as-usual","themeId":"support-default","colours": {"backgroundColor":"#F1F8FC","headlineColor":"#052962","guardianLogoColor":"#000000","fontColor":"#000000","ctaBackgroundColor":"#FFE500","ctaFontColor":"#052962"}}"""
+        """{
+            "type":"Inline1SupportMessage",
+            "heading":"Support us",
+            "body":"Body",
+            "primaryCta":{"text":"Support","baseUrl":"https://support.theguardian.com"},
+            "image":{"mobileUrl":"mobile.jpg","tabletUrl":"tablet.jpg","desktopUrl":"desktop.jpg","altText":"Support"},
+            "design":{
+              "style": "business-as-usual",
+              "colourTheme": "support-default",
+              "colours": {
+                  "basic": {
+                      "background": {
+                          "r": "F1",
+                          "g": "F8",
+                          "b": "FC",
+                          "kind": "hex"
+                      },
+                      "bodyText": {
+                          "r": "00",
+                          "g": "00",
+                          "b": "00",
+                          "kind": "hex"
+                      },
+                      "headerText": {
+                          "r": "05",
+                          "g": "29",
+                          "b": "62",
+                          "kind": "hex"
+                      },
+                      "articleCountText": {
+                          "r": "00",
+                          "g": "00",
+                          "b": "00",
+                          "kind": "hex"
+                      },
+                      "logo": {
+                          "r": "00",
+                          "g": "00",
+                          "b": "00",
+                          "kind": "hex"
+                      }
+                  },
+                  "primaryCta": {
+                      "default": {
+                          "text": {
+                              "r": "05",
+                              "g": "29",
+                              "b": "62",
+                              "kind": "hex"
+                          },
+                          "background": {
+                              "r": "FF",
+                              "g": "E5",
+                              "b": "00",
+                              "kind": "hex"
+                          }
+                      }
+                  }
+              }
+          }
+        }"""
       ),
       decodeTest("""{"type":"Inline1PuzzlesMessage"}"""),
       decodeTest(

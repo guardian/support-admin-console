@@ -10,8 +10,17 @@ import {
   UserCohort,
   Variant,
 } from '../components/channelManagement/helpers/shared';
-import { Inline1SupportMessageColours } from '../components/channelManagement/inline1Tests/utils/styles';
+import { BasicColours, CtaDesign } from './bannerDesign';
 import { MaxViews, ResponsiveImage } from './shared';
+
+interface Inline1SupportMessageDesign {
+  style: string;
+  colourTheme: string;
+  colours: {
+    basic: BasicColours;
+    primaryCta: CtaDesign;
+  };
+}
 
 interface Inline1SupportMessage {
   type: 'Inline1SupportMessage';
@@ -19,9 +28,7 @@ interface Inline1SupportMessage {
   body: string;
   primaryCta: Cta;
   image?: ResponsiveImage;
-  styleId: string;
-  themeId: string;
-  colours: Inline1SupportMessageColours;
+  design: Inline1SupportMessageDesign;
 }
 interface Inline1PuzzlesMessage {
   type: 'Inline1PuzzlesMessage';

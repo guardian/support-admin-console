@@ -1,5 +1,6 @@
 import { Inline1Test, Inline1Variant } from '../../../../models/inline1';
 import { MaxViews } from '../../../../models/shared';
+import { stringToHexColour } from '../../../../utils/bannerDesigns';
 import { DEFAULT_REGION_TARGETING } from '../../epicTests/utils/defaults';
 import { UserCohort } from '../../helpers/shared';
 
@@ -17,15 +18,24 @@ export const getDefaultInline1SupportMessage = (): Inline1Variant['message'] => 
     text: 'Support us',
     baseUrl: 'https://support.theguardian.com',
   },
-  styleId: 'business-as-usual',
-  themeId: 'support-default',
-  colours: {
-    backgroundColor: '#F1F8FC',
-    headlineColor: '#052962',
-    guardianLogoColor: '#000000',
-    fontColor: '#000000',
-    ctaBackgroundColor: '#FFE500',
-    ctaFontColor: '#052962',
+  design: {
+    style: 'business-as-usual',
+    colourTheme: 'support-default',
+    colours: {
+      basic: {
+        background: stringToHexColour('#F1F8FC'),
+        headerText: stringToHexColour('#052962'),
+        logo: stringToHexColour('#000000'),
+        bodyText: stringToHexColour('#000000'),
+        articleCountText: stringToHexColour('#000000'),
+      },
+      primaryCta: {
+        default: {
+          text: stringToHexColour('#FFE500'),
+          background: stringToHexColour('#052962'),
+        },
+      },
+    },
   },
 });
 

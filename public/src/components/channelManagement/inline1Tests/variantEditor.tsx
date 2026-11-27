@@ -5,6 +5,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
 import { ResponsiveImage } from '../../../models/shared';
+import { stringToHexColour } from '../../../utils/bannerDesigns';
 import { ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
 import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
 import { Inline1EditorConfig } from '../helpers/shared';
@@ -172,13 +173,31 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
     }
   };
 
-  const applySelectedPalette = (selectedPalette: SelectedPalette): void =>
+  const applySelectedPalette = (selectedPalette: SelectedPalette): void => {
+    const design = {
+      style: selectedPalette.styleId,
+      colourTheme: selectedPalette.themeId,
+      colours: {
+        basic: {
+          background: stringToHexColour(selectedPalette.colours.background),
+          bodyText: stringToHexColour(selectedPalette.colours.bodyText),
+          headerText: stringToHexColour(selectedPalette.colours.heading),
+          articleCountText: stringToHexColour(selectedPalette.colours.articleCountText),
+          logo: stringToHexColour(selectedPalette.colours.logo),
+        },
+        primaryCta: {
+          default: {
+            text: stringToHexColour(selectedPalette.colours.primaryCta.text),
+            background: stringToHexColour(selectedPalette.colours.primaryCta.background),
+          },
+        },
+      },
+    };
     onChange({
       ...message,
-      styleId: selectedPalette.styleId,
-      themeId: selectedPalette.themeId,
-      colours: selectedPalette.colours,
+      design,
     });
+  };
 
   return (
     <Container>
@@ -270,8 +289,8 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
       <Section>
         <SectionHeader variant="h4">Theme</SectionHeader>
         <ThemeSelector
-          initialStyleId={message.styleId}
-          initialThemeId={message.themeId}
+          initialStyleId={message.design.style}
+          initialThemeId={message.design.colourTheme}
           onChange={applySelectedPalette}
           isDisabled={isDisabled}
         />

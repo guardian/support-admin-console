@@ -8,11 +8,11 @@ import {
 } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
-  Inline1SupportMessageColours,
-  Inline1SupportMessageStyle,
-  inline1SupportMessageStyles,
-  Inline1SupportMessageTheme,
-} from './utils/styles';
+  colourThemes,
+  ThemeColours,
+  ThemeDefinition,
+  ThemeStyle,
+} from '../bannerDesigns/utils/colourThemes';
 
 const Container = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -39,7 +39,7 @@ const Selectors = styled('div')(({ theme }) => ({
 export interface SelectedPalette {
   styleId: string;
   themeId: string;
-  colours: Inline1SupportMessageColours;
+  colours: ThemeColours;
 }
 
 interface ThemeSelectorProps {
@@ -55,31 +55,28 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   onChange,
   isDisabled,
 }) => {
-  const styles = inline1SupportMessageStyles;
-
   const getStyle = useCallback(
-    (styleId: string) => styles.find((style) => style.id === styleId),
-    [styles],
-  );
-
-  const getTheme = useCallback(
-    (style: Inline1SupportMessageStyle, themeId: string) =>
-      style.themes.find((theme) => theme.id === themeId),
+    (styleId: string) => colourThemes.styles.find((style) => style.id === styleId),
     [],
   );
 
-  const [style, setStyle] = useState<Inline1SupportMessageStyle>(
-    () => getStyle(initialStyleId) ?? styles[0],
+  const getTheme = useCallback(
+    (style: ThemeStyle, themeId: string) => style.themes.find((theme) => theme.id === themeId),
+    [],
   );
 
-  const [theme, setTheme] = useState<Inline1SupportMessageTheme>(
+  const [style, setStyle] = useState<ThemeStyle>(
+    () => getStyle(initialStyleId) ?? colourThemes.styles[0],
+  );
+
+  const [theme, setTheme] = useState<ThemeDefinition>(
     () => getTheme(style, initialThemeId) ?? style.themes[0],
   );
 
   const availableThemes = useMemo(() => style.themes, [style]);
 
   const setSelectedPalette = useCallback(
-    (style: Inline1SupportMessageStyle, theme: Inline1SupportMessageTheme) => {
+    (style: ThemeStyle, theme: ThemeDefinition) => {
       onChange({
         styleId: style.id,
         themeId: theme.id,
@@ -122,7 +119,7 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               id: 'style-select',
             }}
           >
-            {styles.map((style) => (
+            {colourThemes.styles.map((style) => (
               <MenuItem key={style.id} value={style.id}>
                 {style.label}
               </MenuItem>
