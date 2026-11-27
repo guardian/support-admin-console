@@ -34,7 +34,7 @@ object Inline1Message {
 
 case class Inline1Variant(
     name: String,
-    uuid: Option[String],
+    uuid: String,
     message: Inline1Message,
     bidScore: Double = 0.0
 ) derives ConfiguredCodec
