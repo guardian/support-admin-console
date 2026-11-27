@@ -5,6 +5,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Inline1Message, Inline1Variant } from '../../../models/inline1';
 import type { Inline1MessageType } from '../../../models/inline1';
 import { ResponsiveImage } from '../../../models/shared';
+import { stringToHexColour } from '../../../utils/bannerDesigns';
 import { ResponsiveImageEditor } from '../../shared/ResponsiveImageEditor';
 import VariantCtaFieldsEditor from '../../tests/variants/variantCtaFieldsEditor';
 import { Inline1EditorConfig } from '../helpers/shared';
@@ -17,6 +18,7 @@ import useValidation from '../hooks/useValidation';
 import { RichTextEditorSingleLine, RteMenuConstraints } from '../richTextEditor/richTextEditor';
 import TypedRadioGroup from '../TypedRadioGroup';
 import BidScoreEditor from './BidScoreEditor';
+import ThemeSelector, { SelectedPalette } from './themeSelector';
 
 const Container = styled('div')(({ theme }) => ({
   width: '100%',
@@ -170,6 +172,32 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
     }
   };
 
+  const applySelectedPalette = (selectedPalette: SelectedPalette): void => {
+    const design = {
+      style: selectedPalette.styleId,
+      colourTheme: selectedPalette.themeId,
+      colours: {
+        basic: {
+          background: stringToHexColour(selectedPalette.colours.background),
+          bodyText: stringToHexColour(selectedPalette.colours.bodyText),
+          headerText: stringToHexColour(selectedPalette.colours.heading),
+          articleCountText: stringToHexColour(selectedPalette.colours.articleCountText),
+          logo: stringToHexColour(selectedPalette.colours.logo),
+        },
+        primaryCta: {
+          default: {
+            text: stringToHexColour(selectedPalette.colours.primaryCta.text),
+            background: stringToHexColour(selectedPalette.colours.primaryCta.background),
+          },
+        },
+      },
+    };
+    onChange({
+      ...message,
+      design,
+    });
+  };
+
   return (
     <Container>
       <Section>
@@ -255,6 +283,16 @@ const SupportMessageEditor: React.FC<MessageEditorProps<SupportMessage>> = ({
             onChange={updateImage}
           />
         )}
+      </Section>
+
+      <Section>
+        <SectionHeader variant="h4">Theme</SectionHeader>
+        <ThemeSelector
+          initialStyleId={message.design.style}
+          initialThemeId={message.design.colourTheme}
+          onChange={applySelectedPalette}
+          isDisabled={isDisabled}
+        />
       </Section>
     </Container>
   );
