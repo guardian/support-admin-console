@@ -13,7 +13,7 @@
     "eslint-plugin-prettier": "5.5.7",
     "globals": "17.14.0",
     "jest": "30.5.2",
-    "json-diff-ts": "4.10.4",
+    "json-diff-ts": "5.1.2",
     "prettier": "3.10.1",
     "style-loader": "4.0.0",
     "ts-jest": "29.4.15",
