@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Inline1Test, Inline1Variant } from '../../../../models/inline1';
 import { MaxViews } from '../../../../models/shared';
 import { DEFAULT_REGION_TARGETING } from '../../epicTests/utils/defaults';
@@ -28,6 +29,7 @@ export const getDefaultInline1NewsletterMessage = (): Inline1Variant['message'] 
 
 export const getDefaultVariant = (): Inline1Variant => ({
   name: 'CONTROL',
+  uuid: uuidv4(),
   message: getDefaultInline1SupportMessage(),
   bidScore: 0,
 });

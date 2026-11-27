@@ -17,7 +17,7 @@ class Inline1TestSpec extends AnyFlatSpec with Matchers with EitherValues {
          |  "lockStatus":null,
          |  "priority":null,
          |  "nickname":"Inline test",
-         |  "variants":[{"name":"CONTROL","message":$message}]
+         |  "variants":[{"name":"CONTROL","uuid": "fd5d98a0-a015-4df9-bc23-20bda68f35dd","message":$message}]
          |}
          |""".stripMargin
     ).value
