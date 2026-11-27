@@ -30,7 +30,7 @@ class Inline1TestSpec extends AnyFlatSpec with Matchers with EitherValues {
             "heading":"Support us",
             "body":"Body",
             "primaryCta":{"text":"Support","baseUrl":"https://support.theguardian.com"},
-            "image":{"mobileUrl":"mobile.jpg","tabletUrl":"tablet.jpg","desktopUrl":"desktop.jpg","altText":"Support"},
+            "image":{"mobileUrl":"mobile.jpg","tabletUrl":"tablet.jpg","desktopUrl":"desktop.jpg"},
             "design":{
               "style": "business-as-usual",
               "colourTheme": "support-default",

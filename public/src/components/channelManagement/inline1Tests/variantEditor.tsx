@@ -70,7 +70,6 @@ const EMPTY_IMAGE: ResponsiveImage = {
   mobileUrl: '',
   tabletUrl: '',
   desktopUrl: '',
-  altText: '',
 };
 
 interface MessageEditorProps<M extends Inline1Message> {
