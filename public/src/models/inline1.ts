@@ -40,6 +40,7 @@ export type Inline1Message =
 export type Inline1MessageType = Inline1Message['type'];
 
 export interface Inline1Variant extends Variant {
+  uuid: string;
   message: Inline1Message;
   bidScore?: number;
 }
